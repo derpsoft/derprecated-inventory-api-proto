@@ -2,12 +2,20 @@
 using System.Data;
 using BausCode.Api.Models;
 using BausCode.Api.Models.Routing;
+using ServiceStack;
+using ServiceStack.OrmLite;
 
 namespace BausCode.Api.Handlers
 {
     public class InventoryHandler
     {
-        public IDbConnection Db { get; set; }
+        public InventoryHandler(IDbConnection db, UserSession user)
+        {
+            Db = db;
+        }
+
+        private IDbConnection Db { get; }
+        private UserSession User { get; set; }
 
         /// <summary>
         ///     Receive inventory into the system.
@@ -28,8 +36,26 @@ namespace BausCode.Api.Handlers
         ///     future
         ///     - trace transaction
         /// </remarks>
+        /// <exception cref="ArgumentOutOfRangeException">if the requested Quantity is negative.</exception>
         public void Receive(CreateInventoryTransaction request)
         {
+            Receive(request.ItemId, request.LocationId, request.Quantity);
+        }
+
+        internal void Receive(int itemId, int locationId, decimal quantity)
+        {
+            quantity.ThrowIfLessThan(0);
+
+            var transaction = new InventoryTransaction();
+            var item = new ItemHandler(Db, User).GetItem(itemId);
+            var location = new LocationHandler(Db, User).GetLocation(locationId);
+
+            transaction.ItemId = item.Id;
+            transaction.Quantity = quantity;
+            transaction.TransactionType = InventoryTransactionTypes.In;
+            transaction.UserId = User.Id.ToInt();
+
+            Db.Save(transaction);
         }
 
         /// <summary>
@@ -46,7 +72,7 @@ namespace BausCode.Api.Handlers
         /// <remarks>
         ///     create a warehouse transaction
         ///     - with the quantity being moved as a decrement
-        ///         - must not exceed the available quantity
+        ///     - must not exceed the available quantity
         ///     - with the source Location
         ///     create a warehouse transaction
         ///     - with the quantity being moved as an increment
@@ -54,16 +80,36 @@ namespace BausCode.Api.Handlers
         /// </remarks>
         public void Move(Item item, Location from, Location to, decimal quantity)
         {
+            var q = Math.Abs(quantity);
+            Release(item.Id, from.Id, -q);
+            Receive(item.Id, to.Id, q);
         }
 
         /// <summary>
-        /// Release a quantity of inventory to sale, shipment, or other 3rd-party transfer
+        ///     Release a quantity of inventory to sale, shipment, or other 3rd-party transfer
         /// </summary>
         /// <param name="request"></param>
         /// <remarks>
         /// </remarks>
         public void Release(CreateInventoryTransaction request)
         {
+            Release(request.ItemId, request.LocationId, request.Quantity);
+        }
+
+        internal void Release(int itemId, int locationId, decimal quantity)
+        {
+            quantity.ThrowIfGreaterThan(0);
+
+            var transaction = new InventoryTransaction();
+            var item = new ItemHandler(Db, User).GetItem(itemId);
+            var location = new LocationHandler(Db, User).GetLocation(locationId);
+
+            transaction.ItemId = item.Id;
+            transaction.Quantity = quantity;
+            transaction.TransactionType = InventoryTransactionTypes.Out;
+            transaction.UserId = User.Id.ToInt();
+
+            Db.Save(transaction);
         }
     }
 }

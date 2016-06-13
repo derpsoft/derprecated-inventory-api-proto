@@ -89,8 +89,10 @@
   <ItemGroup>
     <Compile Include="Attributes\ApiKeyAuthorizeAttribute.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="DecimalExtensions.cs" />
     <Compile Include="Handlers\InventoryHandler.cs" />
     <Compile Include="Handlers\ItemHandler.cs" />
+    <Compile Include="Handlers\LocationHandler.cs" />
     <Compile Include="Handlers\ProductHandler.cs" />
     <Compile Include="IntegerExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

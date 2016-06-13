@@ -7,7 +7,7 @@ namespace BausCode.Api.Models
         public int Id { get; set; }
         public int ItemId { get; set; }
         public int UserId { get; set; }
-        public string TransactionType { get; set; }
+        public InventoryTransactionTypes TransactionType { get; set; }
         public int UnitOfMeasureId { get; set; }
         public decimal Quantity { get; set; }
 

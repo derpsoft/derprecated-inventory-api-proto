@@ -97,6 +97,7 @@
     <Compile Include="IAuditable.cs" />
     <Compile Include="InventoryTraceTransaction.cs" />
     <Compile Include="InventoryTransaction.cs" />
+    <Compile Include="InventoryTransactionTypes.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="ItemMeta.cs" />
     <Compile Include="Location.cs" />

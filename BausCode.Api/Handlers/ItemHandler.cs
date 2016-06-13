@@ -7,8 +7,20 @@ namespace BausCode.Api.Handlers
 {
     internal class ItemHandler
     {
-        // ReSharper disable once MemberCanBePrivate.Global
-        public IDbConnection Db { get; set; }
+        public ItemHandler(IDbConnection db, UserSession user)
+        {
+            Db = db;
+            User = user;
+        }
+
+        private IDbConnection Db { get; }
+        private UserSession User { get; set; }
+
+        public Item GetItem(int id)
+        {
+            id.ThrowIfLessThan(1);
+            return Db.SingleById<Item>(id);
+        }
 
         public decimal QuantityOnHand(int itemId)
         {

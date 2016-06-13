@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using BausCode.Api.Models;
 using ServiceStack.OrmLite;
 
@@ -8,8 +7,14 @@ namespace BausCode.Api.Handlers
 {
     internal class ProductHandler
     {
-        // ReSharper disable once MemberCanBePrivate.Global
-        public IDbConnection Db { get; set; }
+        public ProductHandler(IDbConnection db, UserSession user)
+        {
+            Db = db;
+            User = user;
+        }
+
+        private IDbConnection Db { get; }
+        private UserSession User { get; set; }
 
         public Product GetProduct(int id)
         {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using BausCode.Api.Models;
 using ServiceStack.OrmLite;
 

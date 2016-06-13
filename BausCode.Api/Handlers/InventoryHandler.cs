@@ -24,7 +24,7 @@ namespace BausCode.Api.Handlers
         ///     ensure
         ///     - user captured
         ///     - timestamp captured
-        ///     - product/item mapping
+        ///     - product/product mapping
         ///     future
         ///     - trace transaction
         /// </remarks>

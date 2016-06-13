@@ -1,4 +1,5 @@
 ﻿using System;
+using ServiceStack;
 
 namespace BausCode.Api.Models
 {

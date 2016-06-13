@@ -106,7 +106,6 @@ namespace BausCode.Api.Configuration
                 settings.InitSchema();
                 using (var ctx = container.Resolve<IDbConnectionFactory>().Open())
                 {
-                    ctx.CreateTableIfNotExists<Keyword>();
                     ctx.CreateTableIfNotExists<ApiKey>();
                 }
 #if DEBUG
@@ -155,7 +154,7 @@ namespace BausCode.Api.Configuration
 
             // Configuration
             var configuration = new Models.Configuration();
-            configuration.QueueName = appSettings.Get("bc.jobs.opm.queueName");
+            //configuration.QueueName = appSettings.Get("bc.jobs.opm.queueName");
 
             container.Register(configuration);
         }

@@ -10,9 +10,6 @@ namespace BausCode.Api.Models
     [DataContract]
     public class UserSession : AuthUserSession
     {
-        [DataMember]
-        public List<Keyword> UserKeywords { get; set; }
-
         public override void OnAuthenticated(IServiceBase authService, IAuthSession session, IAuthTokens tokens,
             Dictionary<string, string> authInfo)
         {
@@ -22,7 +19,7 @@ namespace BausCode.Api.Models
 
             using (var ctx = authService.TryResolve<IDbConnectionFactory>().Open())
             {
-                UserKeywords = ctx.LoadSelect(ctx.From<Keyword>().Where(k => k.UserAuthId == userId));
+
             }
         }
     }

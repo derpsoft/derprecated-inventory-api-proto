@@ -10,7 +10,7 @@ namespace BausCode.Api.Services
         {
             var response = new GetQueueStatusResponse();
 
-            response.ProcessingQueueLength = Redis.GetListCount(Configuration.QueueName);
+            //response.ProcessingQueueLength = Redis.GetListCount(Configuration.QueueName);
 
             return response;
         }

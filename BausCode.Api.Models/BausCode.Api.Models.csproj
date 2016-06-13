@@ -90,27 +90,18 @@
   <ItemGroup>
     <Compile Include="ApiKey.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="Dto\Keyword.cs" />
     <Compile Include="Dto\UserAuth.cs" />
     <Compile Include="Dto\UserSession.cs" />
     <Compile Include="IApiKeyStore.cs" />
     <Compile Include="IAuditable.cs" />
-    <Compile Include="Keyword.cs" />
     <Compile Include="PermissionNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleNames.cs" />
-    <Compile Include="Routing\DeleteCounter.cs" />
-    <Compile Include="Routing\DeleteCounterResponse.cs" />
-    <Compile Include="Routing\GetCounters.cs" />
-    <Compile Include="Routing\GetCountersResponse.cs" />
     <Compile Include="Routing\GetQueueStatus.cs" />
     <Compile Include="Routing\GetQueueStatusResponse.cs" />
     <Compile Include="Routing\GetUser.cs" />
     <Compile Include="Routing\GetUserResponse.cs" />
     <Compile Include="Routing\GetUserValidator.cs" />
-    <Compile Include="Routing\PostCounter.cs" />
-    <Compile Include="Routing\PostCounterResponse.cs" />
-    <Compile Include="Routing\PostCounterValidator.cs" />
     <Compile Include="UserSession.cs" />
   </ItemGroup>
   <ItemGroup>

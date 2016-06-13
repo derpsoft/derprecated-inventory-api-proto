@@ -89,12 +89,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiKey.cs" />
+    <Compile Include="Category.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Dto\UserAuth.cs" />
     <Compile Include="Dto\UserSession.cs" />
     <Compile Include="IApiKeyStore.cs" />
     <Compile Include="IAuditable.cs" />
+    <Compile Include="InventoryTraceTransaction.cs" />
+    <Compile Include="InventoryTransaction.cs" />
+    <Compile Include="Item.cs" />
+    <Compile Include="ItemMeta.cs" />
+    <Compile Include="Location.cs" />
+    <Compile Include="Order.cs" />
     <Compile Include="PermissionNames.cs" />
+    <Compile Include="Product.cs" />
+    <Compile Include="ProductCategory.cs" />
+    <Compile Include="ProductItem.cs" />
+    <Compile Include="ProductMeta.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleNames.cs" />
     <Compile Include="Routing\GetQueueStatus.cs" />
@@ -102,7 +113,10 @@
     <Compile Include="Routing\GetUser.cs" />
     <Compile Include="Routing\GetUserResponse.cs" />
     <Compile Include="Routing\GetUserValidator.cs" />
+    <Compile Include="UnitOfMeasure.cs" />
     <Compile Include="UserSession.cs" />
+    <Compile Include="Warehouse.cs" />
+    <Compile Include="WarehouseTransaction.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

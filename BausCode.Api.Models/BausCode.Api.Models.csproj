@@ -132,6 +132,8 @@
     <Compile Include="Routing\GetOrder.cs" />
     <Compile Include="Routing\GetOrderResponse.cs" />
     <Compile Include="Routing\GetProduct.cs" />
+    <Compile Include="Routing\GetProductQuantityOnHand.cs" />
+    <Compile Include="Routing\GetProductQuantityOnHandResponse.cs" />
     <Compile Include="Routing\GetProductResponse.cs" />
     <Compile Include="Routing\GetProducts.cs" />
     <Compile Include="Routing\GetProductsResponse.cs" />

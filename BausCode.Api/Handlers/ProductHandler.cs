@@ -35,5 +35,18 @@ namespace BausCode.Api.Handlers
         {
             return Db.Select<Product>();
         }
+
+        /// <summary>
+        /// Get quantity on hand for a particular product.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Wraps ItemHandler#GetQuantityOnHand(1)
+        /// </remarks>
+        public decimal GetQuantityOnHand(int id)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -1,6 +1,8 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using BausCode.Api.Models;
+using ServiceStack;
 using ServiceStack.OrmLite;
 
 namespace BausCode.Api.Handlers
@@ -29,6 +31,16 @@ namespace BausCode.Api.Handlers
                     .Select(it => it.Quantity)
                     .Where(it => it.ItemId == itemId)
                 ).Sum();
+        }
+
+        public List<KeyValuePair<int, decimal>> QuantityOnHand(List<int> itemIds)
+        {
+            return itemIds.Map(i => new KeyValuePair<int, decimal>(i, QuantityOnHand(i)));
+        }
+
+        public List<Item> GetItems(List<int> ids)
+        {
+            return Db.SelectByIds<Item>(ids);
         }
     }
 }

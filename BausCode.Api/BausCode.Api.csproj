@@ -94,6 +94,7 @@
     <Compile Include="Handlers\ItemHandler.cs" />
     <Compile Include="Handlers\LocationHandler.cs" />
     <Compile Include="Handlers\ProductHandler.cs" />
+    <Compile Include="Handlers\ProductItemHandler.cs" />
     <Compile Include="IntegerExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BaseService.cs" />

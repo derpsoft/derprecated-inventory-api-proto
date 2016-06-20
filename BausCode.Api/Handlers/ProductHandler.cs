@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using BausCode.Api.Models;
 using ServiceStack.OrmLite;
@@ -14,7 +15,7 @@ namespace BausCode.Api.Handlers
         }
 
         private IDbConnection Db { get; }
-        private UserSession User { get; set; }
+        private UserSession User { get; }
 
         public Product GetProduct(int id)
         {
@@ -37,16 +38,25 @@ namespace BausCode.Api.Handlers
         }
 
         /// <summary>
-        /// Get quantity on hand for a particular product.
+        ///     Get quantity on hand for a particular product.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         /// <remarks>
-        /// Wraps ItemHandler#GetQuantityOnHand(1)
+        ///     Wraps ItemHandler#GetQuantityOnHand(1)
         /// </remarks>
         public decimal GetQuantityOnHand(int id)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
+
+            var product = GetProduct(id);
+            var itemHandler = new ItemHandler(Db, User);
+            var idsHandler = new ProductItemHandler(Db, User);
+
+            // TODO(jamesearl)
+            // How do we decide how many products are on hand, given the number of items?
+            //
+            var itemsOnHand = itemHandler.QuantityOnHand(idsHandler.GetItemIds(product));
         }
     }
 }

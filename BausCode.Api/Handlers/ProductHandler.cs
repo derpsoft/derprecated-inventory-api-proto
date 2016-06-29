@@ -38,7 +38,7 @@ namespace BausCode.Api.Handlers
         }
 
         /// <summary>
-        ///     Get quantity on hand for a particular product.
+        ///     Get quantity on hand for a particular updatedProduct.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -57,6 +57,17 @@ namespace BausCode.Api.Handlers
             // How do we decide how many products are on hand, given the number of items?
             //
             var itemsOnHand = itemHandler.QuantityOnHand(idsHandler.GetItemIds(product));
+        }
+
+        /// <summary>
+        /// Update an existing Product.
+        /// </summary>
+        /// <param name="id">The ID of the Product to update.</param>
+        /// <param name="updatedProduct">The values to update the existing Product with.</param>
+        /// <returns></returns>
+        public Product Update(int id, Product updatedProduct)
+        {
+            throw new NotImplementedException();
         }
     }
 }

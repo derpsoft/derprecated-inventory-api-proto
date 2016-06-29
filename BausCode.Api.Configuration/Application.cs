@@ -139,7 +139,7 @@ namespace BausCode.Api.Configuration
 
             // Plugins
             Plugins.Add(new CorsFeature(allowCredentials: true, allowedHeaders: "Content-Type, X-Requested-With",
-                allowOriginWhitelist: new List<string> { "http://localhost:9000" }, maxAge: 3600));
+                allowOriginWhitelist: new List<string> { "http://localhost:6307" }, maxAge: 3600));
             Plugins.Add(new RegistrationFeature());
             Plugins.Add(new AuthFeature(
                 () => new UserSession(),

@@ -32,5 +32,11 @@ namespace BausCode.Api.Services
             handler.Update(request.Id, request.Product);
             return resp;
         }
+        
+        public object Any(GetProducts request)
+        {
+            var handler = new ProductHandler(Db, CurrentUser);
+            return handler.GetProducts();
+        }
     }
 }

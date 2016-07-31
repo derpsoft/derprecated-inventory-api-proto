@@ -139,7 +139,16 @@ namespace BausCode.Api.Configuration
 
             // Plugins
             Plugins.Add(new CorsFeature(allowCredentials: true, allowedHeaders: "Content-Type, X-Requested-With",
-                allowOriginWhitelist: new List<string> { "http://localhost:6307" }, maxAge: 3600));
+                allowOriginWhitelist:
+                    new List<string>
+                    {
+                        "http://localhost:6307",
+                        "http://localhost:8080",
+                        "http://0.0.0.0:8080",
+                        "http://0.0.0.0:3000",
+                        "https://inventory-web-dev-wb45gu.herokuapp.com"
+                    },
+                maxAge: 3600));
             Plugins.Add(new RegistrationFeature());
             Plugins.Add(new AuthFeature(
                 () => new UserSession(),

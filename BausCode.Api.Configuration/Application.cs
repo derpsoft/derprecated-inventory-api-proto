@@ -81,18 +81,30 @@ namespace BausCode.Api.Configuration
             // Db filters
             OrmLiteConfig.InsertFilter = (dbCmd, row) =>
             {
-                var auditRow = row as IAuditable;
-                if (null != auditRow)
+                if (row is IAuditable)
                 {
+                    var auditRow = row as IAuditable;
                     auditRow.CreateDate = auditRow.ModifyDate = DateTime.UtcNow;
+                }
+
+                if (row is Product)
+                {
+                    var product = row as Product;
+                    product.OnInsert();
                 }
             };
             OrmLiteConfig.UpdateFilter = (dbCmd, row) =>
             {
-                var auditRow = row as IAuditable;
-                if (null != auditRow)
+                if (row is IAuditable)
                 {
+                    var auditRow = row as IAuditable;
                     auditRow.ModifyDate = DateTime.UtcNow;
+                }
+
+                if (row is Product)
+                {
+                    var product = row as Product;
+                    product.OnUpdate();
                 }
             };
 

@@ -1,5 +1,9 @@
-﻿using BausCode.Api.Handlers;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BausCode.Api.Handlers;
+using BausCode.Api.Models;
 using BausCode.Api.Models.Routing;
+using ServiceStack;
 
 namespace BausCode.Api.Services
 {
@@ -10,7 +14,15 @@ namespace BausCode.Api.Services
             var resp = new GetProductResponse();
             var handler = new ProductHandler(Db, CurrentUser);
 
-            resp.Product = handler.GetProduct(request.Id);
+            var product = handler.GetProduct(request.Id);
+
+            resp.Product["id"] = request.Id;
+
+            var fields = request.Fields ?? Product.FIELDS.Keys.ToList();
+            foreach (var k in fields)
+            {
+                resp.Product[k] = product.Get(k);
+            }
 
             return resp;
         }
@@ -32,11 +44,16 @@ namespace BausCode.Api.Services
             handler.Update(request.Id, request.Product);
             return resp;
         }
-        
+
         public object Any(GetProducts request)
         {
+            var resp = new GetProductsResponse();
             var handler = new ProductHandler(Db, CurrentUser);
-            return handler.GetProducts();
+            var products = handler.GetProducts(request.Skip, request.Take);
+
+            resp.Products = products.Map(Models.Dto.Product.From);
+
+            return resp;
         }
     }
 }

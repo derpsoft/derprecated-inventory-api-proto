@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using BausCode.Api.Models;
 using ServiceStack.OrmLite;
 
@@ -20,7 +21,7 @@ namespace BausCode.Api.Handlers
         public Product GetProduct(int id)
         {
             id.ThrowIfLessThan(1);
-            return Db.SingleById<Product>(id);
+            return Db.LoadSingleById<Product>(id);
         }
 
         /// <summary>
@@ -32,9 +33,9 @@ namespace BausCode.Api.Handlers
         /// <remarks>
         ///     Might be slow, use with caution.
         /// </remarks>
-        public List<Product> GetProducts()
+        public List<Product> GetProducts(int? skip, int? take)
         {
-            return Db.Select<Product>();
+            return Db.LoadSelect(Db.From<Product>().Skip(skip).Take(take));
         }
 
         /// <summary>

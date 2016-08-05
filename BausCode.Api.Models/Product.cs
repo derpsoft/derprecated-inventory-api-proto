@@ -1,13 +1,20 @@
-﻿using ServiceStack.DataAnnotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using ServiceStack;
+using ServiceStack.DataAnnotations;
 
 namespace BausCode.Api.Models
 {
     public class Product : IAuditable
     {
+        public static readonly Dictionary<string, Type> FIELDS =
+            new Dictionary<string, Type>
+            {
+                {"title", typeof(string)},
+                {"description", typeof(string)}
+            };
+
         private List<ProductMeta> _meta;
 
         public Product()
@@ -41,16 +48,21 @@ namespace BausCode.Api.Models
         public DateTime ModifyDate { get; set; }
         public ulong RowVersion { get; set; }
 
-        private void Set(string key, object value)
+        public void Set(string key, object value)
         {
-            var meta = MetaDictionary.GetOrAdd(key.ToLowerInvariant(), k => new ProductMeta { Key = k });
+            var meta = MetaDictionary.GetOrAdd(key.ToLowerInvariant(), k => new ProductMeta {Key = k});
             meta.Set(value);
         }
 
-        private T Get<T>(string key, T fallback = default(T))
+        public T Get<T>(string key, T fallback = default(T))
         {
             var m = MetaDictionary.GetValueOrDefault(key.ToLowerInvariant());
             return m == default(ProductMeta) ? fallback : m.Get<T>();
+        }
+
+        public object Get(string key)
+        {
+            return FIELDS.ContainsKey(key) ? Get(key, FIELDS[key].GetDefaultValue()) : null;
         }
 
         public void OnInsert()

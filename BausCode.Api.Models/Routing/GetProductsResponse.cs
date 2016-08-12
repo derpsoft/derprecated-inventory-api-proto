@@ -4,6 +4,6 @@ namespace BausCode.Api.Models.Routing
 {
     public class GetProductsResponse
     {
-        public List<Dto.Product> Products { get; set; }
+        public List<Dictionary<string, object>> Products { get; set; } 
     }
 }

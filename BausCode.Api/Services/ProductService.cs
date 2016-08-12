@@ -51,7 +51,29 @@ namespace BausCode.Api.Services
             var handler = new ProductHandler(Db, CurrentUser);
             var products = handler.GetProducts(request.Skip, request.Take);
 
-            resp.Products = products.Map(Models.Dto.Product.From);
+            resp.Products = products.Map(p =>
+            {
+                var result = new Dictionary<string, object>();
+                var fields = Product.FIELDS.Keys.ToList();
+                result["id"] = p.Id;
+                result["createdAt"] = p.CreateDate;
+                result["updatedAt"] = p.ModifyDate;
+                result["version"] = p.RowVersion;
+
+                if (request.MetaOnly.GetValueOrDefault(false))
+                {
+                    result["fields"] = fields;
+                }
+                else
+                {
+                    foreach (var k in fields)
+                    {
+                        result[k] = p.Get(k);
+                    }
+                }
+
+                return result;
+            });
 
             return resp;
         }

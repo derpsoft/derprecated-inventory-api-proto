@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using BausCode.Api.Handlers;
-using BausCode.Api.Models;
+﻿using BausCode.Api.Handlers;
 using BausCode.Api.Models.Routing;
 using ServiceStack;
 
@@ -16,13 +13,7 @@ namespace BausCode.Api.Services
 
             var product = handler.GetProduct(request.Id);
 
-            resp.Product["id"] = request.Id;
-
-            var fields = request.Fields ?? Product.FIELDS.Keys.ToList();
-            foreach (var k in fields)
-            {
-                resp.Product[k] = product.Get(k);
-            }
+            resp.Product = Models.Dto.Product.From(product);
 
             return resp;
         }
@@ -51,29 +42,7 @@ namespace BausCode.Api.Services
             var handler = new ProductHandler(Db, CurrentUser);
             var products = handler.GetProducts(request.Skip, request.Take);
 
-            resp.Products = products.Map(p =>
-            {
-                var result = new Dictionary<string, object>();
-                var fields = Product.FIELDS.Keys.ToList();
-                result["id"] = p.Id;
-                result["createdAt"] = p.CreateDate;
-                result["updatedAt"] = p.ModifyDate;
-                result["version"] = p.RowVersion;
-
-                if (request.MetaOnly.GetValueOrDefault(false))
-                {
-                    result["fields"] = fields;
-                }
-                else
-                {
-                    foreach (var k in fields)
-                    {
-                        result[k] = p.Get(k);
-                    }
-                }
-
-                return result;
-            });
+            resp.Products = products.Map(Models.Dto.Product.From);
 
             return resp;
         }

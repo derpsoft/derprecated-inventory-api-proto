@@ -100,14 +100,11 @@
     <Compile Include="InventoryTraceTransaction.cs" />
     <Compile Include="InventoryTransaction.cs" />
     <Compile Include="InventoryTransactionTypes.cs" />
-    <Compile Include="Item.cs" />
-    <Compile Include="ItemMeta.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="PermissionNames.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="ProductCategory.cs" />
-    <Compile Include="ProductItem.cs" />
     <Compile Include="ProductMeta.cs" />
     <Compile Include="ProductVariant.cs" />
     <Compile Include="ProductVariantMeta.cs" />

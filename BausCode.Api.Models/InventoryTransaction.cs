@@ -5,7 +5,8 @@ namespace BausCode.Api.Models
     public class InventoryTransaction : IAuditable
     {
         public int Id { get; set; }
-        public int ItemId { get; set; }
+        public int ProductId { get; set; }
+        public int ProductVariantId { get; set; }
         public int UserId { get; set; }
         public InventoryTransactionTypes TransactionType { get; set; }
         public int UnitOfMeasureId { get; set; }

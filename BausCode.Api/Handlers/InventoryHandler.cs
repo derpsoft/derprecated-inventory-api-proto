@@ -47,10 +47,11 @@ namespace BausCode.Api.Handlers
             quantity.ThrowIfLessThan(0);
 
             var transaction = new InventoryTransaction();
-            var item = new ItemHandler(Db, User).GetItem(itemId);
+            var item = new VariantHandler(Db, User).GetVariant(itemId);
             var location = new LocationHandler(Db, User).GetLocation(locationId);
 
-            transaction.ItemId = item.Id;
+            transaction.ProductId = item.ProductId;
+            transaction.ProductVariantId = item.Id;
             transaction.Quantity = quantity;
             transaction.TransactionType = InventoryTransactionTypes.In;
             transaction.UserId = User.Id.ToInt();
@@ -78,7 +79,7 @@ namespace BausCode.Api.Handlers
         ///     - with the quantity being moved as an increment
         ///     - with the target Location
         /// </remarks>
-        public void Move(Item item, Location from, Location to, decimal quantity)
+        public void Move(ProductVariant item, Location from, Location to, decimal quantity)
         {
             var q = Math.Abs(quantity);
             Release(item.Id, from.Id, -q);
@@ -96,15 +97,16 @@ namespace BausCode.Api.Handlers
             Release(request.ItemId, request.LocationId, request.Quantity);
         }
 
-        internal void Release(int itemId, int locationId, decimal quantity)
+        internal void Release(int variantId, int locationId, decimal quantity)
         {
             quantity.ThrowIfGreaterThan(0);
 
             var transaction = new InventoryTransaction();
-            var item = new ItemHandler(Db, User).GetItem(itemId);
+            var variant = new VariantHandler(Db, User).GetVariant(variantId);
             var location = new LocationHandler(Db, User).GetLocation(locationId);
 
-            transaction.ItemId = item.Id;
+            transaction.ProductId = variant.ProductId;
+            transaction.ProductVariantId = variant.Id;
             transaction.Quantity = quantity;
             transaction.TransactionType = InventoryTransactionTypes.Out;
             transaction.UserId = User.Id.ToInt();

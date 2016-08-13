@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using BausCode.Api.Models;
+using ServiceStack;
 using ServiceStack.OrmLite;
 
 namespace BausCode.Api.Handlers
@@ -24,6 +25,19 @@ namespace BausCode.Api.Handlers
             return Db.LoadSingleById<Product>(id);
         }
 
+        public Product GetProductVariant(int productId, int variantId)
+        {
+            productId.ThrowIfLessThan(1);
+            variantId.ThrowIfLessThan(1);
+
+            return Db.Select(
+                Db.From<Product>().Join<ProductVariant>()
+                    .Where(p => p.Id == productId)
+                    .And<ProductVariant>(v => v.Id == variantId)
+                    .Limit(1)
+                ).Single();
+        }
+
         /// <summary>
         ///     Get all products.
         /// </summary>
@@ -39,29 +53,27 @@ namespace BausCode.Api.Handlers
         }
 
         /// <summary>
-        ///     Get quantity on hand for a particular updatedProduct.
+        ///     Get quantity on hand for a particular ProductVariant.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         /// <remarks>
-        ///     Wraps ItemHandler#GetQuantityOnHand(1)
+        ///     Wraps VariantHandler#GetQuantityOnHand(1)
         /// </remarks>
-        public decimal GetQuantityOnHand(int id)
+        public Dictionary<int, decimal> GetQuantityOnHand(int productId)
         {
-            throw new NotImplementedException();
+            var product = GetProduct(productId);
 
-            var product = GetProduct(id);
-            var itemHandler = new ItemHandler(Db, User);
-            var idsHandler = new ProductItemHandler(Db, User);
+            var variantHandler = new VariantHandler(Db, User);
 
             // TODO(jamesearl)
             // How do we decide how many products are on hand, given the number of items?
             //
-            var itemsOnHand = itemHandler.QuantityOnHand(idsHandler.GetItemIds(product));
+            return variantHandler.QuantityOnHand(product.Variants.Map(v => v.Id));
         }
 
         /// <summary>
-        /// Update an existing Product.
+        ///     Update an existing Product.
         /// </summary>
         /// <param name="id">The ID of the Product to update.</param>
         /// <param name="updatedProduct">The values to update the existing Product with.</param>

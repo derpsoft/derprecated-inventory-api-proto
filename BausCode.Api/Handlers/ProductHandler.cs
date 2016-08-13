@@ -66,9 +66,6 @@ namespace BausCode.Api.Handlers
 
             var variantHandler = new VariantHandler(Db, User);
 
-            // TODO(jamesearl)
-            // How do we decide how many products are on hand, given the number of items?
-            //
             return variantHandler.QuantityOnHand(product.Variants.Map(v => v.Id));
         }
 

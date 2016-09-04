@@ -7,7 +7,7 @@ namespace BausCode.Api.Services
 {
     public class ProductService : BaseService
     {
-        public GetProductResponse Any(GetProduct request)
+        public object Any(GetProduct request)
         {
             var resp = new GetProductResponse();
             var handler = new ProductHandler(Db, CurrentUser);
@@ -19,7 +19,7 @@ namespace BausCode.Api.Services
             return resp;
         }
 
-        public GetProductQuantityOnHandResponse Any(GetProductQuantityOnHand request)
+        public object Any(GetProductQuantityOnHand request)
         {
             var resp = new GetProductQuantityOnHandResponse();
             var handler = new ProductHandler(Db, CurrentUser);
@@ -29,7 +29,7 @@ namespace BausCode.Api.Services
             return resp;
         }
 
-        public UpdateProductResponse Any(UpdateProduct request)
+        public object Any(UpdateProduct request)
         {
             var resp = new UpdateProductResponse();
             var handler = new ProductHandler(Db, CurrentUser);

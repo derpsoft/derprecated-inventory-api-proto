@@ -1,6 +1,5 @@
 ﻿using BausCode.Api.Models;
 using ServiceStack;
-using ServiceStack.Auth;
 
 namespace BausCode.Api.Services
 {

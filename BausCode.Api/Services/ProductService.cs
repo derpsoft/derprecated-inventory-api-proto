@@ -2,11 +2,14 @@
 using BausCode.Api.Models.Dto;
 using BausCode.Api.Models.Routing;
 using ServiceStack;
+using ServiceStack.Logging;
 
 namespace BausCode.Api.Services
 {
     public class ProductService : BaseService
     {
+        protected static ILog Log = LogManager.GetLogger(typeof(ProductService));
+
         public object Any(GetProduct request)
         {
             var resp = new GetProductResponse();

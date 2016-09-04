@@ -9,6 +9,8 @@ using ServiceStack;
 using ServiceStack.Auth;
 using ServiceStack.Configuration;
 using ServiceStack.Data;
+using ServiceStack.Logging;
+using ServiceStack.Logging.NLogger;
 using ServiceStack.OrmLite;
 using ServiceStack.Redis;
 using ServiceStack.Text;
@@ -45,6 +47,22 @@ namespace BausCode.Api.Configuration
 
         public override void Configure(Container container)
         {
+            // Settings
+            SetConfig(new HostConfig());
+
+            JsConfig.EmitCamelCaseNames = true;
+            JsConfig.ExcludeTypeInfo = true;
+            JsConfig.DateHandler = DateHandler.ISO8601;
+
+            LogManager.LogFactory = new NLogFactory();
+
+            var baseSettings = new AppSettings();
+            container.Register(baseSettings);
+            container.Register(c => new MultiAppSettings(c.Resolve<AppSettings>()));
+
+            var appSettings = container.Resolve<MultiAppSettings>();
+
+
             // DB
             container.Register<IDbConnectionFactory>(c =>
             {
@@ -56,21 +74,6 @@ namespace BausCode.Api.Configuration
             container.Register<IRedisClientsManager>(
                 new RedisManagerPool(ConfigurationManager.ConnectionStrings["AzureRedis"].ConnectionString));
 
-            // Settings
-            var baseSettings = new AppSettings();
-
-            container.Register(baseSettings);
-            //            container.RegisterAutoWired<OrmLiteAppSettings>();
-            container.Register(c => new MultiAppSettings(c.Resolve<AppSettings>()));
-
-            var appSettings = container.Resolve<MultiAppSettings>();
-
-            SetConfig(new HostConfig());
-
-            JsConfig.EmitCamelCaseNames = true;
-            JsConfig.ExcludeTypeInfo = true;
-            JsConfig.DateHandler = DateHandler.ISO8601;
-            
             // Validators
             container.RegisterValidators(typeof(IAuditable).Assembly);
 

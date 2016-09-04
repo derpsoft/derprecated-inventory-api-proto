@@ -1,11 +1,13 @@
-﻿using BausCode.Api.Attributes;
-using BausCode.Api.Models.Routing;
+﻿using BausCode.Api.Models.Routing;
+using ServiceStack;
+using ServiceStack.Logging;
 
 namespace BausCode.Api.Services
 {
     public class StatusService : BaseService
     {
-        [ApiKeyAuthorize]
+        protected static ILog Log = LogManager.GetLogger(typeof (StatusService));
+
         public object Any(GetQueueStatus request)
         {
             var response = new GetQueueStatusResponse();

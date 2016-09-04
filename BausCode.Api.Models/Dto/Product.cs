@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using BausCode.Api.Models.Attributes;
 using ServiceStack;
 
+// ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
 
 namespace BausCode.Api.Models.Dto
@@ -13,6 +15,7 @@ namespace BausCode.Api.Models.Dto
 
         public string Title { get; set; }
         public string Description { get; set; }
+        public string Tags { get; set; }
 
         public List<Variant> Variants { get; set; }
 
@@ -23,7 +26,7 @@ namespace BausCode.Api.Models.Dto
                 Id = source.Id,
                 Version = source.RowVersion,
                 Variants = source.Variants.Map(Variant.From)
-            }.PopulateWith(source.Meta ?? new ProductMeta());
+            }.PopulateFromPropertiesWithAttribute(source.Meta, typeof (WhitelistAttribute));
         }
     }
 }

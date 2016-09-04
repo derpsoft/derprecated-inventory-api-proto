@@ -60,8 +60,8 @@ namespace BausCode.Api.Configuration
             var baseSettings = new AppSettings();
 
             container.Register(baseSettings);
-            container.RegisterAutoWired<OrmLiteAppSettings>();
-            container.Register(c => new MultiAppSettings(c.Resolve<OrmLiteAppSettings>(), c.Resolve<AppSettings>()));
+            //            container.RegisterAutoWired<OrmLiteAppSettings>();
+            container.Register(c => new MultiAppSettings(c.Resolve<AppSettings>()));
 
             var appSettings = container.Resolve<MultiAppSettings>();
 
@@ -110,12 +110,12 @@ namespace BausCode.Api.Configuration
 
             // Schema init
             var userRepo = (OrmLiteAuthRepository)container.Resolve<IUserAuthRepository>();
-            var settings = container.Resolve<OrmLiteAppSettings>();
+            //var settings = container.Resolve<OrmLiteAppSettings>();
 
             try
             {
                 userRepo.InitSchema();
-                settings.InitSchema();
+                //settings.InitSchema();
                 using (var ctx = container.Resolve<IDbConnectionFactory>().Open())
                 {
                     ctx.CreateTableIfNotExists<ApiKey>();
@@ -175,7 +175,6 @@ namespace BausCode.Api.Configuration
 
             // Configuration
             var configuration = new Models.Configuration();
-            //configuration.QueueName = appSettings.Get("bc.jobs.opm.queueName");
 
             container.Register(configuration);
         }

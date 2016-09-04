@@ -1,4 +1,5 @@
 ﻿using BausCode.Api.Handlers;
+using BausCode.Api.Models.Dto;
 using BausCode.Api.Models.Routing;
 using ServiceStack;
 
@@ -13,7 +14,7 @@ namespace BausCode.Api.Services
 
             var product = handler.GetProduct(request.Id);
 
-            resp.Product = Models.Dto.Product.From(product);
+            resp.Product = Product.From(product);
 
             return resp;
         }
@@ -32,7 +33,9 @@ namespace BausCode.Api.Services
         {
             var resp = new UpdateProductResponse();
             var handler = new ProductHandler(Db, CurrentUser);
-            handler.Update(request.Id, request.Product);
+
+            resp.Product = Product.From(handler.Update(request.Id, request));
+
             return resp;
         }
 
@@ -42,7 +45,7 @@ namespace BausCode.Api.Services
             var handler = new ProductHandler(Db, CurrentUser);
             var products = handler.GetProducts(request.Skip, request.Take);
 
-            resp.Products = products.Map(Models.Dto.Product.From);
+            resp.Products = products.Map(Product.From);
 
             return resp;
         }

@@ -89,6 +89,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiKey.cs" />
+    <Compile Include="Attributes\BlacklistAttribute.cs" />
+    <Compile Include="Attributes\WhitelistAttribute.cs" />
     <Compile Include="Category.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Dto\Product.cs" />

@@ -13,6 +13,7 @@ namespace BausCode.Api.Models.Dto
 
         public string Title { get; set; }
         public string Description { get; set; }
+
         public List<Variant> Variants { get; set; }
 
         public static Product From(Models.Product source)
@@ -22,7 +23,7 @@ namespace BausCode.Api.Models.Dto
                 Id = source.Id,
                 Version = source.RowVersion,
                 Variants = source.Variants.Map(Variant.From)
-            }.PopulateWith(source.Meta);
+            }.PopulateWith(source.Meta ?? new ProductMeta());
         }
     }
 }

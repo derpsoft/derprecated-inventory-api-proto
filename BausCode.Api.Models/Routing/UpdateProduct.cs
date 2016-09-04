@@ -1,4 +1,8 @@
-﻿using ServiceStack;
+﻿using System.Collections.Generic;
+using BausCode.Api.Models.Attributes;
+using BausCode.Api.Models.Dto;
+using ServiceStack;
+using ServiceStack.DataAnnotations;
 
 namespace BausCode.Api.Models.Routing
 {
@@ -6,6 +10,11 @@ namespace BausCode.Api.Models.Routing
     public class UpdateProduct : IReturn<UpdateProductResponse>
     {
         public int Id { get; set; }
-        public Product Product { get; set; }
+
+        [Whitelist]
+        public ProductMeta Meta { get; set; }
+
+        [Whitelist]
+        public List<Variant> Variants { get; set; }
     }
 }

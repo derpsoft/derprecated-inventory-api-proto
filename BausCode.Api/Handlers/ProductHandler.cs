@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using BausCode.Api.Models;
+using BausCode.Api.Models.Attributes;
 using ServiceStack;
 using ServiceStack.OrmLite;
 
@@ -75,9 +75,19 @@ namespace BausCode.Api.Handlers
         /// <param name="id">The ID of the Product to update.</param>
         /// <param name="updatedProduct">The values to update the existing Product with.</param>
         /// <returns></returns>
-        public Product Update(int id, Product updatedProduct)
+        public Product Update(int id, object updatedProduct)
         {
-            throw new NotImplementedException();
+            updatedProduct.ThrowIfNull();
+
+            var product = GetProduct(id);
+            product.ThrowIfNull();
+
+            product = product
+                .PopulateFromPropertiesWithAttribute(updatedProduct, typeof (WhitelistAttribute));
+
+            Db.Save(product, true);
+
+            return product;
         }
     }
 }

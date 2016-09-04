@@ -2,5 +2,6 @@
 {
     public class UpdateProductResponse
     {
+        public Models.Dto.Product Product { get; set; }
     }
 }

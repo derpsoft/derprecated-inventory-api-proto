@@ -155,6 +155,7 @@
     <Compile Include="Routing\UpdateProfile.cs" />
     <Compile Include="UnitOfMeasure.cs" />
     <Compile Include="UserSession.cs" />
+    <Compile Include="Validation\RegisterValidator.cs" />
     <Compile Include="Warehouse.cs" />
     <Compile Include="WarehouseTransaction.cs" />
   </ItemGroup>

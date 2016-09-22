@@ -1,18 +1,8 @@
-<<<<<<< 7df6b0069281e8448f3f188389482b820025df1e
-﻿using System.Linq;
-using BausCode.Api.Models;
-=======
-﻿using BausCode.Api.Models.Dto;
->>>>>>> add(#12) registration api endpoint implemented
+using BausCode.Api.Models.Dto;
 using BausCode.Api.Models.Routing;
 using ServiceStack;
 using ServiceStack.Auth;
 using ServiceStack.Logging;
-<<<<<<< 7df6b0069281e8448f3f188389482b820025df1e
-using ServiceStack.OrmLite;
-=======
-using UserAuth = ServiceStack.Auth.UserAuth;
->>>>>>> add(#12) registration api endpoint implemented
 
 namespace BausCode.Api.Services
 {
@@ -29,7 +19,6 @@ namespace BausCode.Api.Services
             return new HttpResult(response);
         }
 
-<<<<<<< 7df6b0069281e8448f3f188389482b820025df1e
         public object Any(UpdateProfile request)
         {
             var res = new ProfileResponse();
@@ -67,11 +56,10 @@ namespace BausCode.Api.Services
 
             Request.SaveSession(CurrentSession);
 
-            res.Profile = Models.Dto.Profile.From(CurrentSession);
+            res.Profile = Profile.From(CurrentSession);
             return res;
         }
 
-=======
         public object Any(Register request)
         {
             UserAuthRepository.CreateUserAuth(new UserAuth
@@ -91,6 +79,5 @@ namespace BausCode.Api.Services
                 });
             }
         }
->>>>>>> add(#12) registration api endpoint implemented
     }
 }

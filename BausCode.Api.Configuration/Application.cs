@@ -122,7 +122,7 @@ namespace BausCode.Api.Configuration
             {
                 Email = "james@bauscode.com"
             };
-            var existing = userRepo.GetUserAuthByUserName(testUser.UserName);
+            var existing = userRepo.GetUserAuthByUserName(testUser.Email);
             if (null == existing)
             {
                 userRepo.CreateUserAuth(testUser, "12345");

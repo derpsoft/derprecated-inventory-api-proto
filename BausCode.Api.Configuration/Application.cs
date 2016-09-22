@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Net;
+using System.Net.Mail;
 using System.Reflection;
 using BausCode.Api.Models;
 using Funq;
@@ -129,6 +131,15 @@ namespace BausCode.Api.Configuration
             }
 #endif
 
+            // Mail
+            container.Register(new SmtpClient
+            {
+                Host = appSettings.Get("mail.host"),
+                Port = appSettings.Get("mail.port", 587),
+                Credentials = new NetworkCredential(appSettings.Get("mail.username"), appSettings.Get("mail.password")),
+                EnableSsl = appSettings.Get("mail.useSsl", true)
+            });
+
             // Plugins
             Plugins.Add(new CorsFeature(allowCredentials: true, allowedHeaders: "Content-Type, X-Requested-With",
                 allowOriginWhitelist:
@@ -152,11 +163,6 @@ namespace BausCode.Api.Configuration
                 "/login"
                 ));
             Plugins.Add(new ValidationFeature());
-
-            // Configuration
-            var configuration = new Models.Configuration();
-
-            container.Register(configuration);
         }
     }
 }

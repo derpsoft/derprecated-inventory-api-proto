@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Reflection;
 using BausCode.Api.Models;
-using BausCode.Api.Stores;
 using Funq;
 using ServiceStack;
 using ServiceStack.Auth;
@@ -79,7 +78,6 @@ namespace BausCode.Api.Configuration
 
             // Auth
             container.Register<IUserAuthRepository>(c => new OrmLiteAuthRepository(c.Resolve<IDbConnectionFactory>()));
-            container.RegisterAutoWiredAs<ApiKeyStore, IApiKeyStore>();
 
             // Db filters
             OrmLiteConfig.InsertFilter = (dbCmd, row) =>
@@ -131,18 +129,7 @@ namespace BausCode.Api.Configuration
                 var existing = userRepo.GetUserAuthByUserName(testUser.UserName);
                 if (null == existing)
                 {
-                    testUser = userRepo.CreateUserAuth(testUser, "12345");
-
-                    var apiKey = new ApiKey()
-                    {
-                        ApplicationName = "BausCode",
-                        Key = Guid.NewGuid(),
-                        UserAuthId = testUser.Id
-                    };
-                    using (var ctx = container.Resolve<IDbConnectionFactory>().Open())
-                    {
-                        ctx.Save(apiKey);
-                    }
+                    userRepo.CreateUserAuth(testUser, "12345");
                 }
 #endif
             }

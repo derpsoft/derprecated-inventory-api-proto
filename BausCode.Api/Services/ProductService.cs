@@ -13,7 +13,7 @@ namespace BausCode.Api.Services
         public object Any(GetProduct request)
         {
             var resp = new GetProductResponse();
-            var handler = new ProductHandler(Db, CurrentUser);
+            var handler = new ProductHandler(Db, CurrentSession);
 
             var product = handler.GetProduct(request.Id);
 
@@ -25,7 +25,7 @@ namespace BausCode.Api.Services
         public object Any(GetProductQuantityOnHand request)
         {
             var resp = new GetProductQuantityOnHandResponse();
-            var handler = new ProductHandler(Db, CurrentUser);
+            var handler = new ProductHandler(Db, CurrentSession);
 
             resp.Quantity = handler.GetQuantityOnHand(request.Id);
 
@@ -35,7 +35,7 @@ namespace BausCode.Api.Services
         public object Any(UpdateProduct request)
         {
             var resp = new UpdateProductResponse();
-            var handler = new ProductHandler(Db, CurrentUser);
+            var handler = new ProductHandler(Db, CurrentSession);
 
             resp.Product = Product.From(handler.Update(request.Id, request));
 
@@ -45,7 +45,7 @@ namespace BausCode.Api.Services
         public object Any(GetProducts request)
         {
             var resp = new GetProductsResponse();
-            var handler = new ProductHandler(Db, CurrentUser);
+            var handler = new ProductHandler(Db, CurrentSession);
             var products = handler.GetProducts(request.Skip, request.Take);
 
             resp.Products = products.Map(Product.From);

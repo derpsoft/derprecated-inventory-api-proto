@@ -1,5 +1,6 @@
 ﻿using BausCode.Api.Models;
 using ServiceStack;
+using ServiceStack.Auth;
 
 namespace BausCode.Api.Services
 {
@@ -7,7 +8,9 @@ namespace BausCode.Api.Services
     {
         public Configuration Configuration { get; set; }
 
+        public IUserAuthRepository UserAuthRepository { get; set; }
+
         private UserSession userSession;
-        internal UserSession CurrentUser => userSession ?? (userSession = SessionAs<UserSession>());
+        internal UserSession CurrentSession => userSession ?? (userSession = SessionAs<UserSession>());
     }
 }

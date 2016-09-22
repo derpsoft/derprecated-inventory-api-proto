@@ -7,7 +7,6 @@ namespace BausCode.Api.Services
 {
     public abstract class BaseService : Service
     {
-        public Configuration Configuration { get; set; }
         public AppSettings AppSettings { get; set; }
         public IUserAuthRepository UserAuthRepository { get; set; }
 

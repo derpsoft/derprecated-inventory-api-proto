@@ -91,7 +91,6 @@
     <Compile Include="Attributes\BlacklistAttribute.cs" />
     <Compile Include="Attributes\WhitelistAttribute.cs" />
     <Compile Include="Category.cs" />
-    <Compile Include="Configuration.cs" />
     <Compile Include="Dto\Product.cs" />
     <Compile Include="Dto\Profile.cs" />
     <Compile Include="Dto\UserSession.cs" />
@@ -128,6 +127,8 @@
     <Compile Include="Routing\DeleteProductResponse.cs" />
     <Compile Include="Routing\DeleteWarehouse.cs" />
     <Compile Include="Routing\DeleteWarehouseResponse.cs" />
+    <Compile Include="Routing\ForgotPassword.cs" />
+    <Compile Include="Routing\ForgotPasswordResponse.cs" />
     <Compile Include="Routing\GetCategories.cs" />
     <Compile Include="Routing\GetCategoriesResponse.cs" />
     <Compile Include="Routing\GetOrder.cs" />
@@ -148,6 +149,8 @@
     <Compile Include="Routing\GetWarehouses.cs" />
     <Compile Include="Routing\GetWarehousesResponse.cs" />
     <Compile Include="Routing\ProfileResponse.cs" />
+    <Compile Include="Routing\ResetPassword.cs" />
+    <Compile Include="Routing\ResetPasswordResponse.cs" />
     <Compile Include="Routing\UpdateCategory.cs" />
     <Compile Include="Routing\UpdateCategoryResponse.cs" />
     <Compile Include="Routing\UpdateProduct.cs" />

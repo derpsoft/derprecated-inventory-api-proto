@@ -1,21 +1,20 @@
-﻿using System.Linq;
-using BausCode.Api.Models;
+using BausCode.Api.Models.Dto;
 using BausCode.Api.Models.Routing;
 using ServiceStack;
+using ServiceStack.Auth;
 using ServiceStack.Logging;
-using ServiceStack.OrmLite;
 
 namespace BausCode.Api.Services
 {
     public class UserService : BaseService
     {
-        protected static ILog Log = LogManager.GetLogger(typeof(UserService));
+        protected static ILog Log = LogManager.GetLogger(typeof (UserService));
 
         public object Any(GetUser request)
         {
             var response = new GetUserResponse();
 
-            response.User = Models.Dto.UserSession.From(SessionAs<UserSession>());
+            response.User = UserSession.From(SessionAs<Models.UserSession>());
 
             return new HttpResult(response);
         }
@@ -57,9 +56,28 @@ namespace BausCode.Api.Services
 
             Request.SaveSession(CurrentSession);
 
-            res.Profile = Models.Dto.Profile.From(CurrentSession);
+            res.Profile = Profile.From(CurrentSession);
             return res;
         }
 
+        public object Any(Register request)
+        {
+            UserAuthRepository.CreateUserAuth(new UserAuth
+            {
+                UserName = request.UserName,
+                Email = request.Email
+            }, request.Password);
+
+            using (var service = ResolveService<AuthenticateService>())
+            {
+                Request.RemoveSession();
+                return service.Authenticate(new Authenticate
+                {
+                    provider = AuthenticateService.CredentialsProvider,
+                    UserName = request.Email,
+                    Password = request.Password
+                });
+            }
+        }
     }
 }

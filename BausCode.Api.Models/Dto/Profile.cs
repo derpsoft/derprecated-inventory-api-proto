@@ -2,18 +2,16 @@
 
 namespace BausCode.Api.Models.Dto
 {
-    public class UserAuth
+    public class Profile
     {
-        public int Id { get; set; }
         public string PrimaryEmail { get; set; }
         public string DisplayName { get; set; }
         public List<string> Roles { get; set; }
 
-        public static UserAuth From(ServiceStack.Auth.UserAuth source)
+        public static Profile From(Models.UserSession source)
         {
-            var userAuth = new UserAuth();
+            var userAuth = new Profile();
 
-            userAuth.Id = source.Id;
             userAuth.PrimaryEmail = source.PrimaryEmail;
             userAuth.DisplayName = source.DisplayName;
             userAuth.Roles = source.Roles;

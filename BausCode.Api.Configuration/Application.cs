@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Reflection;
 using BausCode.Api.Models;
-using BausCode.Api.Stores;
 using Funq;
 using ServiceStack;
 using ServiceStack.Auth;
@@ -75,11 +74,10 @@ namespace BausCode.Api.Configuration
                 new RedisManagerPool(ConfigurationManager.ConnectionStrings["AzureRedis"].ConnectionString));
 
             // Validators
-            container.RegisterValidators(typeof(IAuditable).Assembly);
+            container.RegisterValidators(typeof (IAuditable).Assembly);
 
             // Auth
             container.Register<IUserAuthRepository>(c => new OrmLiteAuthRepository(c.Resolve<IDbConnectionFactory>()));
-            container.RegisterAutoWiredAs<ApiKeyStore, IApiKeyStore>();
 
             // Db filters
             OrmLiteConfig.InsertFilter = (dbCmd, row) =>
@@ -112,45 +110,24 @@ namespace BausCode.Api.Configuration
             };
 
             // Schema init
-            var userRepo = (OrmLiteAuthRepository)container.Resolve<IUserAuthRepository>();
-            //var settings = container.Resolve<OrmLiteAppSettings>();
+            var userRepo = (OrmLiteAuthRepository) container.Resolve<IUserAuthRepository>();
 
-            try
+            userRepo.InitSchema();
+            using (var ctx = container.Resolve<IDbConnectionFactory>().Open())
             {
-                userRepo.InitSchema();
-                //settings.InitSchema();
-                using (var ctx = container.Resolve<IDbConnectionFactory>().Open())
-                {
-                    ctx.CreateTableIfNotExists<ApiKey>();
-                }
+                ctx.CreateTableIfNotExists<ApiKey>();
+            }
 #if DEBUG
-                var testUser = (IUserAuth)new UserAuth
-                {
-                    Email = "james@bauscode.com"
-                };
-                var existing = userRepo.GetUserAuthByUserName(testUser.UserName);
-                if (null == existing)
-                {
-                    testUser = userRepo.CreateUserAuth(testUser, "12345");
-
-                    var apiKey = new ApiKey()
-                    {
-                        ApplicationName = "BausCode",
-                        Key = Guid.NewGuid(),
-                        UserAuthId = testUser.Id
-                    };
-                    using (var ctx = container.Resolve<IDbConnectionFactory>().Open())
-                    {
-                        ctx.Save(apiKey);
-                    }
-                }
-#endif
-            }
-            catch (Exception)
+            var testUser = (IUserAuth) new UserAuth
             {
-                // don't block website startup because of db connection failure, just assume that the subsequent calls will fail
+                Email = "james@bauscode.com"
+            };
+            var existing = userRepo.GetUserAuthByUserName(testUser.Email);
+            if (null == existing)
+            {
+                userRepo.CreateUserAuth(testUser, "12345");
             }
-
+#endif
 
             // Plugins
             Plugins.Add(new CorsFeature(allowCredentials: true, allowedHeaders: "Content-Type, X-Requested-With",

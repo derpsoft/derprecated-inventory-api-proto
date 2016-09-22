@@ -1,25 +1,35 @@
+<<<<<<< 7df6b0069281e8448f3f188389482b820025df1e
 ﻿using System.Linq;
 using BausCode.Api.Models;
+=======
+﻿using BausCode.Api.Models.Dto;
+>>>>>>> add(#12) registration api endpoint implemented
 using BausCode.Api.Models.Routing;
 using ServiceStack;
+using ServiceStack.Auth;
 using ServiceStack.Logging;
+<<<<<<< 7df6b0069281e8448f3f188389482b820025df1e
 using ServiceStack.OrmLite;
+=======
+using UserAuth = ServiceStack.Auth.UserAuth;
+>>>>>>> add(#12) registration api endpoint implemented
 
 namespace BausCode.Api.Services
 {
     public class UserService : BaseService
     {
-        protected static ILog Log = LogManager.GetLogger(typeof(UserService));
+        protected static ILog Log = LogManager.GetLogger(typeof (UserService));
 
         public object Any(GetUser request)
         {
             var response = new GetUserResponse();
 
-            response.User = Models.Dto.UserSession.From(SessionAs<UserSession>());
+            response.User = UserSession.From(SessionAs<Models.UserSession>());
 
             return new HttpResult(response);
         }
 
+<<<<<<< 7df6b0069281e8448f3f188389482b820025df1e
         public object Any(UpdateProfile request)
         {
             var res = new ProfileResponse();
@@ -61,5 +71,26 @@ namespace BausCode.Api.Services
             return res;
         }
 
+=======
+        public object Any(Register request)
+        {
+            UserAuthRepository.CreateUserAuth(new UserAuth
+            {
+                UserName = request.UserName,
+                Email = request.Email
+            }, request.Password);
+
+            using (var service = ResolveService<AuthenticateService>())
+            {
+                Request.RemoveSession();
+                return service.Authenticate(new Authenticate
+                {
+                    provider = AuthenticateService.CredentialsProvider,
+                    UserName = request.Email,
+                    Password = request.Password
+                });
+            }
+        }
+>>>>>>> add(#12) registration api endpoint implemented
     }
 }

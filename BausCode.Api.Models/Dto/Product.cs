@@ -18,6 +18,7 @@ namespace BausCode.Api.Models.Dto
         public string Tags { get; set; }
 
         public List<Variant> Variants { get; set; }
+        public List<Image> Images { get; set; }
 
         public static Product From(Models.Product source)
         {
@@ -25,7 +26,8 @@ namespace BausCode.Api.Models.Dto
             {
                 Id = source.Id,
                 Version = source.RowVersion,
-                Variants = source.Variants.Map(Variant.From)
+                Variants = source.Variants.Map(Variant.From),
+                Images = source.Images.Map(Image.From)
             }.PopulateFromPropertiesWithAttribute(source.Meta, typeof (WhitelistAttribute));
         }
     }

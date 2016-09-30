@@ -91,6 +91,7 @@
     <Compile Include="Attributes\BlacklistAttribute.cs" />
     <Compile Include="Attributes\WhitelistAttribute.cs" />
     <Compile Include="Category.cs" />
+    <Compile Include="Dto\Image.cs" />
     <Compile Include="Dto\Product.cs" />
     <Compile Include="Dto\Profile.cs" />
     <Compile Include="Dto\UserSession.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="PermissionNames.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="ProductCategory.cs" />
+    <Compile Include="ProductImage.cs" />
     <Compile Include="ProductMeta.cs" />
     <Compile Include="ProductVariant.cs" />
     <Compile Include="ProductVariantMeta.cs" />

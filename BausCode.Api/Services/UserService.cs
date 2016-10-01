@@ -3,6 +3,7 @@ using BausCode.Api.Models.Routing;
 using ServiceStack;
 using ServiceStack.Auth;
 using ServiceStack.Logging;
+using ServiceStack.OrmLite;
 
 namespace BausCode.Api.Services
 {
@@ -78,6 +79,25 @@ namespace BausCode.Api.Services
                     Password = request.Password
                 });
             }
+        }
+
+        public object Any(SearchUsers request)
+        {
+            var response = new SearchUsersResponse();
+
+            return response;
+        }
+
+        public object Any(GetUsers request)
+        {
+            var response = new GetUsersResponse();
+
+            response.Users = Db.Select(Db.From<UserAuth>()
+                .Skip(request.Skip.GetValueOrDefault(0))
+                .Take(request.Take.GetValueOrDefault(25))
+                ).Map(User.From);
+
+            return response;
         }
     }
 }

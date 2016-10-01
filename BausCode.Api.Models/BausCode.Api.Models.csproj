@@ -98,6 +98,7 @@
     <Compile Include="Dto\Shopify\ProductImage.cs" />
     <Compile Include="Dto\Shopify\ProductOption.cs" />
     <Compile Include="Dto\Shopify\ProductVariant.cs" />
+    <Compile Include="Dto\User.cs" />
     <Compile Include="Dto\UserSession.cs" />
     <Compile Include="Dto\Variant.cs" />
     <Compile Include="IAuditable.cs" />
@@ -153,6 +154,8 @@
     <Compile Include="Routing\GetQueueStatusResponse.cs" />
     <Compile Include="Routing\GetUser.cs" />
     <Compile Include="Routing\GetUserResponse.cs" />
+    <Compile Include="Routing\GetUsers.cs" />
+    <Compile Include="Routing\GetUsersResponse.cs" />
     <Compile Include="Routing\GetUserValidator.cs" />
     <Compile Include="Routing\GetWarehouse.cs" />
     <Compile Include="Routing\GetWarehouseResponse.cs" />
@@ -161,6 +164,8 @@
     <Compile Include="Routing\ProfileResponse.cs" />
     <Compile Include="Routing\ResetPassword.cs" />
     <Compile Include="Routing\ResetPasswordResponse.cs" />
+    <Compile Include="Routing\SearchUsers.cs" />
+    <Compile Include="Routing\SearchUsersResponse.cs" />
     <Compile Include="Routing\Shopify\GetProducts.cs" />
     <Compile Include="Routing\Shopify\GetProductsCount.cs" />
     <Compile Include="Routing\Shopify\GetProductsCountResponse.cs" />

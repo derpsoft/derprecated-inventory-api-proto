@@ -3,6 +3,7 @@ using System.Data;
 using System.Linq;
 using BausCode.Api.Models;
 using BausCode.Api.Models.Attributes;
+using BausCode.Api.Models.Routing;
 using ServiceStack;
 using ServiceStack.OrmLite;
 
@@ -75,7 +76,7 @@ namespace BausCode.Api.Handlers
         /// <param name="id">The ID of the Product to update.</param>
         /// <param name="updatedProduct">The values to update the existing Product with.</param>
         /// <returns></returns>
-        public Product Update(int id, object updatedProduct)
+        public Product Update(int id, UpdateProduct updatedProduct)
         {
             updatedProduct.ThrowIfNull();
 
@@ -88,6 +89,11 @@ namespace BausCode.Api.Handlers
             Db.Save(product, true);
 
             return product;
+        }
+
+        public bool Update(int id, string fieldName, object fieldValue)
+        {
+            return false;
         }
     }
 }

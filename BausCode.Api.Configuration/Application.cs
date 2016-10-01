@@ -149,6 +149,7 @@ namespace BausCode.Api.Configuration
                         "http://localhost:8080",
                         "http://0.0.0.0:8080",
                         "http://0.0.0.0:3000",
+                        "http://inventory-web-dev-wb45gu.herokuapp.com",
                         "https://inventory-web-dev-wb45gu.herokuapp.com"
                     },
                 maxAge: 3600));

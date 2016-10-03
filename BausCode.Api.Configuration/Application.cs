@@ -7,6 +7,7 @@ using System.Reflection;
 using BausCode.Api.Models;
 using Funq;
 using ServiceStack;
+using ServiceStack.Admin;
 using ServiceStack.Auth;
 using ServiceStack.Configuration;
 using ServiceStack.Data;
@@ -165,6 +166,7 @@ namespace BausCode.Api.Configuration
                 ));
             Plugins.Add(new ValidationFeature());
             Plugins.Add(new AutoQueryFeature { MaxLimit = 100 });
+            Plugins.Add(new AdminFeature());
         }
     }
 }

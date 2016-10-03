@@ -164,6 +164,7 @@ namespace BausCode.Api.Configuration
                 "/login"
                 ));
             Plugins.Add(new ValidationFeature());
+            Plugins.Add(new AutoQueryFeature { MaxLimit = 100 });
         }
     }
 }

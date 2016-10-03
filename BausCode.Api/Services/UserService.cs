@@ -81,13 +81,6 @@ namespace BausCode.Api.Services
             }
         }
 
-        public object Any(SearchUsers request)
-        {
-            var response = new SearchUsersResponse();
-
-            return response;
-        }
-
         public object Any(GetUsers request)
         {
             var response = new GetUsersResponse();

@@ -166,6 +166,8 @@
     <Compile Include="Routing\ProfileResponse.cs" />
     <Compile Include="Routing\ResetPassword.cs" />
     <Compile Include="Routing\ResetPasswordResponse.cs" />
+    <Compile Include="Routing\SearchProducts.cs" />
+    <Compile Include="Routing\SearchProductsResponse.cs" />
     <Compile Include="Routing\SearchUsers.cs" />
     <Compile Include="Routing\SearchUsersResponse.cs" />
     <Compile Include="Routing\Shopify\GetProducts.cs" />

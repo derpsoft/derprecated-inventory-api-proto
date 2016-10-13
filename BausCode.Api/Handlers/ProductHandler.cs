@@ -96,8 +96,18 @@ namespace BausCode.Api.Handlers
             update.ThrowIfNull();
             var product = GetProduct(id);
             product.SetProperty(update.FieldName, update.Value);
-            Db.UpdateOnly(product, new[] { update.FieldName }, p => p.Id == product.Id);
+            Db.UpdateOnly(product, new[] {update.FieldName}, p => p.Id == product.Id);
             return product;
+        }
+
+        public List<Product> Search(string query, int? skip, int? take)
+        {
+            return Db.Select(
+                Db.From<Product>()
+                    .UnsafeWhere("FREETEXT(Description, {0})", query)
+                    .Skip(skip)
+                    .Take(take)
+                );
         }
     }
 }

@@ -8,7 +8,7 @@ namespace BausCode.Api.Services
 {
     public class ProductService : BaseService
     {
-        protected static ILog Log = LogManager.GetLogger(typeof(ProductService));
+        protected static ILog Log = LogManager.GetLogger(typeof (ProductService));
 
         public object Any(GetProduct request)
         {
@@ -57,6 +57,17 @@ namespace BausCode.Api.Services
             var resp = new GetProductsResponse();
             var handler = new ProductHandler(Db, CurrentSession);
             var products = handler.GetProducts(request.Skip, request.Take);
+
+            resp.Products = products.Map(Product.From);
+
+            return resp;
+        }
+
+        public object Any(SearchProducts request)
+        {
+            var resp = new SearchProductsResponse();
+            var handler = new ProductHandler(Db, CurrentSession);
+            var products = handler.Search(request.Query, request.Skip, request.Take);
 
             resp.Products = products.Map(Product.From);
 

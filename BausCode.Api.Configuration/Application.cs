@@ -119,6 +119,10 @@ namespace BausCode.Api.Configuration
             using (var ctx = container.Resolve<IDbConnectionFactory>().Open())
             {
                 ctx.CreateTableIfNotExists<ApiKey>();
+                ctx.CreateTableIfNotExists<Product>();
+                ctx.CreateTableIfNotExists<ProductImage>();
+                ctx.CreateTableIfNotExists<ProductTag>();
+                ctx.CreateTableIfNotExists<ProductVariant>();
             }
 #if DEBUG
             var testUser = (IUserAuth) new UserAuth

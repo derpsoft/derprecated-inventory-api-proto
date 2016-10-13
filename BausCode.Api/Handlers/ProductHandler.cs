@@ -91,9 +91,13 @@ namespace BausCode.Api.Handlers
             return product;
         }
 
-        public bool Update(int id, string fieldName, object fieldValue)
+        public Product Update<T>(int id, IUpdatableField<T> update)
         {
-            return false;
+            update.ThrowIfNull();
+            var product = GetProduct(id);
+            product.SetProperty(update.FieldName, update.Value);
+            Db.UpdateOnly(product, new[] { update.FieldName }, p => p.Id == product.Id);
+            return product;
         }
     }
 }

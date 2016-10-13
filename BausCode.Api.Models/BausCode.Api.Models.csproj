@@ -107,12 +107,14 @@
     <Compile Include="InventoryTransaction.cs" />
     <Compile Include="InventoryTransactionTypes.cs" />
     <Compile Include="IPublishable.cs" />
+    <Compile Include="IUpdatableField.cs" />
     <Compile Include="IUpdateFilter.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="PermissionNames.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="ProductCategory.cs" />
+    <Compile Include="ProductExtensions.cs" />
     <Compile Include="ProductImage.cs" />
     <Compile Include="ProductMeta.cs" />
     <Compile Include="ProductTag.cs" />
@@ -174,6 +176,7 @@
     <Compile Include="Routing\UpdateCategory.cs" />
     <Compile Include="Routing\UpdateCategoryResponse.cs" />
     <Compile Include="Routing\UpdateProduct.cs" />
+    <Compile Include="Routing\UpdateProductTitle.cs" />
     <Compile Include="Routing\UpdateProductResponse.cs" />
     <Compile Include="Routing\UpdateProfile.cs" />
     <Compile Include="Tag.cs" />

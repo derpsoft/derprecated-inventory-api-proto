@@ -42,6 +42,16 @@ namespace BausCode.Api.Services
             return resp;
         }
 
+        public object Any(UpdateProductTitle request)
+        {
+            var resp = new UpdateProductResponse();
+
+            var handler = new ProductHandler(Db, CurrentSession);
+            handler.Update(request.Id, request);
+
+            return resp;
+        }
+
         public object Any(GetProducts request)
         {
             var resp = new GetProductsResponse();

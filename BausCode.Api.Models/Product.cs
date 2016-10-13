@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ServiceStack;
+using BausCode.Api.Models.Attributes;
 using ServiceStack.DataAnnotations;
 
 namespace BausCode.Api.Models
@@ -10,7 +10,8 @@ namespace BausCode.Api.Models
     {
         public Product()
         {
-            Meta = new ProductMeta();
+            Variants = new List<ProductVariant>();
+            Images = new List<ProductImage>();
         }
 
         [PrimaryKey]
@@ -19,11 +20,24 @@ namespace BausCode.Api.Models
 
         public long ShopifyId { get; set; }
 
-        public ProductMeta Meta { get; set; }
+        [Whitelist]
+        public string Title { get; set; }
+
+        [Whitelist]
+        public string Description { get; set; }
+
+        [Whitelist]
+        public string Tags { get; set; }
 
         public DateTime CreateDate { get; set; }
         public DateTime ModifyDate { get; set; }
         public ulong RowVersion { get; set; }
+
+        [Reference]
+        public List<ProductVariant> Variants { get; set; }
+
+        [Reference]
+        public List<ProductImage> Images { get; set; }
 
 
         /// <summary>
@@ -32,9 +46,9 @@ namespace BausCode.Api.Models
         /// <param name="source"></param>
         public void Merge(Dto.Shopify.Product source)
         {
-            Meta.Title = source.Title;
-            Meta.Description = source.BodyHtml;
-            Meta.Tags = source.Tags;
+            Title = source.Title;
+            Description = source.BodyHtml;
+            Tags = source.Tags;
 
             foreach (var pv in source.Variants)
             {
@@ -67,17 +81,12 @@ namespace BausCode.Api.Models
 
         public static Product From(Dto.Shopify.Product source)
         {
-            var dest = new Product { ShopifyId = source.Id };
+            var dest = new Product {ShopifyId = source.Id};
 
             dest.Merge(source);
 
             return dest;
         }
-        [Reference]
-        public List<ProductVariant> Variants { get; set; }
-
-        [Reference]
-        public List<ProductImage>  Images { get; set; }
 
         public void OnInsert()
         {

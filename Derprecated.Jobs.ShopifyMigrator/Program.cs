@@ -10,6 +10,7 @@ using ServiceStack.Configuration;
 using ServiceStack.Data;
 using ServiceStack.MiniProfiler.Storage;
 using ServiceStack.OrmLite;
+
 // ReSharper disable AccessToDisposedClosure
 
 namespace Derprecated.Jobs.ShopifyMigrator
@@ -118,60 +119,61 @@ namespace Derprecated.Jobs.ShopifyMigrator
                 Console.WriteLine($"Found\n\tShopify: {shopifyCount.Count}\n");
                 Console.WriteLine("Merging...\n");
 
-                var shopifyProducts = client.Get(new GetProducts { Limit = shopifyCount.Count });
+                var shopifyProducts = client.Get(new GetProducts {Limit = shopifyCount.Count});
 
-                var count = shopifyProducts.Products.AsParallel().Select(p =>
-                {
-                    Product product;
-                    using (var db = Container.Resolve<IDbConnectionFactory>().Open())
+                var count = shopifyProducts.Products.AsParallel()
+                    .Select(p =>
                     {
-                        product = db.Where<Product>(new { ShopifyId = p.Id }).SingleOrDefault();
-
-                        if (product == default(Product))
+                        Product product;
+                        using (var db = Container.Resolve<IDbConnectionFactory>().Open())
                         {
-                            product = Product.From(p);
-                            Console.WriteLine($"New [{product.ShopifyId}] {p.Title.Truncate(40)}...");
-                        }
-                        else
-                        {
-                            db.LoadReferences(product);
-                            product.Merge(p);
+                            product = db.Where<Product>(new {ShopifyId = p.Id}).SingleOrDefault();
 
-                            Console.WriteLine(
-                                $"Existing [{product.ShopifyId} -> {product.Id}] {p.Title.Truncate(40)}...");
-                        }
-
-                        product.Meta.Tags.Split(',')
-                            .Map(x => new Tag { Lowercase = x.ToLowerSafe().Trim(), Name = x.Trim() })
-                            .ExecAll(x =>
+                            if (product == default(Product))
                             {
-                                var tagId = -1;
-                                if (!db.Exists<Tag>(new { x.Lowercase }))
-                                {
-                                    db.Save(x);
-                                    tagId = (int)db.LastInsertId();
-                                }
-                                else
-                                {
-                                    tagId = db.Scalar<int>(
-                                        db.From<Tag>()
-                                            .Select(t => t.Id)
-                                            .Where(t => t.Lowercase == x.Lowercase)
-                                            .Limit(1)
-                                        );
-                                }
+                                product = Product.From(p);
+                                Console.WriteLine($"New [{product.ShopifyId}] {p.Title.Truncate(40)}...");
+                            }
+                            else
+                            {
+                                db.LoadReferences(product);
+                                product.Merge(p);
 
-                                var productTag = new ProductTag { ProductId = product.Id, TagId = tagId };
-                                if (!db.Exists<ProductTag>(productTag))
-                                {
-                                    db.Save(productTag);
-                                }
-                            });
+                                Console.WriteLine(
+                                    $"Existing [{product.ShopifyId} -> {product.Id}] {p.Title.Truncate(40)}...");
+                            }
 
-                        db.Save(product, true);
-                    }
-                    return product;
-                }).Count();
+                            product.Tags.Split(',')
+                                .Map(x => new Tag {Lowercase = x.ToLowerSafe().Trim(), Name = x.Trim()})
+                                .ExecAll(x =>
+                                {
+                                    var tagId = -1;
+                                    if (!db.Exists<Tag>(new {x.Lowercase}))
+                                    {
+                                        db.Save(x);
+                                        tagId = (int) db.LastInsertId();
+                                    }
+                                    else
+                                    {
+                                        tagId = db.Scalar<int>(
+                                            db.From<Tag>()
+                                                .Select(t => t.Id)
+                                                .Where(t => t.Lowercase == x.Lowercase)
+                                                .Limit(1)
+                                            );
+                                    }
+
+                                    var productTag = new ProductTag {ProductId = product.Id, TagId = tagId};
+                                    if (!db.Exists<ProductTag>(productTag))
+                                    {
+                                        db.Save(productTag);
+                                    }
+                                });
+
+                            db.Save(product, true);
+                        }
+                        return product;
+                    }).Count();
 
                 Console.WriteLine($"Saved {count} Products.\n");
             }

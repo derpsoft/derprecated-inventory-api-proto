@@ -3,7 +3,7 @@ using ServiceStack.DataAnnotations;
 
 namespace BausCode.Api.Models
 {
-    public class ProductVariant
+    public class ProductVariant : IAuditable    
     {
         public ProductVariant()
         {

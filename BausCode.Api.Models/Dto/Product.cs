@@ -22,13 +22,15 @@ namespace BausCode.Api.Models.Dto
 
         public static Product From(Models.Product source)
         {
-            return new Product
+            var product = new Product
             {
                 Id = source.Id,
                 Version = source.RowVersion,
                 Variants = source.Variants.Map(Variant.From),
                 Images = source.Images.Map(Image.From)
-            }.PopulateFromPropertiesWithAttribute(source.Meta, typeof (WhitelistAttribute));
+            }.PopulateFromPropertiesWithAttribute(source, typeof (WhitelistAttribute));
+
+            return product;
         }
     }
 }

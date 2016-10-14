@@ -183,6 +183,7 @@
     <Compile Include="Routing\UpdateProfile.cs" />
     <Compile Include="Tag.cs" />
     <Compile Include="UnitOfMeasure.cs" />
+    <Compile Include="UserAuthExtensions.cs" />
     <Compile Include="UserSession.cs" />
     <Compile Include="Validation\RegisterValidator.cs" />
     <Compile Include="Warehouse.cs" />

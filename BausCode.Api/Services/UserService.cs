@@ -1,9 +1,12 @@
+using BausCode.Api.Handlers;
+using BausCode.Api.Models;
 using BausCode.Api.Models.Dto;
 using BausCode.Api.Models.Routing;
 using ServiceStack;
 using ServiceStack.Auth;
 using ServiceStack.Logging;
 using ServiceStack.OrmLite;
+using UserSession = BausCode.Api.Models.Dto.UserSession;
 
 namespace BausCode.Api.Services
 {
@@ -18,6 +21,16 @@ namespace BausCode.Api.Services
             response.User = UserSession.From(SessionAs<Models.UserSession>());
 
             return new HttpResult(response);
+        }
+
+        private object UpdateUserField<T>(IUpdatableField<T> request)
+        {
+            var resp = new UpdateProductResponse();
+
+            var handler = new UserHandler(Db, UserAuthRepository, CurrentSession);
+            handler.Update(request.Id, request);
+
+            return resp;
         }
 
         public object Any(UpdateProfile request)

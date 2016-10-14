@@ -181,6 +181,8 @@
     <Compile Include="Routing\UpdateProductTitle.cs" />
     <Compile Include="Routing\UpdateProductResponse.cs" />
     <Compile Include="Routing\UpdateProfile.cs" />
+    <Compile Include="Routing\UpdateUserFirstName.cs" />
+    <Compile Include="Routing\UpdateUserLastName.cs" />
     <Compile Include="Tag.cs" />
     <Compile Include="UnitOfMeasure.cs" />
     <Compile Include="UserAuthExtensions.cs" />

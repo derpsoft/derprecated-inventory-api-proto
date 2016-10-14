@@ -33,6 +33,16 @@ namespace BausCode.Api.Services
             return resp;
         }
 
+        public object Any(UpdateUserFirstName request)
+        {
+            return UpdateUserField(request);
+        }
+
+        public object Any(UpdateUserLastName request)
+        {
+            return UpdateUserField(request);
+        }
+
         public object Any(UpdateProfile request)
         {
             var res = new ProfileResponse();

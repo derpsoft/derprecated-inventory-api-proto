@@ -89,6 +89,7 @@ namespace BausCode.Api.Services
                 .Skip(request.Skip.GetValueOrDefault(0))
                 .Take(request.Take.GetValueOrDefault(25))
                 ).Map(User.From);
+            response.Count = Db.Count<UserAuth>();
 
             return response;
         }

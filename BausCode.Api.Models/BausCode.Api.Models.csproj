@@ -178,6 +178,7 @@
     <Compile Include="Routing\UpdateCategory.cs" />
     <Compile Include="Routing\UpdateCategoryResponse.cs" />
     <Compile Include="Routing\UpdateProduct.cs" />
+    <Compile Include="Routing\UpdateProductDescription.cs" />
     <Compile Include="Routing\UpdateProductTitle.cs" />
     <Compile Include="Routing\UpdateProductResponse.cs" />
     <Compile Include="Routing\UpdateProfile.cs" />

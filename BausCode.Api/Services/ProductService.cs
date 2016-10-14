@@ -1,8 +1,9 @@
 ﻿using BausCode.Api.Handlers;
-using BausCode.Api.Models.Dto;
+using BausCode.Api.Models;
 using BausCode.Api.Models.Routing;
 using ServiceStack;
 using ServiceStack.Logging;
+using Product = BausCode.Api.Models.Dto.Product;
 
 namespace BausCode.Api.Services
 {
@@ -42,7 +43,7 @@ namespace BausCode.Api.Services
             return resp;
         }
 
-        public object Any(UpdateProductTitle request)
+        private object UpdateProductField<T>(IUpdatableField<T> request)
         {
             var resp = new UpdateProductResponse();
 
@@ -50,6 +51,16 @@ namespace BausCode.Api.Services
             handler.Update(request.Id, request);
 
             return resp;
+        }
+
+        public object Any(UpdateProductTitle request)
+        {
+            return UpdateProductField(request);
+        }
+
+        public object Any(UpdateProductDescription request)
+        {
+            return UpdateProductField(request);
         }
 
         public object Any(GetProducts request)

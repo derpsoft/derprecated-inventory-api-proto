@@ -63,11 +63,7 @@ namespace BausCode.Api.Services
 
         public object Any(Register request)
         {
-            UserAuthRepository.CreateUserAuth(new UserAuth
-            {
-                UserName = request.UserName,
-                Email = request.Email
-            }, request.Password);
+            UserAuthRepository.CreateUserAuth(new UserAuth().PopulateWith(request), request.Password);
 
             using (var service = ResolveService<AuthenticateService>())
             {

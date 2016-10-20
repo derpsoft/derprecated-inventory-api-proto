@@ -17,10 +17,10 @@ namespace BausCode.Api.Handlers
         private IDbConnection Db { get; }
         private UserSession User { get; set; }
 
-        public ProductVariant GetVariant(int id)
+        public Variant GetVariant(int id)
         {
             id.ThrowIfLessThan(1);
-            return Db.SingleById<ProductVariant>(id);
+            return Db.SingleById<Variant>(id);
         }
 
         public decimal QuantityOnHand(int variantId)

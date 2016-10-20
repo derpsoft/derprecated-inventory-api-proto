@@ -124,6 +124,7 @@
     <Compile Include="DecimalExtensions.cs" />
     <Compile Include="Handlers\ImageHandler.cs" />
     <Compile Include="Handlers\InventoryHandler.cs" />
+    <Compile Include="Handlers\PriceHandler.cs" />
     <Compile Include="Handlers\UserHandler.cs" />
     <Compile Include="Handlers\VariantHandler.cs" />
     <Compile Include="Handlers\LocationHandler.cs" />

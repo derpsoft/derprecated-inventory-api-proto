@@ -10,7 +10,7 @@ namespace BausCode.Api.Models
     {
         public Product()
         {
-            Variants = new List<ProductVariant>();
+            Variants = new List<Variant>();
             Images = new List<ProductImage>();
         }
 
@@ -34,7 +34,7 @@ namespace BausCode.Api.Models
         public ulong RowVersion { get; set; }
 
         [Reference]
-        public List<ProductVariant> Variants { get; set; }
+        public List<Variant> Variants { get; set; }
 
         [Reference]
         public List<ProductImage> Images { get; set; }
@@ -54,9 +54,9 @@ namespace BausCode.Api.Models
             {
                 var v = Variants.FirstOrDefault(x => x.ShopifyId == pv.Id);
 
-                if (default(ProductVariant) == v)
+                if (default(Variant) == v)
                 {
-                    Variants.Add(ProductVariant.From(pv));
+                    Variants.Add(Variant.From(pv));
                 }
                 else
                 {

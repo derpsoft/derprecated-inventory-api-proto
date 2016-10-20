@@ -32,9 +32,9 @@ namespace BausCode.Api.Handlers
             variantId.ThrowIfLessThan(1);
 
             return Db.Select(
-                Db.From<Product>().Join<ProductVariant>()
+                Db.From<Product>().Join<Variant>()
                     .Where(p => p.Id == productId)
-                    .And<ProductVariant>(v => v.Id == variantId)
+                    .And<Variant>(v => v.Id == variantId)
                     .Limit(1)
                 ).Single();
         }
@@ -54,7 +54,7 @@ namespace BausCode.Api.Handlers
         }
 
         /// <summary>
-        ///     Get quantity on hand for a particular ProductVariant.
+        ///     Get quantity on hand for a particular Variant.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

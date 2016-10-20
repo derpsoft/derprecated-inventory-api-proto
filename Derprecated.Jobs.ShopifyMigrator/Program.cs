@@ -102,7 +102,7 @@ namespace Derprecated.Jobs.ShopifyMigrator
             {
                 db.CreateTableIfNotExists<Tag>();
                 db.CreateTableIfNotExists<Product>();
-                db.CreateTableIfNotExists<ProductVariant>();
+                db.CreateTableIfNotExists<Variant>();
                 db.CreateTableIfNotExists<ProductTag>();
                 db.CreateTableIfNotExists<ProductImage>();
             }

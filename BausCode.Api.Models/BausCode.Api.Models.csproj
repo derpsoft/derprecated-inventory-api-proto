@@ -118,6 +118,7 @@
     <Compile Include="ProductImage.cs" />
     <Compile Include="ProductMeta.cs" />
     <Compile Include="ProductTag.cs" />
+    <Compile Include="UserPriceOverride.cs" />
     <Compile Include="Variant.cs" />
     <Compile Include="VariantMeta.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -109,5 +109,10 @@ namespace BausCode.Api.Handlers
                     .Take(take)
                 );
         }
+
+        public long Count()
+        {
+            return Db.Count<Product>();
+        }
     }
 }

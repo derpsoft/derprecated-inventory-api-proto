@@ -118,8 +118,11 @@
     <Compile Include="ProductImage.cs" />
     <Compile Include="ProductMeta.cs" />
     <Compile Include="ProductTag.cs" />
-    <Compile Include="ProductVariant.cs" />
-    <Compile Include="ProductVariantMeta.cs" />
+    <Compile Include="Routing\GetPriceOverrides.cs" />
+    <Compile Include="Routing\GetPriceOverridesResponse.cs" />
+    <Compile Include="UserPriceOverride.cs" />
+    <Compile Include="Variant.cs" />
+    <Compile Include="VariantMeta.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleNames.cs" />
     <Compile Include="Routing\CreateCategory.cs" />

@@ -1,15 +1,11 @@
 ﻿using System;
+using BausCode.Api.Models.Attributes;
 using ServiceStack.DataAnnotations;
 
 namespace BausCode.Api.Models
 {
-    public class ProductVariant : IAuditable    
+    public class Variant : IAuditable    
     {
-        public ProductVariant()
-        {
-            Meta = new ProductVariantMeta();
-        }
-
         [PrimaryKey]
         [AutoIncrement]
         public int Id { get; set; }
@@ -20,7 +16,29 @@ namespace BausCode.Api.Models
         [ForeignKey(typeof (Product), OnDelete = "CASCADE", OnUpdate = "CASCADE")]
         public int ProductId { get; set; }
 
-        public ProductVariantMeta Meta { get; set; }
+        [Whitelist]
+        public string Title { get; set; }
+
+        [Whitelist]
+        public decimal Price { get; set; }
+
+        [Whitelist]
+        public string Sku { get; set; }
+
+        [Whitelist]
+        public int Grams { get; set; }
+
+        [Whitelist]
+        public string Barcode { get; set; }
+
+        [Whitelist]
+        public decimal Weight { get; set; }
+
+        [Whitelist]
+        public string WeightUnit { get; set; }
+
+        [Whitelist]
+        public string Color { get; set; }
 
         public DateTime CreateDate { get; set; }
         public DateTime ModifyDate { get; set; }
@@ -32,18 +50,18 @@ namespace BausCode.Api.Models
         /// <param name="source"></param>
         public void Merge(Dto.Shopify.ProductVariant source)
         {
-            Meta.Title = source.Title;
-            Meta.Price = decimal.Parse(source.Price);
-            Meta.Sku = source.Sku;
-            Meta.Grams = source.Grams;
-            Meta.Barcode = source.Barcode;
-            Meta.Weight = source.Weight;
-            Meta.WeightUnit = source.WeightUnit;
+            Title = source.Title;
+            Price = decimal.Parse(source.Price);
+            Sku = source.Sku;
+            Grams = source.Grams;
+            Barcode = source.Barcode;
+            Weight = source.Weight;
+            WeightUnit = source.WeightUnit;
         }
 
-        public static ProductVariant From(Dto.Shopify.ProductVariant source)
+        public static Variant From(Dto.Shopify.ProductVariant source)
         {
-            var dest = new ProductVariant {ShopifyId = source.Id, ProductShopifyId = source.ProductShopifyId};
+            var dest = new Variant {ShopifyId = source.Id, ProductShopifyId = source.ProductShopifyId};
 
             dest.Merge(source);
 

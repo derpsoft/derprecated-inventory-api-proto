@@ -79,7 +79,7 @@ namespace BausCode.Api.Handlers
         ///     - with the quantity being moved as an increment
         ///     - with the target Location
         /// </remarks>
-        public void Move(ProductVariant item, Location from, Location to, decimal quantity)
+        public void Move(Variant item, Location from, Location to, decimal quantity)
         {
             var q = Math.Abs(quantity);
             Release(item.Id, from.Id, -q);

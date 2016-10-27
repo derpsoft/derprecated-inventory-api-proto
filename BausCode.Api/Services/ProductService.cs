@@ -70,6 +70,7 @@ namespace BausCode.Api.Services
             var products = handler.GetProducts(request.Skip, request.Take);
 
             resp.Products = products.Map(Product.From);
+            resp.Count = handler.Count();
 
             return resp;
         }

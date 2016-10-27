@@ -10,7 +10,7 @@ namespace BausCode.Api.Models.Routing
     {
         public UpdateProduct()
         {
-            Variants = new List<Variant>();
+            Variants = new List<Dto.Variant>();
             Images = new List<Image>();
         }
 
@@ -20,7 +20,7 @@ namespace BausCode.Api.Models.Routing
         public ProductMeta Meta { get; set; }
 
         [Whitelist]
-        public List<Variant> Variants { get; set; }
+        public List<Dto.Variant> Variants { get; set; }
 
         [Whitelist]
         public List<Image> Images { get; set; }

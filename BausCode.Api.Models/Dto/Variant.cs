@@ -22,10 +22,10 @@ namespace BausCode.Api.Models.Dto
         public string Sku { get; set; }
 
         [Whitelist]
-        public int Grams { get; set; }
+        public string Barcode { get; set; }
 
         [Whitelist]
-        public string Barcode { get; set; }
+        public int Grams { get; set; }
 
         [Whitelist]
         public decimal Weight { get; set; }
@@ -33,13 +33,16 @@ namespace BausCode.Api.Models.Dto
         [Whitelist]
         public string WeightUnit { get; set; }
 
-        public static Variant From(ProductVariant source)
+        [Whitelist]
+        public string Color { get; set; }
+
+        public static Variant From(Models.Variant source)
         {
             return new Variant
             {
                 Id = source.Id,
                 Version = source.RowVersion
-            }.PopulateWith(source.Meta);
+            }.PopulateFromPropertiesWithAttribute(source, typeof(WhitelistAttribute));
         }
     }
 }

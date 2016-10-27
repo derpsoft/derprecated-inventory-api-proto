@@ -2,7 +2,7 @@
 
 namespace BausCode.Api.Models
 {
-    public class ProductVariantMeta
+    public class VariantMeta
     {
         [Whitelist]
         public string Title { get; set; }

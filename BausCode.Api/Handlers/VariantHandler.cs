@@ -20,7 +20,12 @@ namespace BausCode.Api.Handlers
         public Variant GetVariant(int id)
         {
             id.ThrowIfLessThan(1);
-            return Db.SingleById<Variant>(id);
+
+            var variant = Db.SingleById<Variant>(id);
+
+            variant.Price = new PriceHandler(Db, User).GetPrice(variant);
+
+            return variant;
         }
 
         public decimal QuantityOnHand(int variantId)

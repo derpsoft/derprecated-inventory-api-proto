@@ -102,12 +102,7 @@ namespace BausCode.Api.Handlers
 
         public List<Product> Search(string query, int? skip, int? take)
         {
-            return Db.Select(
-                Db.From<Product>()
-                    .UnsafeWhere("FREETEXT(Description, {0})", query)
-                    .Skip(skip)
-                    .Take(take)
-                );
+            return Db.SqlList<Product>(@"SELECT * FROM dbo.Product WHERE FREETEXT([Description], @query)", new {query});
         }
 
         public long Count()

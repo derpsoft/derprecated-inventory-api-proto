@@ -113,5 +113,10 @@ namespace BausCode.Api.Handlers
             Db.UpdateOnly(new Product() {ShopifyId = shopifyId},
                 q.Update(x => x.ShopifyId).Where(x => x.Id == productId));
         }
+
+        public Product Create(CreateProduct createProduct)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

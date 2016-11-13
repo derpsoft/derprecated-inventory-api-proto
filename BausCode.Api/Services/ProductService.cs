@@ -59,6 +59,24 @@ namespace BausCode.Api.Services
             return resp;
         }
 
+        public object Any(CreateProduct request)
+        {
+            var resp = new CreateProductResponse();
+            var productHandler = new ProductHandler(Db, CurrentSession);
+            var shopifyHandler = new ShopifyHandler(ShopifyServiceClient);
+
+            var product = productHandler.Create(request);
+            var shopifyProduct = Models.Shopify.Product.From(product);
+
+            shopifyProduct = shopifyHandler.Create(shopifyProduct);
+            // ReSharper disable once PossibleInvalidOperationException
+            productHandler.SetShopifyId(product.Id, shopifyProduct.Id.Value);
+
+            resp.Product = Product.From(product);
+
+            return resp;
+        }
+
         private object UpdateProductField<T>(IUpdatableField<T> request)
         {
             var resp = new UpdateProductResponse();

@@ -18,7 +18,7 @@ namespace BausCode.Api.Models
         [AutoIncrement]
         public int Id { get; set; }
 
-        public long ShopifyId { get; set; }
+        public long? ShopifyId { get; set; }
 
         [Whitelist]
         public string Title { get; set; }
@@ -81,7 +81,7 @@ namespace BausCode.Api.Models
 
         public static Product From(Shopify.Product source)
         {
-            var dest = new Product {ShopifyId = source.Id};
+            var dest = new Product {ShopifyId = source.Id.Value};
 
             dest.Merge(source);
 

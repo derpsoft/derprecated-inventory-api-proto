@@ -1,4 +1,5 @@
-﻿using BausCode.Api.Models.Shopify;
+﻿using System;
+using BausCode.Api.Models.Shopify;
 using ServiceStack;
 
 namespace BausCode.Api.Handlers
@@ -25,16 +26,19 @@ namespace BausCode.Api.Handlers
         {
             product.ThrowIfNull();
 
-            var result = Client.Put(new UpdateProduct() {Id = product.Id, Product = product});
+            if (!product.Id.HasValue)
+                throw new ArgumentNullException(nameof(product));
+
+            var result = Client.Put(new UpdateProduct {Id = product.Id.Value, Product = product});
 
             return result.Product;
         }
 
-        public Product Create(CreateProduct product)
+        public Product Create(Product product)
         {
             product.ThrowIfNull();
 
-            var result = Client.Post(product);
+            var result = Client.Post(new CreateProduct {Product = product});
 
             return result.Product;
         }

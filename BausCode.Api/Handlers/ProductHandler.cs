@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using BausCode.Api.Models;
@@ -103,6 +104,14 @@ namespace BausCode.Api.Handlers
         public long Count()
         {
             return Db.Count<Product>();
+        }
+
+        public void SetShopifyId(int productId, long shopifyId)
+        {
+            var q = Db.From<Product>();
+
+            Db.UpdateOnly(new Product() {ShopifyId = shopifyId},
+                q.Update(x => x.ShopifyId).Where(x => x.Id == productId));
         }
     }
 }

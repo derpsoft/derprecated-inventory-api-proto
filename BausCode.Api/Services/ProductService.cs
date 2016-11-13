@@ -41,8 +41,20 @@ namespace BausCode.Api.Services
             var shopifyHandler = new ShopifyHandler(ShopifyServiceClient);
             var product = productHandler.Update(request.Id, request);
 
+            var shopifyProduct = Models.Shopify.Product.From(product);
+            if (shopifyProduct.Id.HasValue)
+            {
+                shopifyHandler.Update(shopifyProduct);
+            }
+            else
+            {
+                shopifyProduct = shopifyHandler.Create(shopifyProduct);
+                // ReSharper disable once PossibleInvalidOperationException
+                productHandler.SetShopifyId(product.Id, shopifyProduct.Id.Value);
+            }
+
             resp.Product = Product.From(product);
-            shopifyHandler.Update(Models.Shopify.Product.From(product));
+
 
             return resp;
         }

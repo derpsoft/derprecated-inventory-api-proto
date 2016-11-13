@@ -10,42 +10,42 @@ namespace BausCode.Api.Models.Shopify
     // ReSharper disable once ClassNeverInstantiated.Global
     public class Product
     {
-        [DataMember(Name = "id")]
-        public long Id { get; set; }
+        [DataMember(Name = "id", EmitDefaultValue = false)]
+        public long? Id { get; set; }
 
-        [DataMember(Name = "title")]
+        [DataMember(Name = "title", EmitDefaultValue = false)]
         public string Title { get; set; }
 
-        [DataMember(Name = "body_html")]
+        [DataMember(Name = "body_html", EmitDefaultValue = false)]
         public string BodyHtml { get; set; }
 
-        [DataMember(Name = "vendor")]
+        [DataMember(Name = "vendor", EmitDefaultValue = false)]
         public string Vendor { get; set; }
 
-        [DataMember(Name = "product_type")]
+        [DataMember(Name = "product_type", EmitDefaultValue = false)]
         public string ProductType { get; set; }
 
-        [DataMember(Name = "handle")]
+        [DataMember(Name = "handle", EmitDefaultValue = false)]
         public string Handle { get; set; }
 
-        [DataMember(Name = "created_at")]
+        [DataMember(Name = "created_at", EmitDefaultValue = false)]
         public DateTimeOffset CreatedAt { get; set; }
 
-        [DataMember(Name = "updated_at")]
+        [DataMember(Name = "updated_at", EmitDefaultValue = false)]
         public DateTimeOffset ModifiedAt { get; set; }
 
-        [DataMember(Name = "published_at")]
+        [DataMember(Name = "published_at", EmitDefaultValue = false)]
         public DateTimeOffset PublishedAt { get; set; }
 
-        [DataMember(Name = "tags")]
+        [DataMember(Name = "tags", EmitDefaultValue = false)]
         public string Tags { get; set; }
 
-        [DataMember(Name = "variants")]
+        [DataMember(Name = "variants", EmitDefaultValue = false)]
         public List<Variant> Variants { get; set; }
 
         public List<Option> Options { get; set; }
 
-        [DataMember(Name = "images")]
+        [DataMember(Name = "images", EmitDefaultValue = false)]
         public List<Image> Images { get; set; }
 
         public static Product From(Models.Product source)

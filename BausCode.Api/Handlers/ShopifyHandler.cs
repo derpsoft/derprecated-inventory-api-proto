@@ -21,11 +21,11 @@ namespace BausCode.Api.Handlers
             return result.Product;
         }
 
-        public Product Update(UpdateProduct product)
+        public Product Update(Product product)
         {
             product.ThrowIfNull();
 
-            var result = Client.Put(product);
+            var result = Client.Put(new UpdateProduct() {Id = product.Id, Product = product});
 
             return result.Product;
         }

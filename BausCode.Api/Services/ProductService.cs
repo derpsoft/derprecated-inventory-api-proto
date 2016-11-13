@@ -10,6 +10,7 @@ namespace BausCode.Api.Services
     public class ProductService : BaseService
     {
         protected static ILog Log = LogManager.GetLogger(typeof (ProductService));
+        public ShopifyServiceClient ShopifyServiceClient { get; set; }
 
         public object Any(GetProduct request)
         {
@@ -36,9 +37,12 @@ namespace BausCode.Api.Services
         public object Any(UpdateProduct request)
         {
             var resp = new UpdateProductResponse();
-            var handler = new ProductHandler(Db, CurrentSession);
+            var productHandler = new ProductHandler(Db, CurrentSession);
+            var shopifyHandler = new ShopifyHandler(ShopifyServiceClient);
+            var product = productHandler.Update(request.Id, request);
 
-            resp.Product = Product.From(handler.Update(request.Id, request));
+            resp.Product = Product.From(product);
+            shopifyHandler.Update(Models.Shopify.Product.From(product));
 
             return resp;
         }

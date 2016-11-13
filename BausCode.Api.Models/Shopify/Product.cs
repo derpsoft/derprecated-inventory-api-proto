@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using BausCode.Api.Models.Attributes;
+using ServiceStack;
 
 namespace BausCode.Api.Models.Shopify
 {
@@ -45,5 +47,15 @@ namespace BausCode.Api.Models.Shopify
 
         [DataMember(Name = "images")]
         public List<Image> Images { get; set; }
+
+        public static Product From(Models.Product source)
+        {
+            var product = new Product
+            {
+                Id = source.ShopifyId
+            };
+
+            return product;
+        }
     }
 }

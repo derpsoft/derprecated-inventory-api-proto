@@ -100,11 +100,6 @@ namespace BausCode.Api.Handlers
             return product;
         }
 
-        public List<Product> Search(string query, int? skip, int? take)
-        {
-            return Db.SqlList<Product>(@"SELECT * FROM dbo.Product WHERE FREETEXT([Description], @query)", new {query});
-        }
-
         public long Count()
         {
             return Db.Count<Product>();

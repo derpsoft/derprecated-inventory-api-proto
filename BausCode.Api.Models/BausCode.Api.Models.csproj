@@ -120,6 +120,8 @@
     <Compile Include="ProductTag.cs" />
     <Compile Include="Routing\GetPriceOverrides.cs" />
     <Compile Include="Routing\GetPriceOverridesResponse.cs" />
+    <Compile Include="Routing\ProductTypeahead.cs" />
+    <Compile Include="Routing\ProductTypeaheadResponse.cs" />
     <Compile Include="UserPriceOverride.cs" />
     <Compile Include="Variant.cs" />
     <Compile Include="VariantMeta.cs" />
@@ -170,7 +172,6 @@
     <Compile Include="Routing\ResetPassword.cs" />
     <Compile Include="Routing\ResetPasswordResponse.cs" />
     <Compile Include="Routing\SearchProducts.cs" />
-    <Compile Include="Routing\SearchProductsResponse.cs" />
     <Compile Include="Routing\SearchUsers.cs" />
     <Compile Include="Routing\SearchUsersResponse.cs" />
     <Compile Include="Routing\Shopify\GetProducts.cs" />

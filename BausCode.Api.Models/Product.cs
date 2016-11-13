@@ -44,7 +44,7 @@ namespace BausCode.Api.Models
         ///     Merge fields from source into this.
         /// </summary>
         /// <param name="source"></param>
-        public void Merge(Dto.Shopify.Product source)
+        public void Merge(Shopify.Product source)
         {
             Title = source.Title;
             Description = source.BodyHtml;
@@ -79,7 +79,7 @@ namespace BausCode.Api.Models
             }
         }
 
-        public static Product From(Dto.Shopify.Product source)
+        public static Product From(Shopify.Product source)
         {
             var dest = new Product {ShopifyId = source.Id};
 

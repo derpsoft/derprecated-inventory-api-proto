@@ -24,12 +24,12 @@ namespace BausCode.Api.Models
         ///     Merge fields from source into this.
         /// </summary>
         /// <param name="source"></param>
-        public void Merge(Dto.Shopify.ProductImage source)
+        public void Merge(Shopify.Image source)
         {
             SourceUrl = source.Url;
         }
 
-        public static ProductImage From(Dto.Shopify.ProductImage source)
+        public static ProductImage From(Shopify.Image source)
         {
             var dest = new ProductImage() { ShopifyId = source.Id };
 

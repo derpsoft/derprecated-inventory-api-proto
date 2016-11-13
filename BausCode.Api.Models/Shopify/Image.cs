@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace BausCode.Api.Models.Dto.Shopify
+namespace BausCode.Api.Models.Shopify
 {
     [DataContract]
-    public class ProductImage
+    public class Image
     {
         [DataMember(Name = "id")]
         public long Id { get; set; }

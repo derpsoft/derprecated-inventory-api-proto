@@ -48,7 +48,7 @@ namespace BausCode.Api.Models
         ///     Merge fields from source into this.
         /// </summary>
         /// <param name="source"></param>
-        public void Merge(Dto.Shopify.ProductVariant source)
+        public void Merge(Shopify.Variant source)
         {
             Title = source.Title;
             Price = decimal.Parse(source.Price);
@@ -59,7 +59,7 @@ namespace BausCode.Api.Models
             WeightUnit = source.WeightUnit;
         }
 
-        public static Variant From(Dto.Shopify.ProductVariant source)
+        public static Variant From(Shopify.Variant source)
         {
             var dest = new Variant {ShopifyId = source.Id, ProductShopifyId = source.ProductShopifyId};
 

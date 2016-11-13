@@ -3,13 +3,16 @@ using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using BausCode.Api.Models;
-using BausCode.Api.Models.Routing.Shopify;
+using BausCode.Api.Models.Shopify;
 using Funq;
 using ServiceStack;
 using ServiceStack.Configuration;
 using ServiceStack.Data;
 using ServiceStack.MiniProfiler.Storage;
 using ServiceStack.OrmLite;
+using Product = BausCode.Api.Models.Product;
+using ProductImage = BausCode.Api.Models.ProductImage;
+using Variant = BausCode.Api.Models.Variant;
 
 // ReSharper disable AccessToDisposedClosure
 
@@ -114,7 +117,7 @@ namespace Derprecated.Jobs.ShopifyMigrator
             {
                 Console.WriteLine(@"Requesting latest product counts...");
 
-                var shopifyCount = client.Get(new GetProductsCount());
+                var shopifyCount = client.Get(new CountProducts());
 
                 Console.WriteLine($"Found\n\tShopify: {shopifyCount.Count}\n");
                 Console.WriteLine("Merging...\n");

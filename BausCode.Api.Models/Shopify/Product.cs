@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace BausCode.Api.Models.Dto.Shopify
+namespace BausCode.Api.Models.Shopify
 {
     [DataContract]
     // ReSharper disable once ClassNeverInstantiated.Global
@@ -39,11 +39,11 @@ namespace BausCode.Api.Models.Dto.Shopify
         public string Tags { get; set; }
 
         [DataMember(Name = "variants")]
-        public List<ProductVariant> Variants { get; set; }
+        public List<Variant> Variants { get; set; }
 
-        public List<ProductOption> Options { get; set; }
+        public List<Option> Options { get; set; }
 
         [DataMember(Name = "images")]
-        public List<ProductImage> Images { get; set; }
+        public List<Image> Images { get; set; }
     }
 }

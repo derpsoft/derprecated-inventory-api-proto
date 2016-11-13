@@ -94,10 +94,6 @@
     <Compile Include="Dto\Image.cs" />
     <Compile Include="Dto\Product.cs" />
     <Compile Include="Dto\Profile.cs" />
-    <Compile Include="Dto\Shopify\Product.cs" />
-    <Compile Include="Dto\Shopify\ProductImage.cs" />
-    <Compile Include="Dto\Shopify\ProductOption.cs" />
-    <Compile Include="Dto\Shopify\ProductVariant.cs" />
     <Compile Include="Dto\User.cs" />
     <Compile Include="Dto\UserSession.cs" />
     <Compile Include="Dto\Variant.cs" />
@@ -122,6 +118,30 @@
     <Compile Include="Routing\GetPriceOverridesResponse.cs" />
     <Compile Include="Routing\ProductTypeahead.cs" />
     <Compile Include="Routing\ProductTypeaheadResponse.cs" />
+    <Compile Include="Shopify\CountImages.cs" />
+    <Compile Include="Shopify\CountResponse.cs" />
+    <Compile Include="Shopify\CreateImage.cs" />
+    <Compile Include="Shopify\CreateProduct.cs" />
+    <Compile Include="Shopify\CreateVariant.cs" />
+    <Compile Include="Shopify\GetImage.cs" />
+    <Compile Include="Shopify\GetImages.cs" />
+    <Compile Include="Shopify\GetProduct.cs" />
+    <Compile Include="Shopify\GetProducts.cs" />
+    <Compile Include="Shopify\CountProducts.cs" />
+    <Compile Include="Shopify\ImageResponse.cs" />
+    <Compile Include="Shopify\ImagesResponse.cs" />
+    <Compile Include="Shopify\ProductsResponse.cs" />
+    <Compile Include="Shopify\GetProductsValidator.cs" />
+    <Compile Include="Shopify\GetVariant.cs" />
+    <Compile Include="Shopify\Product.cs" />
+    <Compile Include="Shopify\Image.cs" />
+    <Compile Include="Shopify\Option.cs" />
+    <Compile Include="Shopify\ProductResponse.cs" />
+    <Compile Include="Shopify\UpdateImage.cs" />
+    <Compile Include="Shopify\UpdateProduct.cs" />
+    <Compile Include="Shopify\UpdateVariant.cs" />
+    <Compile Include="Shopify\Variant.cs" />
+    <Compile Include="Shopify\VariantResponse.cs" />
     <Compile Include="UserPriceOverride.cs" />
     <Compile Include="Variant.cs" />
     <Compile Include="VariantMeta.cs" />
@@ -174,11 +194,6 @@
     <Compile Include="Routing\SearchProducts.cs" />
     <Compile Include="Routing\SearchUsers.cs" />
     <Compile Include="Routing\SearchUsersResponse.cs" />
-    <Compile Include="Routing\Shopify\GetProducts.cs" />
-    <Compile Include="Routing\Shopify\GetProductsCount.cs" />
-    <Compile Include="Routing\Shopify\GetProductsCountResponse.cs" />
-    <Compile Include="Routing\Shopify\GetProductsResponse.cs" />
-    <Compile Include="Routing\Shopify\GetProductsValidator.cs" />
     <Compile Include="Routing\UpdateCategory.cs" />
     <Compile Include="Routing\UpdateCategoryResponse.cs" />
     <Compile Include="Routing\UpdateProduct.cs" />
@@ -199,6 +214,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -2,9 +2,9 @@
 
 namespace BausCode.Api.Models.Shopify
 {
-    [Route("/admin/products/{ProductId}.json", "GET")]
+    [Route("/admin/products/{Id}.json", "GET")]
     public class GetProduct : IReturn<ProductResponse>
     {
-        public long ProductId { get; set; }
+        public long Id { get; set; }
     }
 }

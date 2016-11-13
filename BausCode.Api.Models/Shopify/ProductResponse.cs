@@ -3,7 +3,7 @@
 namespace BausCode.Api.Models.Shopify
 {
     [DataContract]
-    internal class ProductResponse
+    public class ProductResponse
     {
         [DataMember(Name = "product")]
         public Product Product { get; set; }

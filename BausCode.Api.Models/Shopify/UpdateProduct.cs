@@ -5,7 +5,7 @@ namespace BausCode.Api.Models.Shopify
 {
     [Route("/admin/products/{Id}.json", "PUT")]
     [DataContract]
-    public class UpdateProduct : IReturn<Product>
+    public class UpdateProduct : IReturn<ProductResponse>
     {
         public long Id { get; set; }
 

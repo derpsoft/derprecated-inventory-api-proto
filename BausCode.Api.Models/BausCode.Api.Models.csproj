@@ -118,6 +118,7 @@
     <Compile Include="Routing\GetPriceOverridesResponse.cs" />
     <Compile Include="Routing\ProductTypeahead.cs" />
     <Compile Include="Routing\ProductTypeaheadResponse.cs" />
+    <Compile Include="Routing\ProductTypeaheadValidator.cs" />
     <Compile Include="Shopify\CountImages.cs" />
     <Compile Include="Shopify\CountResponse.cs" />
     <Compile Include="Shopify\CreateImage.cs" />

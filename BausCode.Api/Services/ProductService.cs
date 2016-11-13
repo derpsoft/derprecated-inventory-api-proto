@@ -75,15 +75,15 @@ namespace BausCode.Api.Services
             return resp;
         }
 
-        public object Any(SearchProducts request)
-        {
-            var resp = new SearchProductsResponse();
-            var handler = new ProductHandler(Db, CurrentSession);
-            var products = handler.Search(request.Query, request.Skip, request.Take);
+        //public object Any(SearchProducts request)
+        //{
+        //    var resp = new SearchProductsResponse();
+        //    var handler = new ProductHandler(Db, CurrentSession);
+        //    var products = handler.Search(request.Query, request.Skip, request.Take);
 
-            resp.Products = products.Map(Product.From);
+        //    resp.Products = products.Map(Product.From);
 
-            return resp;
-        }
+        //    return resp;
+        //}
     }
 }

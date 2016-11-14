@@ -8,8 +8,8 @@ namespace BausCode.Api.Models.Routing
     public class ProductTypeahead : QueryDb<Product>
     {
         [Required]
-        [QueryDbField(Template = "CONTAINS({Field}, {Value})", Field = "Title",
-            ValueFormat = "{0}")]
+        [QueryDbField(Template = "{Field} LIKE {Value}", Field = "Title",
+            ValueFormat = "%{0}%")]
         public string Query { get; set; }
     }
 }

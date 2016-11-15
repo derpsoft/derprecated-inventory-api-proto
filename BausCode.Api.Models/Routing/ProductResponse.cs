@@ -2,6 +2,6 @@
 {
     public class ProductResponse
     {
-        public Dto.Product Product { get; set; }
+        public Product Product { get; set; }
     }
 }

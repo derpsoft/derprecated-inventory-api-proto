@@ -19,7 +19,7 @@ namespace BausCode.Api.Services
 
             var product = handler.GetProduct(request.Id);
 
-            resp.Product = Product.From(product);
+            resp.Product = product;
 
             return resp;
         }
@@ -54,7 +54,7 @@ namespace BausCode.Api.Services
                 productHandler.SetShopifyId(product.Id, shopifyProduct.Id.Value);
             }
 
-            resp.Product = Product.From(product);
+            resp.Product = product;
 
             return resp;
         }
@@ -85,7 +85,7 @@ namespace BausCode.Api.Services
             var handler = new ProductHandler(Db, CurrentSession);
             var products = handler.GetProducts(request.Skip, request.Take);
 
-            resp.Products = products.Map(Product.From);
+            resp.Products = products;
             resp.Count = handler.Count();
 
             return resp;

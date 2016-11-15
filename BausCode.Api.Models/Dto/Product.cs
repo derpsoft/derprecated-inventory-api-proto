@@ -12,12 +12,17 @@ namespace BausCode.Api.Models.Dto
         public int Id { get; set; }
         public ulong Version { get; set; }
 
-
         public string Title { get; set; }
         public string Description { get; set; }
         public string Tags { get; set; }
+        public decimal Price { get; set; }
+        public string Sku { get; set; }
+        public int Grams { get; set; }
+        public string Barcode { get; set; }
+        public decimal Weight { get; set; }
+        public string WeightUnit { get; set; }
+        public string Color { get; set; }
 
-        public List<Variant> Variants { get; set; }
         public List<Image> Images { get; set; }
 
         public static Product From(Models.Product source)
@@ -26,7 +31,6 @@ namespace BausCode.Api.Models.Dto
             {
                 Id = source.Id,
                 Version = source.RowVersion,
-                Variants = source.Variants.Map(Variant.From),
                 Images = source.Images.Map(Image.From)
             }.PopulateFromPropertiesWithAttribute(source, typeof (WhitelistAttribute));
 

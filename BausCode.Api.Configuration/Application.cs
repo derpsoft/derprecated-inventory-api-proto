@@ -122,7 +122,6 @@ namespace BausCode.Api.Configuration
                 ctx.CreateTableIfNotExists<Product>();
                 ctx.CreateTableIfNotExists<ProductImage>();
                 ctx.CreateTableIfNotExists<ProductTag>();
-                ctx.CreateTableIfNotExists<Variant>();
                 ctx.CreateTableIfNotExists<UserPriceOverride>();
             }
 #if DEBUG
@@ -172,6 +171,13 @@ namespace BausCode.Api.Configuration
             Plugins.Add(new ValidationFeature());
             Plugins.Add(new AutoQueryFeature {MaxLimit = 100});
             Plugins.Add(new AdminFeature());
+
+            // Misc
+            container.Register(new ShopifyServiceClient($"https://{appSettings.Get("shopify.store.domain")}")
+            {
+                UserName = appSettings.Get("shopify.api.key"),
+                Password = appSettings.Get("shopify.api.password")
+            });
         }
     }
 }

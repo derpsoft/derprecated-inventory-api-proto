@@ -3,13 +3,15 @@ using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using BausCode.Api.Models;
-using BausCode.Api.Models.Routing.Shopify;
+using BausCode.Api.Models.Attributes;
+using BausCode.Api.Models.Shopify;
 using Funq;
 using ServiceStack;
 using ServiceStack.Configuration;
 using ServiceStack.Data;
 using ServiceStack.MiniProfiler.Storage;
 using ServiceStack.OrmLite;
+using Product = BausCode.Api.Models.Product;
 
 // ReSharper disable AccessToDisposedClosure
 
@@ -102,7 +104,6 @@ namespace Derprecated.Jobs.ShopifyMigrator
             {
                 db.CreateTableIfNotExists<Tag>();
                 db.CreateTableIfNotExists<Product>();
-                db.CreateTableIfNotExists<Variant>();
                 db.CreateTableIfNotExists<ProductTag>();
                 db.CreateTableIfNotExists<ProductImage>();
             }
@@ -114,7 +115,7 @@ namespace Derprecated.Jobs.ShopifyMigrator
             {
                 Console.WriteLine(@"Requesting latest product counts...");
 
-                var shopifyCount = client.Get(new GetProductsCount());
+                var shopifyCount = client.Get(new CountProducts());
 
                 Console.WriteLine($"Found\n\tShopify: {shopifyCount.Count}\n");
                 Console.WriteLine("Merging...\n");
@@ -122,17 +123,28 @@ namespace Derprecated.Jobs.ShopifyMigrator
                 var shopifyProducts = client.Get(new GetProducts {Limit = shopifyCount.Count});
 
                 var count = shopifyProducts.Products.AsParallel()
-                    .Select(p =>
+                    .SelectMany(p =>
+                        p.Variants.Map(v =>
+                        {
+                            var x = Product.From(p)
+                                .PopulateFromPropertiesWithAttribute(v, typeof (WhitelistAttribute));
+
+                            x.ShopifyVariantId = v.Id;
+
+                            return x;
+                        })
+                    ).Select(p =>
                     {
                         Product product;
+
                         using (var db = Container.Resolve<IDbConnectionFactory>().Open())
                         {
-                            product = db.Where<Product>(new {ShopifyId = p.Id}).SingleOrDefault();
+                            product = db.Where<Product>(new {p.ShopifyId, p.ShopifyVariantId}).SingleOrDefault();
 
                             if (product == default(Product))
                             {
-                                product = Product.From(p);
-                                Console.WriteLine($"New [{product.ShopifyId}] {p.Title.Truncate(40)}...");
+                                Console.WriteLine($"New [{p.ShopifyId}] {p.Title.Truncate(40)}...");
+                                product = p;
                             }
                             else
                             {

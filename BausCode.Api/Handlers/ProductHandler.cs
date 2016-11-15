@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using BausCode.Api.Models;
@@ -26,19 +27,6 @@ namespace BausCode.Api.Handlers
             return Db.LoadSingleById<Product>(id);
         }
 
-        public Product GetProductVariant(int productId, int variantId)
-        {
-            productId.ThrowIfLessThan(1);
-            variantId.ThrowIfLessThan(1);
-
-            return Db.Select(
-                Db.From<Product>().Join<Variant>()
-                    .Where(p => p.Id == productId)
-                    .And<Variant>(v => v.Id == variantId)
-                    .Limit(1)
-                ).Single();
-        }
-
         /// <summary>
         ///     Get all products.
         /// </summary>
@@ -56,40 +44,58 @@ namespace BausCode.Api.Handlers
         /// <summary>
         ///     Get quantity on hand for a particular Variant.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="productId"></param>
         /// <returns></returns>
         /// <remarks>
         ///     Wraps VariantHandler#GetQuantityOnHand(1)
         /// </remarks>
-        public Dictionary<int, decimal> GetQuantityOnHand(int productId)
+        public decimal GetQuantityOnHand(int productId)
         {
             var product = GetProduct(productId);
 
-            var variantHandler = new VariantHandler(Db, User);
-
-            return variantHandler.QuantityOnHand(product.Variants.Map(v => v.Id));
+            return Db.Scalar<decimal>(
+                Db.From<InventoryTransaction>()
+                    .Where(it => it.ProductId == product.Id)
+                    .Select(it => Sql.Sum(it.Quantity))
+                );
         }
 
-        /// <summary>
-        ///     Update an existing Product.
-        /// </summary>
-        /// <param name="id">The ID of the Product to update.</param>
-        /// <param name="updatedProduct">The values to update the existing Product with.</param>
-        /// <returns></returns>
-        public Product Update(int id, UpdateProduct updatedProduct)
+        public Product Save(Product product)
         {
-            updatedProduct.ThrowIfNull();
+            product.ThrowIfNull(nameof(product));
 
-            var product = GetProduct(id);
-            product.ThrowIfNull();
+            if (product.Id >= 1)
+            {
+                var existing = GetProduct(product.Id);
+                if (default(Product) == existing)
+                    throw new ArgumentException("invalid Id for existing product", nameof(product));
 
-            product = product
-                .PopulateFromPropertiesWithAttribute(updatedProduct, typeof (WhitelistAttribute));
-
-            Db.Save(product, true);
-
+                var upsert = existing.PopulateWith(product);
+                Db.Save(upsert, true);
+            }
             return product;
         }
+
+//        /// <summary>
+//        ///     Update an existing Product.
+//        /// </summary>
+//        /// <param name="id">The ID of the Product to update.</param>
+//        /// <param name="updatedProduct">The values to update the existing Product with.</param>
+//        /// <returns></returns>
+//        public Product Update(int id, UpdateProduct updatedProduct)
+//        {
+//            updatedProduct.ThrowIfNull();
+//
+//            var product = GetProduct(id);
+//            product.ThrowIfNull();
+//
+//            product = product
+//                .PopulateFromPropertiesWithAttribute(updatedProduct, typeof (WhitelistAttribute));
+//
+//            Db.Save(product, true);
+//
+//            return product;
+//        }
 
         public Product Update<T>(int id, IUpdatableField<T> update)
         {
@@ -103,6 +109,14 @@ namespace BausCode.Api.Handlers
         public long Count()
         {
             return Db.Count<Product>();
+        }
+
+        public void SetShopifyId(int productId, long shopifyId)
+        {
+            var q = Db.From<Product>();
+
+            Db.UpdateOnly(new Product() {ShopifyId = shopifyId},
+                q.Update(x => x.ShopifyId).Where(x => x.Id == productId));
         }
     }
 }

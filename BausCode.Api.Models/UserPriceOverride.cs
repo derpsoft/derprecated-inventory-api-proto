@@ -11,8 +11,8 @@ namespace BausCode.Api.Models
         [AutoIncrement]
         public int Id { get; set; }
 
-        [ForeignKey(typeof (Variant), OnDelete = "CASCADE", OnUpdate = "CASCADE")]
-        public int VariantId { get; set; }
+        [ForeignKey(typeof (Product), OnDelete = "CASCADE", OnUpdate = "CASCADE")]
+        public int ProductId { get; set; }
 
         [ForeignKey(typeof (UserAuth), OnDelete = "CASCADE", OnUpdate = "CASCADE")]
         public int UserAuthId { get; set; }

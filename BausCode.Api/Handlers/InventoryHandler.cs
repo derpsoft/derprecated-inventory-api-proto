@@ -51,7 +51,6 @@ namespace BausCode.Api.Handlers
             var location = new LocationHandler(Db, User).GetLocation(locationId);
 
             transaction.ProductId = product.Id;
-            transaction.ProductVariantId = product.Id;
             transaction.Quantity = quantity;
             transaction.TransactionType = InventoryTransactionTypes.In;
             transaction.UserId = User.Id.ToInt();
@@ -106,7 +105,6 @@ namespace BausCode.Api.Handlers
             var location = new LocationHandler(Db, User).GetLocation(locationId);
 
             transaction.ProductId = product.Id;
-            transaction.ProductVariantId = product.Id;
             transaction.Quantity = quantity;
             transaction.TransactionType = InventoryTransactionTypes.Out;
             transaction.UserId = User.Id.ToInt();

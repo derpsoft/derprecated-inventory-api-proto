@@ -114,9 +114,12 @@
     <Compile Include="ProductTag.cs" />
     <Compile Include="Routing\GetPriceOverrides.cs" />
     <Compile Include="Routing\GetPriceOverridesResponse.cs" />
+    <Compile Include="Routing\ProductResponse.cs" />
     <Compile Include="Routing\ProductTypeahead.cs" />
     <Compile Include="Routing\ProductTypeaheadResponse.cs" />
     <Compile Include="Routing\ProductTypeaheadValidator.cs" />
+    <Compile Include="Routing\QuantityOnHandResponse.cs" />
+    <Compile Include="Routing\SaveProduct.cs" />
     <Compile Include="Shopify\CountImages.cs" />
     <Compile Include="Shopify\CountResponse.cs" />
     <Compile Include="Shopify\CreateImage.cs" />
@@ -150,8 +153,6 @@
     <Compile Include="Routing\CreateInventoryTransactionResponse.cs" />
     <Compile Include="Routing\CreateOrder.cs" />
     <Compile Include="Routing\CreateOrderResponse.cs" />
-    <Compile Include="Routing\CreateProduct.cs" />
-    <Compile Include="Routing\CreateProductResponse.cs" />
     <Compile Include="Routing\CreateWarehouse.cs" />
     <Compile Include="Routing\CreateWarehouseResponse.cs" />
     <Compile Include="Routing\CreateWarehouseTransaction.cs" />
@@ -171,7 +172,6 @@
     <Compile Include="Routing\GetProduct.cs" />
     <Compile Include="Routing\GetProductQuantityOnHand.cs" />
     <Compile Include="Routing\GetProductQuantityOnHandResponse.cs" />
-    <Compile Include="Routing\GetProductResponse.cs" />
     <Compile Include="Routing\GetProducts.cs" />
     <Compile Include="Routing\GetProductsResponse.cs" />
     <Compile Include="Routing\GetQueueStatus.cs" />
@@ -193,10 +193,8 @@
     <Compile Include="Routing\SearchUsersResponse.cs" />
     <Compile Include="Routing\UpdateCategory.cs" />
     <Compile Include="Routing\UpdateCategoryResponse.cs" />
-    <Compile Include="Routing\UpdateProduct.cs" />
     <Compile Include="Routing\UpdateProductDescription.cs" />
     <Compile Include="Routing\UpdateProductTitle.cs" />
-    <Compile Include="Routing\UpdateProductResponse.cs" />
     <Compile Include="Routing\UpdateProfile.cs" />
     <Compile Include="Routing\UpdateUserFirstName.cs" />
     <Compile Include="Routing\UpdateUserLastName.cs" />

@@ -14,7 +14,7 @@ namespace BausCode.Api.Services
 
         public object Any(GetProduct request)
         {
-            var resp = new GetProductResponse();
+            var resp = new ProductResponse();
             var handler = new ProductHandler(Db, CurrentSession);
 
             var product = handler.GetProduct(request.Id);
@@ -26,7 +26,7 @@ namespace BausCode.Api.Services
 
         public object Any(GetProductQuantityOnHand request)
         {
-            var resp = new GetProductQuantityOnHandResponse();
+            var resp = new QuantityOnHandResponse();
             var handler = new ProductHandler(Db, CurrentSession);
 
             resp.Quantity = handler.GetQuantityOnHand(request.Id);
@@ -34,12 +34,13 @@ namespace BausCode.Api.Services
             return resp;
         }
 
-        public object Any(UpdateProduct request)
+        public object Any(SaveProduct request)
         {
-            var resp = new UpdateProductResponse();
+            var resp = new ProductResponse();
             var productHandler = new ProductHandler(Db, CurrentSession);
             var shopifyHandler = new ShopifyHandler(ShopifyServiceClient);
-            var product = productHandler.Update(request.Id, request);
+
+            var product = productHandler.Save(request.Product);
 
             var shopifyProduct = Models.Shopify.Product.From(product);
             if (shopifyProduct.Id.HasValue)
@@ -55,31 +56,12 @@ namespace BausCode.Api.Services
 
             resp.Product = Product.From(product);
 
-
-            return resp;
-        }
-
-        public object Any(CreateProduct request)
-        {
-            var resp = new CreateProductResponse();
-            var productHandler = new ProductHandler(Db, CurrentSession);
-            var shopifyHandler = new ShopifyHandler(ShopifyServiceClient);
-
-            var product = productHandler.Create(request);
-            var shopifyProduct = Models.Shopify.Product.From(product);
-
-            shopifyProduct = shopifyHandler.Create(shopifyProduct);
-            // ReSharper disable once PossibleInvalidOperationException
-            productHandler.SetShopifyId(product.Id, shopifyProduct.Id.Value);
-
-            resp.Product = Product.From(product);
-
             return resp;
         }
 
         private object UpdateProductField<T>(IUpdatableField<T> request)
         {
-            var resp = new UpdateProductResponse();
+            var resp = new ProductResponse();
 
             var handler = new ProductHandler(Db, CurrentSession);
             handler.Update(request.Id, request);
@@ -108,16 +90,5 @@ namespace BausCode.Api.Services
 
             return resp;
         }
-
-        //public object Any(SearchProducts request)
-        //{
-        //    var resp = new SearchProductsResponse();
-        //    var handler = new ProductHandler(Db, CurrentSession);
-        //    var products = handler.Search(request.Query, request.Skip, request.Take);
-
-        //    resp.Products = products.Map(Product.From);
-
-        //    return resp;
-        //}
     }
 }

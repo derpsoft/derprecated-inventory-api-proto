@@ -71,6 +71,25 @@ namespace BausCode.Api.Handlers
             return variantHandler.QuantityOnHand(product.Variants.Map(v => v.Id));
         }
 
+        public Product Save(Product product)
+        {
+            product.ThrowIfNull(nameof(product));
+
+            if (product.Id >= 1)
+            {
+                var existing = GetProduct(product.Id);
+                if (default(Product) == existing)
+                    throw new ArgumentException("invalid Id for existing product", nameof(product));
+
+                var upsert = existing.PopulateWith(product);
+                Db.Save(upsert, true);
+            }
+            else
+            {
+                
+            }
+        }
+
         /// <summary>
         ///     Update an existing Product.
         /// </summary>

@@ -122,7 +122,6 @@ namespace BausCode.Api.Configuration
                 ctx.CreateTableIfNotExists<Product>();
                 ctx.CreateTableIfNotExists<ProductImage>();
                 ctx.CreateTableIfNotExists<ProductTag>();
-                ctx.CreateTableIfNotExists<Variant>();
                 ctx.CreateTableIfNotExists<UserPriceOverride>();
             }
 #if DEBUG

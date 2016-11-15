@@ -17,25 +17,25 @@ namespace BausCode.Api.Handlers
         private IDbConnection Db { get; }
         private UserSession User { get; }
 
-        public decimal GetPrice(Variant variant)
+        public decimal GetPrice(Product product)
         {
             var userId = User.UserAuthId.ToInt();
             var price = Db.Select<decimal>(Db.From<UserPriceOverride>()
                 .Select(x => x.Price)
                 .Where(x => x.UserAuthId == userId)
-                .And(x => x.VariantId == variant.Id)
+                .And(x => x.ProductId == product.Id)
                 .Limit(1)
                 );
 
             if (price.Count > 0)
             {
-                return price.DefaultIfEmpty(variant.Price).FirstOrDefault();
+                return price.DefaultIfEmpty(product.Price).FirstOrDefault();
             }
 
             /* 
              * If no price override found, return default.
              */
-            return variant.Price;
+            return product.Price;
         }
     }
 }

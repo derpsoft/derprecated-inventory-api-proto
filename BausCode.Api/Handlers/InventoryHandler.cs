@@ -42,16 +42,16 @@ namespace BausCode.Api.Handlers
             Receive(request.ItemId, request.LocationId, request.Quantity);
         }
 
-        internal void Receive(int itemId, int locationId, decimal quantity)
+        internal void Receive(int productId, int locationId, decimal quantity)
         {
             quantity.ThrowIfLessThan(0);
 
             var transaction = new InventoryTransaction();
-            var item = new VariantHandler(Db, User).GetVariant(itemId);
+            var product = new ProductHandler(Db, User).GetProduct(productId);
             var location = new LocationHandler(Db, User).GetLocation(locationId);
 
-            transaction.ProductId = item.ProductId;
-            transaction.ProductVariantId = item.Id;
+            transaction.ProductId = product.Id;
+            transaction.ProductVariantId = product.Id;
             transaction.Quantity = quantity;
             transaction.TransactionType = InventoryTransactionTypes.In;
             transaction.UserId = User.Id.ToInt();
@@ -79,7 +79,7 @@ namespace BausCode.Api.Handlers
         ///     - with the quantity being moved as an increment
         ///     - with the target Location
         /// </remarks>
-        public void Move(Variant item, Location from, Location to, decimal quantity)
+        public void Move(Product item, Location from, Location to, decimal quantity)
         {
             var q = Math.Abs(quantity);
             Release(item.Id, from.Id, -q);
@@ -97,16 +97,16 @@ namespace BausCode.Api.Handlers
             Release(request.ItemId, request.LocationId, request.Quantity);
         }
 
-        internal void Release(int variantId, int locationId, decimal quantity)
+        internal void Release(int productId, int locationId, decimal quantity)
         {
             quantity.ThrowIfGreaterThan(0);
 
             var transaction = new InventoryTransaction();
-            var variant = new VariantHandler(Db, User).GetVariant(variantId);
+            var product = new ProductHandler(Db, User).GetProduct(productId);
             var location = new LocationHandler(Db, User).GetLocation(locationId);
 
-            transaction.ProductId = variant.ProductId;
-            transaction.ProductVariantId = variant.Id;
+            transaction.ProductId = product.Id;
+            transaction.ProductVariantId = product.Id;
             transaction.Quantity = quantity;
             transaction.TransactionType = InventoryTransactionTypes.Out;
             transaction.UserId = User.Id.ToInt();

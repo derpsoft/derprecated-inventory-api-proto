@@ -10,7 +10,6 @@ namespace BausCode.Api.Models
     {
         public Product()
         {
-            Variants = new List<Variant>();
             Images = new List<ProductImage>();
         }
 
@@ -19,6 +18,8 @@ namespace BausCode.Api.Models
         public int Id { get; set; }
 
         public long? ShopifyId { get; set; }
+
+        public long? ShopifyVariantId { get; set; }
 
         [Whitelist]
         public string Title { get; set; }
@@ -29,12 +30,30 @@ namespace BausCode.Api.Models
         [Whitelist]
         public string Tags { get; set; }
 
+        [Whitelist]
+        public decimal Price { get; set; }
+
+        [Whitelist]
+        public string Sku { get; set; }
+
+        [Whitelist]
+        public int Grams { get; set; }
+
+        [Whitelist]
+        public string Barcode { get; set; }
+
+        [Whitelist]
+        public decimal Weight { get; set; }
+
+        [Whitelist]
+        public string WeightUnit { get; set; }
+
+        [Whitelist]
+        public string Color { get; set; }
+
         public DateTime CreateDate { get; set; }
         public DateTime ModifyDate { get; set; }
         public ulong RowVersion { get; set; }
-
-        [Reference]
-        public List<Variant> Variants { get; set; }
 
         [Reference]
         public List<ProductImage> Images { get; set; }
@@ -50,19 +69,26 @@ namespace BausCode.Api.Models
             Description = source.BodyHtml;
             Tags = source.Tags;
 
-            foreach (var pv in source.Variants)
+            foreach (var img in source.Images)
             {
-                var v = Variants.FirstOrDefault(x => x.ShopifyId == pv.Id);
+                var i = Images.FirstOrDefault(x => x.ShopifyId == img.Id);
 
-                if (default(Variant) == v)
+                if (default(ProductImage) == i)
                 {
-                    Variants.Add(Variant.From(pv));
+                    Images.Add(ProductImage.From(img));
                 }
                 else
                 {
-                    v.Merge(pv);
+                    i.SourceUrl = img.Url;
                 }
             }
+        }
+
+        public void Merge(Product source)
+        {
+            Title = source.Title;
+            Description = source.Description;
+            Tags = source.Tags;
 
             foreach (var img in source.Images)
             {
@@ -74,14 +100,14 @@ namespace BausCode.Api.Models
                 }
                 else
                 {
-                    i.Merge(img);
+                    i.SourceUrl = img.SourceUrl;
                 }
             }
         }
 
         public static Product From(Shopify.Product source)
         {
-            var dest = new Product {ShopifyId = source.Id.Value};
+            var dest = new Product {ShopifyId = source.Id};
 
             dest.Merge(source);
 

@@ -117,7 +117,6 @@
     <Compile Include="Handlers\PriceHandler.cs" />
     <Compile Include="Handlers\ShopifyHandler.cs" />
     <Compile Include="Handlers\UserHandler.cs" />
-    <Compile Include="Handlers\VariantHandler.cs" />
     <Compile Include="Handlers\LocationHandler.cs" />
     <Compile Include="Handlers\ProductHandler.cs" />
     <Compile Include="IntegerExtensions.cs" />

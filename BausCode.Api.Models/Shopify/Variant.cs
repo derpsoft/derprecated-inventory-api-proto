@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using BausCode.Api.Models.Attributes;
 
 namespace BausCode.Api.Models.Shopify
 {
@@ -16,9 +17,11 @@ namespace BausCode.Api.Models.Shopify
         public string Title { get; set; }
 
         [DataMember(Name = "price", EmitDefaultValue = false)]
+        [Whitelist]
         public string Price { get; set; }
 
         [DataMember(Name = "sku", EmitDefaultValue = false)]
+        [Whitelist]
         public string Sku { get; set; }
 
         [DataMember(Name = "position", EmitDefaultValue = false)]
@@ -55,6 +58,7 @@ namespace BausCode.Api.Models.Shopify
         public bool Taxable { get; set; }
 
         [DataMember(Name = "barcode", EmitDefaultValue = false)]
+        [Whitelist]
         public string Barcode { get; set; }
 
         [DataMember(Name = "image_id", EmitDefaultValue = false)]
@@ -64,9 +68,11 @@ namespace BausCode.Api.Models.Shopify
         public int InventoryQuantity { get; set; }
 
         [DataMember(Name = "weight", EmitDefaultValue = false)]
+        [Whitelist]
         public decimal Weight { get; set; }
 
         [DataMember(Name = "weight_unit", EmitDefaultValue = false)]
+        [Whitelist]
         public string WeightUnit { get; set; }
 
         [DataMember(Name = "old_inventory_quantity", EmitDefaultValue = false)]

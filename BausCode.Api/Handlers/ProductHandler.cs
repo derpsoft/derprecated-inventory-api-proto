@@ -27,19 +27,6 @@ namespace BausCode.Api.Handlers
             return Db.LoadSingleById<Product>(id);
         }
 
-        public Product GetProductVariant(int productId, int variantId)
-        {
-            productId.ThrowIfLessThan(1);
-            variantId.ThrowIfLessThan(1);
-
-            return Db.Select(
-                Db.From<Product>().Join<Variant>()
-                    .Where(p => p.Id == productId)
-                    .And<Variant>(v => v.Id == variantId)
-                    .Limit(1)
-                ).Single();
-        }
-
         /// <summary>
         ///     Get all products.
         /// </summary>
@@ -66,9 +53,7 @@ namespace BausCode.Api.Handlers
         {
             var product = GetProduct(productId);
 
-            var variantHandler = new VariantHandler(Db, User);
-
-            return variantHandler.QuantityOnHand(product.Variants.Map(v => v.Id));
+            return new ProductHandler(Db, User).GetQuantityOnHand(productId);
         }
 
         public Product Save(Product product)
@@ -84,10 +69,7 @@ namespace BausCode.Api.Handlers
                 var upsert = existing.PopulateWith(product);
                 Db.Save(upsert, true);
             }
-            else
-            {
-                
-            }
+            return product;
         }
 
         /// <summary>

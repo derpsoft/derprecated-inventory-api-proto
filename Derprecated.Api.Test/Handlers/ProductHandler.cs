@@ -13,7 +13,7 @@ namespace Derprecated.Api.Test.Handlers
     [TestFixture]
     [Parallelizable]
     [Author(Constants.Authors.James)]
-    public class ProductHandlerTest
+    public class ProductHandler
     {
         private static ServiceStackHost AppHost;
 
@@ -29,7 +29,7 @@ namespace Derprecated.Api.Test.Handlers
                 new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider));
             container.Register(c => c.Resolve<IDbConnectionFactory>().Open());
             container.Register(Constants.UnitTestUserSession);
-            container.RegisterAutoWired<ProductHandler>();
+            container.RegisterAutoWired<BausCode.Api.Handlers.ProductHandler>();
 
             using (var db = container.Resolve<IDbConnectionFactory>().Open())
             {
@@ -41,9 +41,9 @@ namespace Derprecated.Api.Test.Handlers
 
         [Test]
         [Author(Constants.Authors.James)]
-        public void CanCountProducts()
+        public void Count_GetsCorrectCount()
         {
-            var handler = AppHost.Container.Resolve<ProductHandler>();
+            var handler = AppHost.Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
             long count = -1;
 
             Assert.DoesNotThrow(() => { count = handler.Count(); });
@@ -55,7 +55,7 @@ namespace Derprecated.Api.Test.Handlers
         [Author(Constants.Authors.James)]
         public void GetProduct_WithId_GetsCorrectProduct()
         {
-            var handler = AppHost.Container.Resolve<ProductHandler>();
+            var handler = AppHost.Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
             var expected = BausCode.Api.Models.Test.Seeds.Product.EmptyProduct;
             var testId = expected.Id;
 
@@ -71,7 +71,7 @@ namespace Derprecated.Api.Test.Handlers
         [TestCase(int.MinValue)]
         public void GetProduct_WithInvalidId_Throws(int testId)
         {
-            var handler = AppHost.Container.Resolve<ProductHandler>();
+            var handler = AppHost.Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
 
             Assert.Throws<ArgumentOutOfRangeException>(() => handler.GetProduct(testId));
         }
@@ -83,7 +83,7 @@ namespace Derprecated.Api.Test.Handlers
         [TestCase(int.MaxValue)]
         public void GetProduct_WithValidId_DoesNotThrow(int testId)
         {
-            var handler = AppHost.Container.Resolve<ProductHandler>();
+            var handler = AppHost.Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
 
             Assert.DoesNotThrow(() => handler.GetProduct(testId));
         }

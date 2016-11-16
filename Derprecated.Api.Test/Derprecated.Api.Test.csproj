@@ -105,7 +105,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Handlers\ProductHandlerTest.cs" />
+    <Compile Include="Handlers\InventoryHandler.cs" />
+    <Compile Include="Handlers\ProductHandler.cs" />
     <Compile Include="TestTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

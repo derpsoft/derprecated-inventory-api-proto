@@ -3,10 +3,8 @@ using BausCode.Api.Models;
 using BausCode.Api.Models.Test;
 using Funq;
 using NUnit.Framework;
-using ServiceStack;
 using ServiceStack.Data;
 using ServiceStack.OrmLite;
-using ServiceStack.Testing;
 
 namespace Derprecated.Api.Test.Handlers
 {
@@ -28,18 +26,56 @@ namespace Derprecated.Api.Test.Handlers
 
             using (var db = Container.Resolve<IDbConnectionFactory>().Open())
             {
+                db.DropAndCreateTable<Product>();
                 db.DropAndCreateTable<InventoryTransaction>();
             }
         }
 
         [Test]
+        [TestOf(typeof(BausCode.Api.Handlers.InventoryHandler))]
         [Author(Constants.Authors.James)]
         [TestCase(0)]
+        [TestCase(-1)]
         public void QuantityOnHand_InvalidProductId_Throws(int testId)
         {
             var handler = Container.Resolve<BausCode.Api.Handlers.InventoryHandler>();
 
             Assert.Throws<ArgumentOutOfRangeException>(() => handler.GetQuantityOnHand(testId));
+        }
+
+        [Test]
+        [Author(Constants.Authors.James)]
+        [TestCase(0)]
+        [TestCase(-1)]
+        public void Receive_InvalidLocationId_Throws(int testId)
+        {
+            var handler = Container.Resolve<BausCode.Api.Handlers.InventoryHandler>();
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => handler.Receive(1, testId, 1));
+        }
+
+        [Test]
+        [TestOf(typeof(BausCode.Api.Handlers.InventoryHandler))]
+        [Author(Constants.Authors.James)]
+        [TestCase(0)]
+        [TestCase(-1)]
+        public void Receive_InvalidProductId_Throws(int testId)
+        {
+            var handler = Container.Resolve<BausCode.Api.Handlers.InventoryHandler>();
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => handler.Receive(testId, 1, 1));
+        }
+
+        [Test]
+        [TestOf(typeof(BausCode.Api.Handlers.InventoryHandler))]
+        [Author(Constants.Authors.James)]
+        [TestCase(0)]
+        [TestCase(-1)]
+        public void Receive_InvalidQuantity_Throws(decimal testQuantity)
+        {
+            var handler = Container.Resolve<BausCode.Api.Handlers.InventoryHandler>();
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => handler.Receive(1, 1, testQuantity));
         }
     }
 }

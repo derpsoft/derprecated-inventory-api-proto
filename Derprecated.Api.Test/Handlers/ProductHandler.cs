@@ -33,6 +33,7 @@ namespace Derprecated.Api.Test.Handlers
         }
 
         [Test]
+        [TestOf(typeof(BausCode.Api.Handlers.ProductHandler))]
         [Author(Constants.Authors.James)]
         public void Count_GetsCorrectCount()
         {
@@ -45,6 +46,7 @@ namespace Derprecated.Api.Test.Handlers
         }
 
         [Test]
+        [TestOf(typeof(BausCode.Api.Handlers.ProductHandler))]
         [Author(Constants.Authors.James)]
         public void GetProduct_WithId_GetsCorrectProduct()
         {
@@ -58,6 +60,7 @@ namespace Derprecated.Api.Test.Handlers
         }
 
         [Test]
+        [TestOf(typeof(BausCode.Api.Handlers.ProductHandler))]
         [Author(Constants.Authors.James)]
         [TestCase(0)]
         [TestCase(-1)]
@@ -70,6 +73,7 @@ namespace Derprecated.Api.Test.Handlers
         }
 
         [Test]
+        [TestOf(typeof(BausCode.Api.Handlers.ProductHandler))]
         [Author(Constants.Authors.James)]
         [TestCase(1)]
         [TestCase(100)]

@@ -42,9 +42,11 @@ namespace BausCode.Api.Handlers
             Receive(request.ItemId, request.LocationId, request.Quantity);
         }
 
-        internal void Receive(int productId, int locationId, decimal quantity)
+        public void Receive(int productId, int locationId, decimal quantity)
         {
-            quantity.ThrowIfLessThan(0);
+            productId.ThrowIfLessThan(1);
+            locationId.ThrowIfLessThan(1);
+            quantity.ThrowIfLessThan(1);
 
             var transaction = new InventoryTransaction();
             var product = new ProductHandler(Db, User).GetProduct(productId);
@@ -96,7 +98,7 @@ namespace BausCode.Api.Handlers
             Release(request.ItemId, request.LocationId, request.Quantity);
         }
 
-        internal void Release(int productId, int locationId, decimal quantity)
+        public void Release(int productId, int locationId, decimal quantity)
         {
             quantity.ThrowIfGreaterThan(0);
 

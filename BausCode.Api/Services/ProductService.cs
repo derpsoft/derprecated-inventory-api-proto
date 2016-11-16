@@ -1,9 +1,7 @@
 ﻿using BausCode.Api.Handlers;
 using BausCode.Api.Models;
 using BausCode.Api.Models.Routing;
-using ServiceStack;
 using ServiceStack.Logging;
-using Product = BausCode.Api.Models.Dto.Product;
 
 namespace BausCode.Api.Services
 {
@@ -27,7 +25,8 @@ namespace BausCode.Api.Services
         public object Any(GetProductQuantityOnHand request)
         {
             var resp = new QuantityOnHandResponse();
-            var handler = new ProductHandler(Db, CurrentSession);
+            //TODO(jcunningham) move to inventory service
+            var handler = new InventoryHandler(Db, CurrentSession);
 
             resp.Quantity = handler.GetQuantityOnHand(request.Id);
 

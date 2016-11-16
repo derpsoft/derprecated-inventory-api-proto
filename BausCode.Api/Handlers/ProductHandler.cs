@@ -41,25 +41,6 @@ namespace BausCode.Api.Handlers
             return Db.LoadSelect(Db.From<Product>().Skip(skip).Take(take));
         }
 
-        /// <summary>
-        ///     Get quantity on hand for a particular Variant.
-        /// </summary>
-        /// <param name="productId"></param>
-        /// <returns></returns>
-        /// <remarks>
-        ///     Wraps VariantHandler#GetQuantityOnHand(1)
-        /// </remarks>
-        public decimal GetQuantityOnHand(int productId)
-        {
-            var product = GetProduct(productId);
-
-            return Db.Scalar<decimal>(
-                Db.From<InventoryTransaction>()
-                    .Where(it => it.ProductId == product.Id)
-                    .Select(it => Sql.Sum(it.Quantity))
-                );
-        }
-
         public Product Save(Product product)
         {
             product.ThrowIfNull(nameof(product));

@@ -111,5 +111,23 @@ namespace BausCode.Api.Handlers
 
             Db.Save(transaction);
         }
+
+        /// <summary>
+        ///     Get quantity on hand for a particular Variant.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// </remarks>
+        public decimal GetQuantityOnHand(int productId)
+        {
+            productId.ThrowIfLessThan(1);
+
+            return Math.Max(0, Db.Scalar<decimal>(
+                Db.From<InventoryTransaction>()
+                    .Where(it => it.ProductId == productId)
+                    .Select(it => Sql.Sum(it.Quantity))
+                ));
+        }
     }
 }

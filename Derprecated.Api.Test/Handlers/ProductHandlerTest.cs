@@ -11,17 +11,18 @@ using ServiceStack.Testing;
 namespace Derprecated.Api.Test.Handlers
 {
     [TestFixture]
+    [Parallelizable]
     [Author(Constants.Authors.James)]
     public class ProductHandlerTest
     {
-        private ServiceStackHost appHost;
+        private static ServiceStackHost AppHost;
 
         [OneTimeSetUp]
-        public void FixtureSetup()
+        public static void FixtureSetup()
         {
-            appHost = new BasicAppHost().Init();
+            AppHost = new BasicAppHost().Init();
 
-            var container = appHost.Container;
+            var container = AppHost.Container;
 
 
             container.Register<IDbConnectionFactory>(
@@ -42,7 +43,7 @@ namespace Derprecated.Api.Test.Handlers
         [Author(Constants.Authors.James)]
         public void CanCountProducts()
         {
-            var handler = appHost.Container.Resolve<ProductHandler>();
+            var handler = AppHost.Container.Resolve<ProductHandler>();
             long count = -1;
 
             Assert.DoesNotThrow(() => { count = handler.Count(); });
@@ -54,7 +55,7 @@ namespace Derprecated.Api.Test.Handlers
         [Author(Constants.Authors.James)]
         public void GetProduct_WithId_GetsCorrectProduct()
         {
-            var handler = appHost.Container.Resolve<ProductHandler>();
+            var handler = AppHost.Container.Resolve<ProductHandler>();
             var expected = BausCode.Api.Models.Test.Seeds.Product.EmptyProduct;
             var testId = expected.Id;
 
@@ -70,7 +71,7 @@ namespace Derprecated.Api.Test.Handlers
         [TestCase(int.MinValue)]
         public void GetProduct_WithInvalidId_Throws(int testId)
         {
-            var handler = appHost.Container.Resolve<ProductHandler>();
+            var handler = AppHost.Container.Resolve<ProductHandler>();
 
             Assert.Throws<ArgumentOutOfRangeException>(() => handler.GetProduct(testId));
         }
@@ -82,7 +83,7 @@ namespace Derprecated.Api.Test.Handlers
         [TestCase(int.MaxValue)]
         public void GetProduct_WithValidId_DoesNotThrow(int testId)
         {
-            var handler = appHost.Container.Resolve<ProductHandler>();
+            var handler = AppHost.Container.Resolve<ProductHandler>();
 
             Assert.DoesNotThrow(() => handler.GetProduct(testId));
         }

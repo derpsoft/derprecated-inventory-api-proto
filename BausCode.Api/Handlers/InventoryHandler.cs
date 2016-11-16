@@ -12,6 +12,7 @@ namespace BausCode.Api.Handlers
         public InventoryHandler(IDbConnection db, UserSession user)
         {
             Db = db;
+            User = user;
         }
 
         private IDbConnection Db { get; }
@@ -52,10 +53,13 @@ namespace BausCode.Api.Handlers
             var product = new ProductHandler(Db, User).GetProduct(productId);
             var location = new LocationHandler(Db, User).GetLocation(locationId);
 
+            product.ThrowIfNull(nameof(product));
+            location.ThrowIfNull(nameof(location));
+
             transaction.ProductId = product.Id;
             transaction.Quantity = quantity;
             transaction.TransactionType = InventoryTransactionTypes.In;
-            transaction.UserId = User.Id.ToInt();
+            transaction.UserId = User.UserAuthId.ToInt();
 
             Db.Save(transaction);
         }

@@ -12,7 +12,7 @@ namespace BausCode.Api.Models.Test
             UserName = "unitTester",
             FullName = "Unit Test Robot",
             Id = SessionExtensions.CreateRandomSessionId(),
-            UserAuthId = ""
+            UserAuthId = "1"
         };
 
         public static class Authors

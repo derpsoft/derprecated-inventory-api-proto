@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 using BausCode.Api.Models.Routing;
 using ServiceStack;
 using ServiceStack.Auth;
-using ServiceStack.Configuration;
 
 namespace BausCode.Api.Services
 {
@@ -61,17 +59,24 @@ namespace BausCode.Api.Services
 
             var secret = Regex.Replace(SessionExtensions.CreateRandomBase62Id(32), @"[^\w\d]", "",
                 RegexOptions.IgnoreCase);
-            var link = new ResetPassword() {Email = user.Email, Token = secret};
+            var link = new ResetPassword {Email = user.Email, Token = secret};
 
             var message = new MailMessage();
             message.From = new MailAddress(AppSettings.Get("mail.from"));
             message.To.Add(new MailAddress(user.Email));
             message.Subject = "[Derprecated] Password Reset";
-            message.Body = $@"
+            message.Body =
+                $@"
                 <html>
                     <head></head>
                     <body>
-                        <p>Click on the following link to reset your password: <br/><a href=""{link}"">{link}</a>This link will expire in 4 hours.</p>
+                        <p>
+                            Click on the following link to reset your password:
+                            <br/><br/>
+                            <a href=""{link}"">{link}</a>
+                            <br/><br/>
+                            This link will expire in 4 hours.
+                        </p>
                     </body>
                 </html>";
             message.IsBodyHtml = true;

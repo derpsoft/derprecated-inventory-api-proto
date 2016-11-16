@@ -1,4 +1,4 @@
-﻿using BausCode.Api.Models;
+﻿using BausCode.Api.Models.Test;
 using NUnit.Framework;
 
 namespace Derprecated.Api.Test
@@ -6,7 +6,7 @@ namespace Derprecated.Api.Test
     [TestFixture]
     public class TestTests
     {
-        [Test(Author = TestConstants.Authors.James)]
+        [Test(Author = Constants.Authors.James)]
         public void CanRunTests()
         {
             Assert.True(true);

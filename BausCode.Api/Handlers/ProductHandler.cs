@@ -10,7 +10,7 @@ using ServiceStack.OrmLite;
 
 namespace BausCode.Api.Handlers
 {
-    internal class ProductHandler
+    public class ProductHandler
     {
         public ProductHandler(IDbConnection db, UserSession user)
         {

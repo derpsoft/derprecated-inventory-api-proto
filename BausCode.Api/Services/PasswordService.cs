@@ -66,7 +66,7 @@ namespace BausCode.Api.Services
             var message = new MailMessage();
             message.From = new MailAddress(AppSettings.Get("mail.from"));
             message.To.Add(new MailAddress(user.Email));
-            message.Subject = "[PureBarre] Password Reset";
+            message.Subject = "[Derprecated] Password Reset";
             message.Body = $@"
                 <html>
                     <head></head>

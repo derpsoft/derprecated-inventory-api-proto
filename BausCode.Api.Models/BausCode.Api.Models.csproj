@@ -146,6 +146,8 @@
     <Compile Include="Shopify\Variant.cs" />
     <Compile Include="Shopify\VariantResponse.cs" />
     <Compile Include="Test\Constants.cs" />
+    <Compile Include="Test\Seeds\InventoryTransaction.cs" />
+    <Compile Include="Test\Seeds\Location.cs" />
     <Compile Include="Test\Seeds\Product.cs" />
     <Compile Include="UserPriceOverride.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

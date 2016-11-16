@@ -12,6 +12,7 @@ namespace BausCode.Api.Handlers
         public InventoryHandler(IDbConnection db, UserSession user)
         {
             Db = db;
+            User = user;
         }
 
         private IDbConnection Db { get; }
@@ -42,18 +43,23 @@ namespace BausCode.Api.Handlers
             Receive(request.ItemId, request.LocationId, request.Quantity);
         }
 
-        internal void Receive(int productId, int locationId, decimal quantity)
+        public void Receive(int productId, int locationId, decimal quantity)
         {
-            quantity.ThrowIfLessThan(0);
+            productId.ThrowIfLessThan(1);
+            locationId.ThrowIfLessThan(1);
+            quantity.ThrowIfLessThan(1);
 
             var transaction = new InventoryTransaction();
             var product = new ProductHandler(Db, User).GetProduct(productId);
             var location = new LocationHandler(Db, User).GetLocation(locationId);
 
+            product.ThrowIfNull(nameof(product));
+            location.ThrowIfNull(nameof(location));
+
             transaction.ProductId = product.Id;
             transaction.Quantity = quantity;
             transaction.TransactionType = InventoryTransactionTypes.In;
-            transaction.UserId = User.Id.ToInt();
+            transaction.UserId = User.UserAuthId.ToInt();
 
             Db.Save(transaction);
         }
@@ -96,7 +102,7 @@ namespace BausCode.Api.Handlers
             Release(request.ItemId, request.LocationId, request.Quantity);
         }
 
-        internal void Release(int productId, int locationId, decimal quantity)
+        public void Release(int productId, int locationId, decimal quantity)
         {
             quantity.ThrowIfGreaterThan(0);
 
@@ -110,6 +116,24 @@ namespace BausCode.Api.Handlers
             transaction.UserId = User.Id.ToInt();
 
             Db.Save(transaction);
+        }
+
+        /// <summary>
+        ///     Get quantity on hand for a particular Variant.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// </remarks>
+        public decimal GetQuantityOnHand(int productId)
+        {
+            productId.ThrowIfLessThan(1);
+
+            return Math.Max(0, Db.Scalar<decimal>(
+                Db.From<InventoryTransaction>()
+                    .Where(it => it.ProductId == productId)
+                    .Select(it => Sql.Sum(it.Quantity))
+                ));
         }
     }
 }

@@ -1,36 +1,30 @@
 ﻿using System;
-using BausCode.Api.Handlers;
 using BausCode.Api.Models;
 using BausCode.Api.Models.Test;
+using Funq;
 using NUnit.Framework;
-using ServiceStack;
 using ServiceStack.Data;
 using ServiceStack.OrmLite;
-using ServiceStack.Testing;
 
 namespace Derprecated.Api.Test.Handlers
 {
     [TestFixture]
+    [Parallelizable]
     [Author(Constants.Authors.James)]
-    public class ProductHandlerTest
+    public class ProductHandler
     {
-        private ServiceStackHost appHost;
+        private static readonly Container Container = new Container();
 
         [OneTimeSetUp]
-        public void FixtureSetup()
+        public static void FixtureSetup()
         {
-            appHost = new BasicAppHost().Init();
-
-            var container = appHost.Container;
-
-
-            container.Register<IDbConnectionFactory>(
+            Container.Register<IDbConnectionFactory>(
                 new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider));
-            container.Register(c => c.Resolve<IDbConnectionFactory>().Open());
-            container.Register(Constants.UnitTestUserSession);
-            container.RegisterAutoWired<ProductHandler>();
+            Container.Register(c => c.Resolve<IDbConnectionFactory>().Open());
+            Container.Register(Constants.UnitTestUserSession);
+            Container.RegisterAutoWired<BausCode.Api.Handlers.ProductHandler>();
 
-            using (var db = container.Resolve<IDbConnectionFactory>().Open())
+            using (var db = Container.Resolve<IDbConnectionFactory>().Open())
             {
                 db.DropAndCreateTable<Product>();
                 db.DropAndCreateTable<ProductImage>();
@@ -39,10 +33,11 @@ namespace Derprecated.Api.Test.Handlers
         }
 
         [Test]
+        [TestOf(typeof(BausCode.Api.Handlers.ProductHandler))]
         [Author(Constants.Authors.James)]
-        public void CanCountProducts()
+        public void Count_GetsCorrectCount()
         {
-            var handler = appHost.Container.Resolve<ProductHandler>();
+            var handler = Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
             long count = -1;
 
             Assert.DoesNotThrow(() => { count = handler.Count(); });
@@ -51,10 +46,11 @@ namespace Derprecated.Api.Test.Handlers
         }
 
         [Test]
+        [TestOf(typeof(BausCode.Api.Handlers.ProductHandler))]
         [Author(Constants.Authors.James)]
         public void GetProduct_WithId_GetsCorrectProduct()
         {
-            var handler = appHost.Container.Resolve<ProductHandler>();
+            var handler = Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
             var expected = BausCode.Api.Models.Test.Seeds.Product.EmptyProduct;
             var testId = expected.Id;
 
@@ -64,25 +60,27 @@ namespace Derprecated.Api.Test.Handlers
         }
 
         [Test]
+        [TestOf(typeof(BausCode.Api.Handlers.ProductHandler))]
         [Author(Constants.Authors.James)]
         [TestCase(0)]
         [TestCase(-1)]
         [TestCase(int.MinValue)]
         public void GetProduct_WithInvalidId_Throws(int testId)
         {
-            var handler = appHost.Container.Resolve<ProductHandler>();
+            var handler = Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
 
             Assert.Throws<ArgumentOutOfRangeException>(() => handler.GetProduct(testId));
         }
 
         [Test]
+        [TestOf(typeof(BausCode.Api.Handlers.ProductHandler))]
         [Author(Constants.Authors.James)]
         [TestCase(1)]
         [TestCase(100)]
         [TestCase(int.MaxValue)]
         public void GetProduct_WithValidId_DoesNotThrow(int testId)
         {
-            var handler = appHost.Container.Resolve<ProductHandler>();
+            var handler = Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
 
             Assert.DoesNotThrow(() => handler.GetProduct(testId));
         }

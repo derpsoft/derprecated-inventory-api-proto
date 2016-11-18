@@ -45,6 +45,7 @@ namespace BausCode.Api.Handlers
 
         public Image GetImage(long productId, long id)
         {
+            productId.ThrowIfLessThan(1);
             id.ThrowIfLessThan(1);
 
             var result = Client.Get(new GetImage {Id = id, ProductId = productId});
@@ -72,6 +73,7 @@ namespace BausCode.Api.Handlers
 
         public Variant GetVariant(long productId, long id)
         {
+            productId.ThrowIfLessThan(1);
             id.ThrowIfLessThan(1);
 
             var result = Client.Get(new GetVariant {Id = id});

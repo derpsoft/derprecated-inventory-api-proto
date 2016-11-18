@@ -15,6 +15,13 @@ namespace BausCode.Api.Models.Test
             UserAuthId = "1"
         };
 
+        public static class Shopify
+        {
+            public const long IntegrationTestProductId = 8954660422L;
+            public const long IntegrationTestImageId = 20466640070L;
+            public const long IntegrationTestVariantId = 32605101894L;
+        }
+
         public static class Authors
         {
             public const string James = "James Cunningham <james@derprecated.com>";

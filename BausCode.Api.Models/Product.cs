@@ -15,44 +15,59 @@ namespace BausCode.Api.Models
 
         [PrimaryKey]
         [AutoIncrement]
+        [EqualityCheck]
         public int Id { get; set; }
 
+        [EqualityCheck]
         public long? ShopifyId { get; set; }
 
+        [EqualityCheck]
         public long? ShopifyVariantId { get; set; }
 
         [Whitelist]
+        [EqualityCheck]
         public string Title { get; set; }
 
         [Whitelist]
+        [EqualityCheck]
         public string Description { get; set; }
 
         [Whitelist]
+        [EqualityCheck]
         public string Tags { get; set; }
 
         [Whitelist]
+        [EqualityCheck]
         public decimal Price { get; set; }
 
         [Whitelist]
+        [EqualityCheck]
         public string Sku { get; set; }
 
         [Whitelist]
+        [EqualityCheck]
         public int Grams { get; set; }
 
         [Whitelist]
+        [EqualityCheck]
         public string Barcode { get; set; }
 
         [Whitelist]
+        [EqualityCheck]
         public decimal Weight { get; set; }
 
         [Whitelist]
+        [EqualityCheck]
         public string WeightUnit { get; set; }
 
         [Whitelist]
+        [EqualityCheck]
         public string Color { get; set; }
 
+        [EqualityCheck]
         public DateTime CreateDate { get; set; }
         public DateTime ModifyDate { get; set; }
+
         public ulong RowVersion { get; set; }
 
         [Reference]
@@ -126,6 +141,17 @@ namespace BausCode.Api.Models
 
         private void OnUpsert()
         {
+        }
+
+        public override bool Equals(object obj)
+        {
+            var product = obj as Product;
+            if (product != null)
+            {
+                return this.DeepEquals(product);
+            }
+
+            return false;
         }
     }
 }

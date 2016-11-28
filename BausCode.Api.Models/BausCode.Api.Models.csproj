@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\BlacklistAttribute.cs" />
+    <Compile Include="Attributes\EqualityCheckAttribute.cs" />
     <Compile Include="Attributes\WhitelistAttribute.cs" />
     <Compile Include="Category.cs" />
     <Compile Include="Dto\Image.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="IUpdatableField.cs" />
     <Compile Include="IUpdateFilter.cs" />
     <Compile Include="Location.cs" />
+    <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="PermissionNames.cs" />
     <Compile Include="Product.cs" />

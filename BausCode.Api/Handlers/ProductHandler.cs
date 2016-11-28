@@ -51,9 +51,10 @@ namespace BausCode.Api.Handlers
                 if (default(Product) == existing)
                     throw new ArgumentException("invalid Id for existing product", nameof(product));
 
-                var upsert = existing.PopulateWith(product);
-                Db.Save(upsert, true);
+                product = existing.PopulateWith(product);
             }
+            Db.Save(product);
+
             return product;
         }
 

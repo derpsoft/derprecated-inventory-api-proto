@@ -1,10 +1,13 @@
 ﻿using System;
 using BausCode.Api.Models;
+using BausCode.Api.Models.Attributes;
 using BausCode.Api.Models.Test;
 using Funq;
 using NUnit.Framework;
 using ServiceStack.Data;
 using ServiceStack.OrmLite;
+// ReSharper disable once RedundantUsingDirective
+using Seeds = BausCode.Api.Models.Test.Seeds;
 
 namespace Derprecated.Api.Test.Handlers
 {
@@ -28,12 +31,12 @@ namespace Derprecated.Api.Test.Handlers
             {
                 db.DropAndCreateTable<Product>();
                 db.DropAndCreateTable<ProductImage>();
-                db.InsertAll(BausCode.Api.Models.Test.Seeds.Product.Basic);
+                db.InsertAll(Seeds.Product.Basic);
             }
         }
 
         [Test]
-        [TestOf(typeof(BausCode.Api.Handlers.ProductHandler))]
+        [TestOf(typeof (BausCode.Api.Handlers.ProductHandler))]
         [Author(Constants.Authors.James)]
         public void Count_GetsCorrectCount()
         {
@@ -42,16 +45,16 @@ namespace Derprecated.Api.Test.Handlers
 
             Assert.DoesNotThrow(() => { count = handler.Count(); });
 
-            Assert.AreEqual((long) BausCode.Api.Models.Test.Seeds.Product.Basic.Count, count);
+            Assert.AreEqual((long) Seeds.Product.Basic.Count, count);
         }
 
         [Test]
-        [TestOf(typeof(BausCode.Api.Handlers.ProductHandler))]
+        [TestOf(typeof (BausCode.Api.Handlers.ProductHandler))]
         [Author(Constants.Authors.James)]
         public void GetProduct_WithId_GetsCorrectProduct()
         {
             var handler = Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
-            var expected = BausCode.Api.Models.Test.Seeds.Product.EmptyProduct;
+            var expected = Seeds.Product.EmptyProduct;
             var testId = expected.Id;
 
             var product = handler.GetProduct(testId);
@@ -60,7 +63,7 @@ namespace Derprecated.Api.Test.Handlers
         }
 
         [Test]
-        [TestOf(typeof(BausCode.Api.Handlers.ProductHandler))]
+        [TestOf(typeof (BausCode.Api.Handlers.ProductHandler))]
         [Author(Constants.Authors.James)]
         [TestCase(0)]
         [TestCase(-1)]
@@ -73,7 +76,7 @@ namespace Derprecated.Api.Test.Handlers
         }
 
         [Test]
-        [TestOf(typeof(BausCode.Api.Handlers.ProductHandler))]
+        [TestOf(typeof (BausCode.Api.Handlers.ProductHandler))]
         [Author(Constants.Authors.James)]
         [TestCase(1)]
         [TestCase(100)]
@@ -83,6 +86,65 @@ namespace Derprecated.Api.Test.Handlers
             var handler = Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
 
             Assert.DoesNotThrow(() => handler.GetProduct(testId));
+        }
+
+        [Test]
+        [TestOf(typeof (BausCode.Api.Handlers.ProductHandler))]
+        [Author(Constants.Authors.James)]
+        public void SaveProduct_WithExistingProduct_Updates()
+        {
+            var handler = Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
+            Product result = null;
+
+            Assert.DoesNotThrow(() => handler.Save(Seeds.Product.EmptyProduct));
+            Assert.DoesNotThrow(() => result = handler.GetProduct(Seeds.Product.EmptyProduct.Id));
+            Assert.DoesNotThrow(
+                () =>
+                    Seeds.Product.EmptyProduct.ThrowIfInequivalentWithAttribute<Product, EqualityCheckAttribute>(result));
+        }
+
+        [Test]
+        [TestOf(typeof (BausCode.Api.Handlers.ProductHandler))]
+        [Author(Constants.Authors.James)]
+        public void SaveProduct_WithInvalidExistingProduct_Throws()
+        {
+            var handler = Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
+            var nonExistentProduct = new Product {Id = int.MaxValue};
+
+            Assert.Throws<ArgumentException>(() => handler.Save(nonExistentProduct));
+        }
+
+
+        [Test]
+        [TestOf(typeof (BausCode.Api.Handlers.ProductHandler))]
+        [Author(Constants.Authors.James)]
+        public void SaveProduct_WithNewProduct_Creates()
+        {
+            var handler = Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
+            Product result = null;
+            var newProduct = new Product
+            {
+                Title = "New product from test",
+                Description = "New product from test description",
+                CreateDate = DateTime.Now,
+                ModifyDate = DateTime.Now
+            };
+
+            Assert.DoesNotThrow(() => newProduct = handler.Save(newProduct));
+            Assert.GreaterOrEqual(newProduct.Id, 1);
+            Assert.DoesNotThrow(() => result = handler.GetProduct(newProduct.Id));
+            Assert.DoesNotThrow(
+                () => newProduct.ThrowIfInequivalentWithAttribute<Product, EqualityCheckAttribute>(result));
+        }
+
+        [Test]
+        [TestOf(typeof (BausCode.Api.Handlers.ProductHandler))]
+        [Author(Constants.Authors.James)]
+        public void SaveProduct_WithNullProduct_Throws()
+        {
+            var handler = Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
+
+            Assert.Throws<ArgumentNullException>(() => handler.Save(null));
         }
     }
 }

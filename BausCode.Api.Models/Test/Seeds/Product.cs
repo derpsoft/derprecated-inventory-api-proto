@@ -19,6 +19,7 @@ namespace BausCode.Api.Models.Test.Seeds
             Price = 0m,
             RowVersion = 1,
             Tags = "",
+            Title = "",
             Sku = "",
             Weight = 0,
             WeightUnit = ""

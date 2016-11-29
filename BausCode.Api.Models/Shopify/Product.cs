@@ -8,11 +8,8 @@ namespace BausCode.Api.Models.Shopify
 {
     [DataContract]
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class Product
+    public class Product : ShopifyObject
     {
-        [DataMember(Name = "id", EmitDefaultValue = false)]
-        public long? Id { get; set; }
-
         [DataMember(Name = "title", EmitDefaultValue = false)]
         public string Title { get; set; }
 
@@ -27,12 +24,6 @@ namespace BausCode.Api.Models.Shopify
 
         [DataMember(Name = "handle", EmitDefaultValue = false)]
         public string Handle { get; set; }
-
-        [DataMember(Name = "created_at", EmitDefaultValue = false)]
-        public DateTimeOffset CreatedAt { get; set; }
-
-        [DataMember(Name = "updated_at", EmitDefaultValue = false)]
-        public DateTimeOffset ModifiedAt { get; set; }
 
         [DataMember(Name = "published_at", EmitDefaultValue = false)]
         public DateTimeOffset PublishedAt { get; set; }

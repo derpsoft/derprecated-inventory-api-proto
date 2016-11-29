@@ -5,11 +5,8 @@ using BausCode.Api.Models.Attributes;
 namespace BausCode.Api.Models.Shopify
 {
     [DataContract]
-    public class Variant
+    public class Variant : ShopifyObject
     {
-        [DataMember(Name = "id", EmitDefaultValue = false)]
-        public long? Id { get; set; }
-
         [DataMember(Name = "product_id", EmitDefaultValue = false)]
         public long ProductShopifyId { get; set; }
 
@@ -47,12 +44,6 @@ namespace BausCode.Api.Models.Shopify
 
         [DataMember(Name = "option3", EmitDefaultValue = false)]
         public string Option3 { get; set; }
-
-        [DataMember(Name = "created_at", EmitDefaultValue = false)]
-        public DateTimeOffset CreatedAt { get; set; }
-
-        [DataMember(Name = "updated_at", EmitDefaultValue = false)]
-        public DateTimeOffset UpdatedAt { get; set; }
 
         [DataMember(Name = "taxable", EmitDefaultValue = false)]
         public bool Taxable { get; set; }

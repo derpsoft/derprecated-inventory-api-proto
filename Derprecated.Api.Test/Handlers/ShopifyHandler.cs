@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using BausCode.Api.Models.Shopify;
 using BausCode.Api.Models.Test;
 using Funq;
@@ -138,6 +140,59 @@ namespace Derprecated.Api.Test.Handlers
         [Test]
         [TestOf(typeof (BC.ShopifyHandler))]
         [Author(Constants.Authors.James)]
+        [TestCategory(Constants.Categories.Integration)]
+        public void UpdateImage_InvalidId_Throws()
+        {
+            var handler = Container.Resolve<BC.ShopifyHandler>();
+            Assert.Throws<ArgumentNullException>(() => handler.Update(new Image {Id = null}));
+            Assert.Throws<ArgumentOutOfRangeException>(() => handler.Update(new Image {Id = -1}));
+        }
+
+        [Test]
+        [TestOf(typeof (BC.ShopifyHandler))]
+        [Author(Constants.Authors.James)]
+        [TestCategory(Constants.Categories.Integration)]
+        public void UpdateImage_InvalidProductId_Throws()
+        {
+            var handler = Container.Resolve<BC.ShopifyHandler>();
+            Assert.Throws<ArgumentNullException>(() => handler.Update(new Image {Id = 1, ProductId = null}));
+            Assert.Throws<ArgumentOutOfRangeException>(() => handler.Update(new Image {Id = 1, ProductId = -1}));
+        }
+
+        [Test]
+        [TestOf(typeof (BC.ShopifyHandler))]
+        [Author(Constants.Authors.James)]
+        [TestCategory(Constants.Categories.Integration)]
+        public void UpdateImage_NullImage_Throws()
+        {
+            var handler = Container.Resolve<BC.ShopifyHandler>();
+            Assert.Throws<ArgumentNullException>(() => handler.Update(default(Image)));
+            Assert.Throws<ArgumentNullException>(() => handler.Update((Image) null));
+        }
+
+        [Test]
+        [TestOf(typeof (BC.ShopifyHandler))]
+        [Author(Constants.Authors.James)]
+        [TestCategory(Constants.Categories.Integration)]
+        public void UpdateImage_ValidImage_Updates()
+        {
+            var handler = Container.Resolve<BC.ShopifyHandler>();
+            var update = new Image
+            {
+                Id = Constants.Shopify.IntegrationTestImageId,
+                ProductId = Constants.Shopify.IntegrationTestProductId,
+                VariantIds = new List<long> {Constants.Shopify.IntegrationTestVariantId},
+                Url = "https://unsplash.it/500/500/?random"
+            };
+            Image result = null;
+
+            Assert.DoesNotThrow(() => result = handler.Update(update));
+            Assert.That(result.Url.Contains("cdn.shopify"));
+        }
+
+        [Test]
+        [TestOf(typeof (BC.ShopifyHandler))]
+        [Author(Constants.Authors.James)]
         public void UpdateProduct_InvalidId_Throws()
         {
             var handler = Container.Resolve<BC.ShopifyHandler>();
@@ -176,39 +231,39 @@ namespace Derprecated.Api.Test.Handlers
         }
 
         [Test]
-        [TestOf(typeof(BC.ShopifyHandler))]
+        [TestOf(typeof (BC.ShopifyHandler))]
         [Author(Constants.Authors.James)]
         [TestCategory(Constants.Categories.Integration)]
         public void UpdateVariant_InvalidId_Throws()
         {
             var handler = Container.Resolve<BC.ShopifyHandler>();
-            Assert.Throws<ArgumentNullException>(() => handler.Update(new Variant { Id = null }));
-            Assert.Throws<ArgumentOutOfRangeException>(() => handler.Update(new Variant { Id = -1 }));
+            Assert.Throws<ArgumentNullException>(() => handler.Update(new Variant {Id = null}));
+            Assert.Throws<ArgumentOutOfRangeException>(() => handler.Update(new Variant {Id = -1}));
         }
 
         [Test]
-        [TestOf(typeof(BC.ShopifyHandler))]
+        [TestOf(typeof (BC.ShopifyHandler))]
         [Author(Constants.Authors.James)]
         [TestCategory(Constants.Categories.Integration)]
         public void UpdateVariant_NullVariant_Throws()
         {
             var handler = Container.Resolve<BC.ShopifyHandler>();
             Assert.Throws<ArgumentNullException>(() => handler.Update(default(Variant)));
-            Assert.Throws<ArgumentNullException>(() => handler.Update((Variant)null));
+            Assert.Throws<ArgumentNullException>(() => handler.Update((Variant) null));
         }
 
         [Test]
-        [TestOf(typeof(BC.ShopifyHandler))]
+        [TestOf(typeof (BC.ShopifyHandler))]
         [Author(Constants.Authors.James)]
         [TestCategory(Constants.Categories.Integration)]
         public void UpdateVariant_ValidVariant_Updates()
         {
             var handler = Container.Resolve<BC.ShopifyHandler>();
-            var nonce = new Random().Next(100)+1;
+            var nonce = new Random().Next(100) + 1;
             var update = new Variant
             {
                 Id = Constants.Shopify.IntegrationTestVariantId,
-                Price = $"{nonce}000000000000.00",
+                Price = $"{nonce}000000000000.00"
             };
             Variant result = null;
 

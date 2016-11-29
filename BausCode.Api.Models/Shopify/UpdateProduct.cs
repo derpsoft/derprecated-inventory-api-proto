@@ -7,7 +7,7 @@ namespace BausCode.Api.Models.Shopify
     [DataContract]
     public class UpdateProduct : IReturn<ProductResponse>
     {
-        [DataMember(Name = "id", IsRequired = true)]
+        [DataMember(IsRequired = true)]
         public long Id { get; set; }
 
         [DataMember(Name = "product", IsRequired = true)]

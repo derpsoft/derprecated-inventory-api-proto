@@ -82,11 +82,15 @@ namespace BausCode.Api.Handlers
             return result.Variant;
         }
 
-        public Variant Update(UpdateVariant variant)
+        public Variant Update(Variant variant)
         {
             variant.ThrowIfNull();
 
-            var result = Client.Put(variant);
+            if(!variant.Id.HasValue)
+                throw new ArgumentNullException(nameof(variant));
+            variant.Id.Value.ThrowIfLessThan(1);
+
+            var result = Client.Put(new UpdateVariant() { Id = variant.Id.Value, Variant = variant});
 
             return result.Variant;
         }

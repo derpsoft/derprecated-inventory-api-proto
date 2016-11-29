@@ -15,6 +15,12 @@ namespace BausCode.Api.Models.Test
             UserAuthId = "1"
         };
 
+        public static class Categories
+        {
+            public const string Unit = "Unit";
+            public const string Integration = "Integration";
+        }
+
         public static class Shopify
         {
             public const long IntegrationTestProductId = 8954660422L;

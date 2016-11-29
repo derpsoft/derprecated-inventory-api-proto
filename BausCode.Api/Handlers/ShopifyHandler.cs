@@ -27,7 +27,7 @@ namespace BausCode.Api.Handlers
             product.ThrowIfNull();
 
             if (!product.Id.HasValue)
-                throw new ArgumentNullException(nameof(product));
+                throw new ArgumentNullException(nameof(product.Id));
             product.Id.Value.ThrowIfLessThan(1);
 
             var result = Client.Put(new UpdateProduct {Id = product.Id.Value, Product = product});
@@ -54,12 +54,20 @@ namespace BausCode.Api.Handlers
             return result.Image;
         }
 
-        public Image Update(UpdateImage image)
+        public Image Update(Image image)
         {
             image.ThrowIfNull();
 
-            var result = Client.Put(image);
+            if (!image.Id.HasValue)
+                throw new ArgumentNullException(nameof(image.Id));
+            image.Id.Value.ThrowIfLessThan(1);
 
+            if (!image.ProductId.HasValue)
+                throw new ArgumentNullException(nameof(image.ProductId));
+            image.ProductId.Value.ThrowIfLessThan(1);
+
+            var result =
+                Client.Put(new UpdateImage {Id = image.Id.Value, ProductId = image.ProductId.Value, Image = image});
             return result.Image;
         }
 
@@ -86,11 +94,11 @@ namespace BausCode.Api.Handlers
         {
             variant.ThrowIfNull();
 
-            if(!variant.Id.HasValue)
-                throw new ArgumentNullException(nameof(variant));
+            if (!variant.Id.HasValue)
+                throw new ArgumentNullException(nameof(variant.Id));
             variant.Id.Value.ThrowIfLessThan(1);
 
-            var result = Client.Put(new UpdateVariant() { Id = variant.Id.Value, Variant = variant});
+            var result = Client.Put(new UpdateVariant {Id = variant.Id.Value, Variant = variant});
 
             return result.Variant;
         }

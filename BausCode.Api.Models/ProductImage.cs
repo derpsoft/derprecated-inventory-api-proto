@@ -25,7 +25,7 @@ namespace BausCode.Api.Models
         {
             var dest = new ProductImage
             {
-                ShopifyId = source.Id,
+                ShopifyId = source.Id.GetValueOrDefault(),
                 SourceUrl = source.Url
             };
 

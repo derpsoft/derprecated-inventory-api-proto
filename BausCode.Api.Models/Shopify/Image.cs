@@ -5,27 +5,29 @@ using System.Runtime.Serialization;
 namespace BausCode.Api.Models.Shopify
 {
     [DataContract]
-    public class Image
+    public class Image : ShopifyObject
     {
-        [DataMember(Name = "id")]
-        public long Id { get; set; }
+        [DataMember(Name = "product_id", EmitDefaultValue = false)]
+        public long? ProductId { get; set; }
 
-        [DataMember(Name = "product_id")]
-        public long ProductId { get; set; }
-
-        [DataMember(Name = "position")]
+        [DataMember(Name = "position", EmitDefaultValue = false)]
         public int Position { get; set; }
 
-        [DataMember(Name = "created_at")]
-        public DateTimeOffset CreatedAt { get; set; }
-
-        [DataMember(Name = "updated_at")]
-        public DateTimeOffset ModifiedAt { get; set; }
-
-        [DataMember(Name = "src")]
+        /// <summary>
+        /// The Url of the image.
+        /// 
+        /// When GETting this from the Shopify API, it points to a Shopify CDN url.
+        /// 
+        /// When POSTing this to the Shopify API, it's a URL to a publicly accessible image, which
+        /// the Shopify API will then download the image from.
+        /// </summary>
+        [DataMember(Name = "src", EmitDefaultValue = false)]
         public string Url { get; set; }
 
-        [DataMember(Name = "variand_ids")]
-        public List<int> VariantIds { get; set; }
+        [DataMember(Name = "variant_ids", EmitDefaultValue = false)]
+        public List<long> VariantIds { get; set; }
+
+        [DataMember(Name = "metafields", EmitDefaultValue = false)]
+        public List<Metafield> MetaFields { get; set; }
     }
 }

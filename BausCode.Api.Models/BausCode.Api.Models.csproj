@@ -135,6 +135,7 @@
     <Compile Include="Shopify\CountProducts.cs" />
     <Compile Include="Shopify\ImageResponse.cs" />
     <Compile Include="Shopify\ImagesResponse.cs" />
+    <Compile Include="Shopify\MetaField.cs" />
     <Compile Include="Shopify\ProductsResponse.cs" />
     <Compile Include="Shopify\GetProductsValidator.cs" />
     <Compile Include="Shopify\GetVariant.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="Shopify\Image.cs" />
     <Compile Include="Shopify\Option.cs" />
     <Compile Include="Shopify\ProductResponse.cs" />
+    <Compile Include="Shopify\ShopifyObject.cs" />
     <Compile Include="Shopify\UpdateImage.cs" />
     <Compile Include="Shopify\UpdateProduct.cs" />
     <Compile Include="Shopify\UpdateVariant.cs" />

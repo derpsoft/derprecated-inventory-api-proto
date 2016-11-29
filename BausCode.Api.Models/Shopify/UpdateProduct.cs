@@ -3,10 +3,11 @@ using ServiceStack;
 
 namespace BausCode.Api.Models.Shopify
 {
-    [Route("/admin/products/{Id}.json", "PUT")]
+    [Route("/admin/products/{id}.json", "PUT")]
     [DataContract]
     public class UpdateProduct : IReturn<ProductResponse>
     {
+        [DataMember(Name = "id", IsRequired = true)]
         public long Id { get; set; }
 
         [DataMember(Name = "product", IsRequired = true)]

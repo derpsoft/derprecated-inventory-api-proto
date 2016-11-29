@@ -2,9 +2,11 @@
 using BausCode.Api.Models.Shopify;
 using BausCode.Api.Models.Test;
 using Funq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.Configuration;
+using Assert = NUnit.Framework.Assert;
 // ReSharper disable once RedundantUsingDirective
 using Seeds = BausCode.Api.Models.Test.Seeds;
 // ReSharper disable once RedundantUsingDirective
@@ -34,7 +36,44 @@ namespace Derprecated.Api.Test.Handlers
         }
 
         [Test]
-        [TestOf(typeof(BC.ShopifyHandler))]
+        [TestOf(typeof (BC.ShopifyHandler))]
+        [Author(Constants.Authors.James)]
+        [TestCase(1, 0)]
+        [TestCase(1, -1)]
+        public void GetImage_InvalidImageId_Throws(long productId, long imageId)
+        {
+            var handler = Container.Resolve<BC.ShopifyHandler>();
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => handler.GetImage(productId, imageId));
+        }
+
+        [Test]
+        [TestOf(typeof (BC.ShopifyHandler))]
+        [Author(Constants.Authors.James)]
+        [TestCase(0, 1)]
+        [TestCase(-1, 1)]
+        public void GetImage_InvalidProductId_Throws(long productId, long imageId)
+        {
+            var handler = Container.Resolve<BC.ShopifyHandler>();
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => handler.GetImage(productId, imageId));
+        }
+
+        [Test]
+        [TestOf(typeof (BC.ShopifyHandler))]
+        [Author(Constants.Authors.James)]
+        [TestCase(Constants.Shopify.IntegrationTestProductId, Constants.Shopify.IntegrationTestImageId)]
+        public void GetImage_ValidIds_GetsImage(long productId, long imageId)
+        {
+            var handler = Container.Resolve<BC.ShopifyHandler>();
+            Image image = null;
+
+            Assert.DoesNotThrow(() => image = handler.GetImage(productId, imageId));
+            Assert.AreEqual(imageId, image.Id);
+        }
+
+        [Test]
+        [TestOf(typeof (BC.ShopifyHandler))]
         [Author(Constants.Authors.James)]
         [TestCase(0)]
         [TestCase(-1)]
@@ -46,7 +85,7 @@ namespace Derprecated.Api.Test.Handlers
         }
 
         [Test]
-        [TestOf(typeof(BC.ShopifyHandler))]
+        [TestOf(typeof (BC.ShopifyHandler))]
         [Author(Constants.Authors.James)]
         [TestCase(Constants.Shopify.IntegrationTestProductId)]
         public void GetProduct_ValidId_GetsProduct(long testId)
@@ -59,45 +98,20 @@ namespace Derprecated.Api.Test.Handlers
         }
 
         [Test]
-        [TestOf(typeof(BC.ShopifyHandler))]
-        [Author(Constants.Authors.James)]
-        [TestCase(0, 1)]
-        [TestCase(-1, 1)]
-        public void GetImage_InvalidProductId_Throws(long productId, long imageId)
-        {
-            var handler = Container.Resolve<BC.ShopifyHandler>();
-
-            Assert.Throws<ArgumentOutOfRangeException>(() => handler.GetImage(productId, imageId));
-        }
-
-        [Test]
-        [TestOf(typeof(BC.ShopifyHandler))]
+        [TestOf(typeof (BC.ShopifyHandler))]
         [Author(Constants.Authors.James)]
         [TestCase(1, 0)]
         [TestCase(1, -1)]
-        public void GetImage_InvalidImageId_Throws(long productId, long imageId)
+        public void GetVariant_InvalidImageId_Throws(long productId, long variantId)
         {
             var handler = Container.Resolve<BC.ShopifyHandler>();
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => handler.GetImage(productId, imageId));
-        }
-
-        [Test]
-        [TestOf(typeof(BC.ShopifyHandler))]
-        [Author(Constants.Authors.James)]
-        [TestCase(Constants.Shopify.IntegrationTestProductId, Constants.Shopify.IntegrationTestImageId)]
-        public void GetImage_ValidIds_GetsImage(long productId, long imageId)
-        {
-            var handler = Container.Resolve<BC.ShopifyHandler>();
-            Image image = null;
-
-            Assert.DoesNotThrow(() => image = handler.GetImage(productId, imageId));
-            Assert.AreEqual(imageId, image.Id);
+            Assert.Throws<ArgumentOutOfRangeException>(() => handler.GetVariant(productId, variantId));
         }
 
 
         [Test]
-        [TestOf(typeof(BC.ShopifyHandler))]
+        [TestOf(typeof (BC.ShopifyHandler))]
         [Author(Constants.Authors.James)]
         [TestCase(0, 1)]
         [TestCase(-1, 1)]
@@ -109,19 +123,7 @@ namespace Derprecated.Api.Test.Handlers
         }
 
         [Test]
-        [TestOf(typeof(BC.ShopifyHandler))]
-        [Author(Constants.Authors.James)]
-        [TestCase(1, 0)]
-        [TestCase(1, -1)]
-        public void GetVariant_InvalidImageId_Throws(long productId, long variantId)
-        {
-            var handler = Container.Resolve<BC.ShopifyHandler>();
-
-            Assert.Throws<ArgumentOutOfRangeException>(() => handler.GetVariant(productId, variantId));
-        }
-
-        [Test]
-        [TestOf(typeof(BC.ShopifyHandler))]
+        [TestOf(typeof (BC.ShopifyHandler))]
         [Author(Constants.Authors.James)]
         [TestCase(Constants.Shopify.IntegrationTestProductId, Constants.Shopify.IntegrationTestVariantId)]
         public void GetVariant_ValidIds_GetsVariant(long productId, long variantId)
@@ -131,6 +133,46 @@ namespace Derprecated.Api.Test.Handlers
 
             Assert.DoesNotThrow(() => image = handler.GetVariant(productId, variantId));
             Assert.AreEqual(variantId, image.Id);
+        }
+
+        [Test]
+        [TestOf(typeof (BC.ShopifyHandler))]
+        [Author(Constants.Authors.James)]
+        public void UpdateProduct_InvalidId_Throws()
+        {
+            var handler = Container.Resolve<BC.ShopifyHandler>();
+            Assert.Throws<ArgumentNullException>(() => handler.Update(new Product {Id = null}));
+            Assert.Throws<ArgumentOutOfRangeException>(() => handler.Update(new Product {Id = -1}));
+        }
+
+        [Test]
+        [TestOf(typeof(BC.ShopifyHandler))]
+        [Author(Constants.Authors.James)]
+        [TestCategory(Constants.Categories.Integration)]
+        public void UpdateProduct_NullProduct_Throws()
+        {
+            var handler = Container.Resolve<BC.ShopifyHandler>();
+            Assert.Throws<ArgumentNullException>(() => handler.Update(default(Product)));
+            Assert.Throws<ArgumentNullException>(() => handler.Update((Product)null));
+        }
+
+        [Test]
+        [TestOf(typeof(BC.ShopifyHandler))]
+        [Author(Constants.Authors.James)]
+        [TestCategory(Constants.Categories.Integration)]
+        public void UpdateProduct_ValidProduct_Updates()
+        {
+            var handler = Container.Resolve<BC.ShopifyHandler>();
+            var nonce = new Random().Next(100);
+            var update = new Product()
+            {
+                Id = Constants.Shopify.IntegrationTestProductId,
+                BodyHtml = $"DO NOT DELETE. DO NOT SELL. TEST DATA FOLLOWS.<br><br>{nonce}"
+            };
+            Product result = null;
+
+            Assert.DoesNotThrow(() => result = handler.Update(update));
+            Assert.That(result.BodyHtml.Equals(update.BodyHtml, StringComparison.InvariantCulture));
         }
     }
 }

@@ -28,6 +28,7 @@ namespace BausCode.Api.Handlers
 
             if (!product.Id.HasValue)
                 throw new ArgumentNullException(nameof(product));
+            product.Id.Value.ThrowIfLessThan(1);
 
             var result = Client.Put(new UpdateProduct {Id = product.Id.Value, Product = product});
 

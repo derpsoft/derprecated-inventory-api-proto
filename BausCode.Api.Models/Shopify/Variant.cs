@@ -8,7 +8,7 @@ namespace BausCode.Api.Models.Shopify
     public class Variant
     {
         [DataMember(Name = "id", EmitDefaultValue = false)]
-        public long Id { get; set; }
+        public long? Id { get; set; }
 
         [DataMember(Name = "product_id", EmitDefaultValue = false)]
         public long ProductShopifyId { get; set; }

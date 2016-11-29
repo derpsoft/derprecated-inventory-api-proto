@@ -7,6 +7,7 @@ namespace BausCode.Api.Models.Shopify
     [DataContract]
     public class UpdateVariant : IReturn<VariantResponse>
     {
+        [DataMember(IsRequired = true)]
         public long Id { get; set; }
 
         [DataMember(Name = "variant", IsRequired = true)]

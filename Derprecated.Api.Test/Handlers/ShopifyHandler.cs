@@ -146,25 +146,25 @@ namespace Derprecated.Api.Test.Handlers
         }
 
         [Test]
-        [TestOf(typeof(BC.ShopifyHandler))]
+        [TestOf(typeof (BC.ShopifyHandler))]
         [Author(Constants.Authors.James)]
         [TestCategory(Constants.Categories.Integration)]
         public void UpdateProduct_NullProduct_Throws()
         {
             var handler = Container.Resolve<BC.ShopifyHandler>();
             Assert.Throws<ArgumentNullException>(() => handler.Update(default(Product)));
-            Assert.Throws<ArgumentNullException>(() => handler.Update((Product)null));
+            Assert.Throws<ArgumentNullException>(() => handler.Update((Product) null));
         }
 
         [Test]
-        [TestOf(typeof(BC.ShopifyHandler))]
+        [TestOf(typeof (BC.ShopifyHandler))]
         [Author(Constants.Authors.James)]
         [TestCategory(Constants.Categories.Integration)]
         public void UpdateProduct_ValidProduct_Updates()
         {
             var handler = Container.Resolve<BC.ShopifyHandler>();
             var nonce = new Random().Next(100);
-            var update = new Product()
+            var update = new Product
             {
                 Id = Constants.Shopify.IntegrationTestProductId,
                 BodyHtml = $"DO NOT DELETE. DO NOT SELL. TEST DATA FOLLOWS.<br><br>{nonce}"
@@ -173,6 +173,47 @@ namespace Derprecated.Api.Test.Handlers
 
             Assert.DoesNotThrow(() => result = handler.Update(update));
             Assert.That(result.BodyHtml.Equals(update.BodyHtml, StringComparison.InvariantCulture));
+        }
+
+        [Test]
+        [TestOf(typeof(BC.ShopifyHandler))]
+        [Author(Constants.Authors.James)]
+        [TestCategory(Constants.Categories.Integration)]
+        public void UpdateVariant_InvalidId_Throws()
+        {
+            var handler = Container.Resolve<BC.ShopifyHandler>();
+            Assert.Throws<ArgumentNullException>(() => handler.Update(new Variant { Id = null }));
+            Assert.Throws<ArgumentOutOfRangeException>(() => handler.Update(new Variant { Id = -1 }));
+        }
+
+        [Test]
+        [TestOf(typeof(BC.ShopifyHandler))]
+        [Author(Constants.Authors.James)]
+        [TestCategory(Constants.Categories.Integration)]
+        public void UpdateVariant_NullVariant_Throws()
+        {
+            var handler = Container.Resolve<BC.ShopifyHandler>();
+            Assert.Throws<ArgumentNullException>(() => handler.Update(default(Variant)));
+            Assert.Throws<ArgumentNullException>(() => handler.Update((Variant)null));
+        }
+
+        [Test]
+        [TestOf(typeof(BC.ShopifyHandler))]
+        [Author(Constants.Authors.James)]
+        [TestCategory(Constants.Categories.Integration)]
+        public void UpdateVariant_ValidVariant_Updates()
+        {
+            var handler = Container.Resolve<BC.ShopifyHandler>();
+            var nonce = new Random().Next(100)+1;
+            var update = new Variant
+            {
+                Id = Constants.Shopify.IntegrationTestVariantId,
+                Price = $"{nonce}000000000000.00",
+            };
+            Variant result = null;
+
+            Assert.DoesNotThrow(() => result = handler.Update(update));
+            Assert.That(result.Price.Equals(update.Price, StringComparison.InvariantCulture));
         }
     }
 }

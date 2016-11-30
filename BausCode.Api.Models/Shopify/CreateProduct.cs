@@ -5,7 +5,7 @@ namespace BausCode.Api.Models.Shopify
 {
     [Route("/admin/products.json", "POST")]
     [DataContract]
-    public class CreateProduct : IReturn<ProductResponse>
+    public sealed class CreateProduct : IReturn<CreateProductResponse>
     {
         [DataMember(Name = "product")]
         public Product Product { get; set; }

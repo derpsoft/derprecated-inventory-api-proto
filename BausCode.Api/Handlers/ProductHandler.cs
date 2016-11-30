@@ -48,6 +48,7 @@ namespace BausCode.Api.Handlers
             if (product.Id >= 1)
             {
                 var existing = GetProduct(product.Id);
+                // ReSharper disable once PossibleUnintendedReferenceComparison
                 if (default(Product) == existing)
                     throw new ArgumentException("invalid Id for existing product", nameof(product));
 

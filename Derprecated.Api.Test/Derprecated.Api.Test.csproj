@@ -65,6 +65,9 @@
       <HintPath>..\packages\ServiceStack.OrmLite.Sqlite.Windows.4.5.4\lib\net45\ServiceStack.OrmLite.Sqlite.Windows.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ServiceStack.Server">
+      <HintPath>..\packages\ServiceStack.Server.4.5.4\lib\net45\ServiceStack.Server.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Text, Version=4.5.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Text.4.5.4\lib\net45\ServiceStack.Text.dll</HintPath>
       <Private>True</Private>
@@ -92,6 +95,8 @@
     <Compile Include="Handlers\InventoryHandler.cs" />
     <Compile Include="Handlers\ProductHandler.cs" />
     <Compile Include="Handlers\ShopifyHandler.cs" />
+    <Compile Include="Services\ProductService.cs" />
+    <Compile Include="TestAppHost.cs" />
     <Compile Include="TestTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

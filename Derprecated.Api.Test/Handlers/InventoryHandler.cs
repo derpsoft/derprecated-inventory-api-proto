@@ -23,7 +23,7 @@ namespace Derprecated.Api.Test.Handlers
             Container.Register<IDbConnectionFactory>(
                 new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider));
             Container.Register(c => c.Resolve<IDbConnectionFactory>().Open());
-            Container.Register(Constants.UnitTestUserSession);
+            Container.Register(Constants.TestUserSession);
             Container.RegisterAutoWired<BausCode.Api.Handlers.InventoryHandler>();
 
             using (var db = Container.Resolve<IDbConnectionFactory>().Open())

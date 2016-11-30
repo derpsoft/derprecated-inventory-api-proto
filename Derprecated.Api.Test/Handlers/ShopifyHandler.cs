@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using BausCode.Api.Models.Shopify;
 using BausCode.Api.Models.Test;
 using Funq;
@@ -35,6 +34,38 @@ namespace Derprecated.Api.Test.Handlers
             });
 
             Container.RegisterAutoWired<BC.ShopifyHandler>();
+        }
+
+        [Test]
+        [TestOf(typeof (BC.ShopifyHandler))]
+        [Author(Constants.Authors.James)]
+        public void CreateProduct_ValidProduct_Creates()
+        {
+            var handler = Container.Resolve<BC.ShopifyHandler>();
+            var rng = new Random();
+            Product result = null;
+            var nonce = rng.Next(100) + 1;
+            var newProduct = new Product
+            {
+                Title = $"ShopifyHandler test product {nonce}",
+                Tags = "test",
+                BodyHtml = $"TEST PRODUCT. DO NOT SELL. TEST DATA FOLLOWS<br><br>{nonce}",
+                IsPublished = false,
+                Variants = new List<Variant>
+                {
+                    new Variant
+                    {
+                        Price = $"{nonce}000000000000.00",
+                        Sku = "TEST",
+                        Barcode = "TEST"
+                    }
+                },
+            };
+
+            Assert.DoesNotThrow(() => result = handler.Create(newProduct));
+            Assert.NotNull(result);
+            Assert.That(result.Title.Equals(newProduct.Title));
+            Assert.That(result.BodyHtml.Equals(newProduct.BodyHtml));
         }
 
         [Test]

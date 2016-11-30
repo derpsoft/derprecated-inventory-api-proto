@@ -1,29 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Net;
-using System.Net.Mail;
-using System.Reflection;
+using BausCode.Api;
 using BausCode.Api.Models;
+using BausCode.Api.Models.Test;
+using BausCode.Api.Services;
 using Funq;
 using ServiceStack;
-using ServiceStack.Admin;
 using ServiceStack.Auth;
+using ServiceStack.Caching;
 using ServiceStack.Configuration;
 using ServiceStack.Data;
-using ServiceStack.Logging;
-using ServiceStack.Logging.NLogger;
 using ServiceStack.OrmLite;
-using ServiceStack.Redis;
 using ServiceStack.Text;
 using ServiceStack.Validation;
 
-namespace BausCode.Api.Configuration
+namespace Derprecated.Api.Test
 {
-    public class Application : AppHostBase
+    internal class TestAppHost : AppSelfHostBase
     {
-        public Application(string applicationName, Assembly assembly)
-            : base("BausCode::Api::{0}".Fmt(applicationName), assembly)
+        public TestAppHost(string name) : base(name, typeof (BaseService).Assembly)
         {
         }
 
@@ -56,31 +51,23 @@ namespace BausCode.Api.Configuration
             JsConfig.ExcludeTypeInfo = true;
             JsConfig<UserSession>.IncludeTypeInfo = true;
             JsConfig.DateHandler = DateHandler.ISO8601;
-            LogManager.LogFactory = new NLogFactory();
 
-            var baseSettings = new AppSettings();
-            container.Register(baseSettings);
-            container.Register(c => new MultiAppSettings(c.Resolve<AppSettings>()));
+            var appSettings = new AppSettings();
+            container.Register(appSettings);
 
-            var appSettings = container.Resolve<MultiAppSettings>();
-
-
-            // DB
-            container.Register<IDbConnectionFactory>(c =>
-            {
-                var connectionString = ConfigurationManager.ConnectionStrings["AzureSql"].ConnectionString;
-                return new OrmLiteConnectionFactory(connectionString, SqlServerDialect.Provider);
-            });
-
-            // Redis
-            container.Register<IRedisClientsManager>(
-                new RedisManagerPool(ConfigurationManager.ConnectionStrings["AzureRedis"].ConnectionString));
+            container.Register<IDbConnectionFactory>(
+                new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider));
+            container.Register(c => c.Resolve<IDbConnectionFactory>().Open());
+            container.Register(Constants.TestUserSession);
 
             // Validators
             container.RegisterValidators(typeof (IAuditable).Assembly);
 
             // Auth
-            container.Register<IUserAuthRepository>(c => new OrmLiteAuthRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IUserAuthRepository>(c => new InMemoryAuthRepository());
+
+            // Cache
+            container.Register<ICacheClient>(new MemoryCacheClient());
 
             // Db filters
             OrmLiteConfig.InsertFilter = (dbCmd, row) =>
@@ -113,37 +100,16 @@ namespace BausCode.Api.Configuration
             };
 
             // Schema init
-            var userRepo = (OrmLiteAuthRepository) container.Resolve<IUserAuthRepository>();
-
-            userRepo.InitSchema();
             using (var ctx = container.Resolve<IDbConnectionFactory>().Open())
             {
-                ctx.CreateTableIfNotExists<ApiKey>();
-                ctx.CreateTableIfNotExists<Product>();
-                ctx.CreateTableIfNotExists<ProductImage>();
-                ctx.CreateTableIfNotExists<ProductTag>();
-                ctx.CreateTableIfNotExists<UserPriceOverride>();
+                ctx.DropAndCreateTable<ApiKey>();
+                ctx.DropAndCreateTable<Product>();
+                ctx.DropAndCreateTable<ProductImage>();
+                ctx.DropAndCreateTable<ProductTag>();
+                ctx.DropAndCreateTable<Location>();
+                ctx.DropAndCreateTable<InventoryTransaction>();
+                ctx.DropAndCreateTable<UserPriceOverride>();
             }
-#if DEBUG
-            var testUser = (IUserAuth) new UserAuth
-            {
-                Email = "james@bauscode.com"
-            };
-            var existing = userRepo.GetUserAuthByUserName(testUser.Email);
-            if (null == existing)
-            {
-                userRepo.CreateUserAuth(testUser, "12345");
-            }
-#endif
-
-            // Mail
-            container.Register(new SmtpClient
-            {
-                Host = appSettings.Get("mail.host"),
-                Port = appSettings.Get("mail.port", 587),
-                Credentials = new NetworkCredential(appSettings.Get("mail.username"), appSettings.Get("mail.password")),
-                EnableSsl = appSettings.Get("mail.useSsl", true)
-            });
 
             // Plugins
             Plugins.Add(new CorsFeature(allowCredentials: true, allowedHeaders: "Content-Type, X-Requested-With",
@@ -153,9 +119,7 @@ namespace BausCode.Api.Configuration
                         "http://localhost:6307",
                         "http://localhost:8080",
                         "http://0.0.0.0:8080",
-                        "http://0.0.0.0:3000",
-                        "http://inventory-web-dev-wb45gu.herokuapp.com",
-                        "https://inventory-web-dev-wb45gu.herokuapp.com"
+                        "http://0.0.0.0:3000"
                     },
                 maxAge: 3600));
             Plugins.Add(new RegistrationFeature());
@@ -163,14 +127,23 @@ namespace BausCode.Api.Configuration
                 () => new UserSession(),
                 new IAuthProvider[]
                 {
-                    new TwitterAuthProvider(appSettings),
+//                    new TwitterAuthProvider(appSettings),
                     new CredentialsAuthProvider(appSettings)
+                    {
+                        SkipPasswordVerificationForInProcessRequests = true
+                    }
                 },
                 "/login"
                 ));
             Plugins.Add(new ValidationFeature());
             Plugins.Add(new AutoQueryFeature {MaxLimit = 100});
-            Plugins.Add(new AdminFeature());
+
+            var userRepo = container.Resolve<IUserAuthRepository>();
+            var testUser = (IUserAuth) new UserAuth
+            {
+                Email = Constants.TestAuthenticate.UserName
+            };
+            userRepo.CreateUserAuth(testUser, Constants.TestAuthenticate.Password);
 
             // Misc
             container.Register(new ShopifyServiceClient($"https://{appSettings.Get("shopify.store.domain")}")

@@ -123,10 +123,12 @@
     <Compile Include="Routing\ProductTypeaheadValidator.cs" />
     <Compile Include="Routing\QuantityOnHandResponse.cs" />
     <Compile Include="Routing\SaveProduct.cs" />
+    <Compile Include="Routing\SaveProductResponse.cs" />
     <Compile Include="Shopify\CountImages.cs" />
     <Compile Include="Shopify\CountResponse.cs" />
     <Compile Include="Shopify\CreateImage.cs" />
     <Compile Include="Shopify\CreateProduct.cs" />
+    <Compile Include="Shopify\CreateProductResponse.cs" />
     <Compile Include="Shopify\CreateVariant.cs" />
     <Compile Include="Shopify\GetImage.cs" />
     <Compile Include="Shopify\GetImages.cs" />

@@ -1,7 +1,13 @@
-﻿using BausCode.Api.Handlers;
+﻿using System.Collections.Generic;
+using System.Globalization;
+using BausCode.Api.Handlers;
 using BausCode.Api.Models;
 using BausCode.Api.Models.Routing;
+using BausCode.Api.Models.Shopify;
 using ServiceStack.Logging;
+using GetProduct = BausCode.Api.Models.Routing.GetProduct;
+using GetProducts = BausCode.Api.Models.Routing.GetProducts;
+using ProductResponse = BausCode.Api.Models.Routing.ProductResponse;
 
 namespace BausCode.Api.Services
 {
@@ -35,22 +41,35 @@ namespace BausCode.Api.Services
 
         public object Any(SaveProduct request)
         {
-            var resp = new ProductResponse();
+            var resp = new SaveProductResponse();
             var productHandler = new ProductHandler(Db, CurrentSession);
             var shopifyHandler = new ShopifyHandler(ShopifyServiceClient);
 
             var product = productHandler.Save(request.Product);
-
             var shopifyProduct = Models.Shopify.Product.From(product);
+
             if (shopifyProduct.Id.HasValue)
             {
                 shopifyHandler.Update(shopifyProduct);
             }
             else
             {
+                shopifyProduct.Variants = new List<Variant>
+                {
+                    new Variant
+                    {
+                        Option1 = product.Color,
+                        Barcode = product.Barcode,
+                        Sku = product.Sku,
+                        Price = product.Price.ToString(CultureInfo.InvariantCulture),
+                        Weight = product.Weight,
+                        WeightUnit = product.WeightUnit,
+                    }
+                };
                 shopifyProduct = shopifyHandler.Create(shopifyProduct);
                 // ReSharper disable once PossibleInvalidOperationException
                 productHandler.SetShopifyId(product.Id, shopifyProduct.Id.Value);
+                product.ShopifyId = shopifyProduct.Id.Value;
             }
 
             resp.Product = product;

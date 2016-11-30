@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using ServiceStack;
 
 namespace BausCode.Api.Models.Shopify
 {
@@ -7,5 +8,8 @@ namespace BausCode.Api.Models.Shopify
     {
         [DataMember(Name = "product")]
         public Product Product { get; set; }
+
+        [DataMember]
+        public ResponseStatus ResponseStatus { get; set; }
     }
 }

@@ -40,7 +40,6 @@ namespace BausCode.Api.Handlers
             product.ThrowIfNull();
 
             var result = Client.Post(new CreateProduct {Product = product});
-
             return result.Product;
         }
 

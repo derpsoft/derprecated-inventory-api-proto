@@ -62,6 +62,9 @@ namespace BausCode.Api.Models.Shopify
         [Whitelist]
         public decimal Weight { get; set; }
 
+        /// <summary>
+        /// Acceptable values are one of: lb, kg, oz, g
+        /// </summary>
         [DataMember(Name = "weight_unit", EmitDefaultValue = false)]
         [Whitelist]
         public string WeightUnit { get; set; }

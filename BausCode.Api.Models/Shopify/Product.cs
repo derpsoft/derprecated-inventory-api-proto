@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using BausCode.Api.Models.Attributes;
-using ServiceStack;
 
 namespace BausCode.Api.Models.Shopify
 {
     [DataContract]
-    // ReSharper disable once ClassNeverInstantiated.Global
     public class Product : ShopifyObject
     {
+        public Product()
+        {
+            PublishedScope = "web";
+        }
+
         [DataMember(Name = "title", EmitDefaultValue = false)]
         public string Title { get; set; }
 
@@ -25,11 +27,20 @@ namespace BausCode.Api.Models.Shopify
         [DataMember(Name = "handle", EmitDefaultValue = false)]
         public string Handle { get; set; }
 
+        [DataMember(Name = "published", EmitDefaultValue = true)]
+        public bool IsPublished { get; set; }
+
         [DataMember(Name = "published_at", EmitDefaultValue = false)]
         public DateTimeOffset PublishedAt { get; set; }
 
         [DataMember(Name = "tags", EmitDefaultValue = false)]
         public string Tags { get; set; }
+
+        /// <summary>
+        /// Comma-separated list of the following: web, global, pos
+        /// </summary>
+        [DataMember(Name = "published_scope", EmitDefaultValue = false)]
+        public string PublishedScope { get; set; }
 
         [DataMember(Name = "variants", EmitDefaultValue = false)]
         public List<Variant> Variants { get; set; }
@@ -43,7 +54,11 @@ namespace BausCode.Api.Models.Shopify
         {
             var product = new Product
             {
-                Id = source.ShopifyId
+                Id = source.ShopifyId,
+                Title = source.Title,
+                BodyHtml = source.Description,
+                Vendor = source.Vendor,
+                Tags = source.Tags
             };
 
             return product;

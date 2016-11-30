@@ -56,6 +56,9 @@ namespace BausCode.Api.Models
         [EqualityCheck]
         public decimal Weight { get; set; }
 
+        /// <summary>
+        /// Acceptable values are one of: lb, kg, oz, g
+        /// </summary>
         [Whitelist]
         [EqualityCheck]
         public string WeightUnit { get; set; }
@@ -63,6 +66,10 @@ namespace BausCode.Api.Models
         [Whitelist]
         [EqualityCheck]
         public string Color { get; set; }
+
+        [Whitelist]
+        [EqualityCheck]
+        public string Vendor { get; set; }
 
         [EqualityCheck]
         public DateTime CreateDate { get; set; }

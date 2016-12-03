@@ -71,8 +71,8 @@ namespace BausCode.Api.Models
         [EqualityCheck]
         public string Vendor { get; set; }
 
-        [EqualityCheck]
         public DateTime CreateDate { get; set; }
+
         public DateTime ModifyDate { get; set; }
 
         public ulong RowVersion { get; set; }

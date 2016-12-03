@@ -4,6 +4,7 @@ using BausCode.Api.Models.Attributes;
 using BausCode.Api.Models.Test;
 using Funq;
 using NUnit.Framework;
+using ServiceStack;
 using ServiceStack.Data;
 using ServiceStack.OrmLite;
 // ReSharper disable once RedundantUsingDirective
@@ -16,23 +17,29 @@ namespace Derprecated.Api.Test.Handlers
     [Author(Constants.Authors.James)]
     public class ProductHandler
     {
-        private static readonly Container Container = new Container();
+        private const string BaseUri = "http://localhost:2001/";
+        private ServiceStackHost Host { get; set; }
 
         [OneTimeSetUp]
-        public static void FixtureSetup()
+        public void FixtureSetUp()
         {
-            Container.Register<IDbConnectionFactory>(
-                new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider));
-            Container.Register(c => c.Resolve<IDbConnectionFactory>().Open());
-            Container.Register(Constants.TestUserSession);
-            Container.RegisterAutoWired<BausCode.Api.Handlers.ProductHandler>();
+            //Start your AppHost on TestFixture SetUp
+            Host = new TestAppHost("Test::ProductHandler")
+                .Init()
+                .Start(BaseUri);
 
-            using (var db = Container.Resolve<IDbConnectionFactory>().Open())
+            Host.Container.RegisterAutoWired<BausCode.Api.Handlers.ProductHandler>();
+
+            using (var db = Host.Resolve<IDbConnectionFactory>().Open())
             {
-                db.DropAndCreateTable<Product>();
-                db.DropAndCreateTable<ProductImage>();
                 db.InsertAll(Seeds.Product.Basic);
             }
+        }
+
+        [OneTimeTearDown]
+        public void FixtureTearDown()
+        {
+            Host.Dispose();
         }
 
         [Test]
@@ -40,7 +47,7 @@ namespace Derprecated.Api.Test.Handlers
         [Author(Constants.Authors.James)]
         public void Count_GetsCorrectCount()
         {
-            var handler = Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
+            var handler = Host.Resolve<BausCode.Api.Handlers.ProductHandler>();
             long count = -1;
 
             Assert.DoesNotThrow(() => { count = handler.Count(); });
@@ -53,7 +60,7 @@ namespace Derprecated.Api.Test.Handlers
         [Author(Constants.Authors.James)]
         public void GetProduct_WithId_GetsCorrectProduct()
         {
-            var handler = Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
+            var handler = Host.Resolve<BausCode.Api.Handlers.ProductHandler>();
             var expected = Seeds.Product.EmptyProduct;
             var testId = expected.Id;
 
@@ -70,7 +77,7 @@ namespace Derprecated.Api.Test.Handlers
         [TestCase(int.MinValue)]
         public void GetProduct_WithInvalidId_Throws(int testId)
         {
-            var handler = Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
+            var handler = Host.Resolve<BausCode.Api.Handlers.ProductHandler>();
 
             Assert.Throws<ArgumentOutOfRangeException>(() => handler.GetProduct(testId));
         }
@@ -83,7 +90,7 @@ namespace Derprecated.Api.Test.Handlers
         [TestCase(int.MaxValue)]
         public void GetProduct_WithValidId_DoesNotThrow(int testId)
         {
-            var handler = Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
+            var handler = Host.Resolve<BausCode.Api.Handlers.ProductHandler>();
 
             Assert.DoesNotThrow(() => handler.GetProduct(testId));
         }
@@ -93,7 +100,7 @@ namespace Derprecated.Api.Test.Handlers
         [Author(Constants.Authors.James)]
         public void SaveProduct_WithExistingProduct_Updates()
         {
-            var handler = Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
+            var handler = Host.Resolve<BausCode.Api.Handlers.ProductHandler>();
             Product result = null;
 
             Assert.DoesNotThrow(() => handler.Save(Seeds.Product.EmptyProduct));
@@ -108,7 +115,7 @@ namespace Derprecated.Api.Test.Handlers
         [Author(Constants.Authors.James)]
         public void SaveProduct_WithInvalidExistingProduct_Throws()
         {
-            var handler = Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
+            var handler = Host.Resolve<BausCode.Api.Handlers.ProductHandler>();
             var nonExistentProduct = new Product {Id = int.MaxValue};
 
             Assert.Throws<ArgumentException>(() => handler.Save(nonExistentProduct));
@@ -120,14 +127,12 @@ namespace Derprecated.Api.Test.Handlers
         [Author(Constants.Authors.James)]
         public void SaveProduct_WithNewProduct_Creates()
         {
-            var handler = Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
+            var handler = Host.Resolve<BausCode.Api.Handlers.ProductHandler>();
             Product result = null;
             var newProduct = new Product
             {
                 Title = "New product from test",
-                Description = "New product from test description",
-                CreateDate = DateTime.Now,
-                ModifyDate = DateTime.Now
+                Description = "New product from test description"
             };
 
             Assert.DoesNotThrow(() => newProduct = handler.Save(newProduct));
@@ -142,7 +147,7 @@ namespace Derprecated.Api.Test.Handlers
         [Author(Constants.Authors.James)]
         public void SaveProduct_WithNullProduct_Throws()
         {
-            var handler = Container.Resolve<BausCode.Api.Handlers.ProductHandler>();
+            var handler = Host.Resolve<BausCode.Api.Handlers.ProductHandler>();
 
             Assert.Throws<ArgumentNullException>(() => handler.Save(null));
         }

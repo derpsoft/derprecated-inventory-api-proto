@@ -3,6 +3,7 @@ using BausCode.Api.Models;
 using BausCode.Api.Models.Test;
 using Funq;
 using NUnit.Framework;
+using ServiceStack;
 using ServiceStack.Data;
 using ServiceStack.OrmLite;
 // ReSharper disable once RedundantUsingDirective
@@ -15,24 +16,21 @@ namespace Derprecated.Api.Test.Handlers
     [Author(Constants.Authors.James)]
     public class InventoryHandler
     {
-        private static readonly Container Container = new Container();
+        private const string BaseUri = "http://localhost:2001/";
+        private ServiceStackHost Host { get; set; }
 
         [OneTimeSetUp]
-        public static void FixtureSetup()
+        public void FixtureSetUp()
         {
-            Container.Register<IDbConnectionFactory>(
-                new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider));
-            Container.Register(c => c.Resolve<IDbConnectionFactory>().Open());
-            Container.Register(Constants.TestUserSession);
-            Container.RegisterAutoWired<BausCode.Api.Handlers.InventoryHandler>();
+            //Start your AppHost on TestFixture SetUp
+            Host = new TestAppHost("Test::ProductHandler")
+                .Init()
+                .Start(BaseUri);
 
-            using (var db = Container.Resolve<IDbConnectionFactory>().Open())
+            Host.Container.RegisterAutoWired<BausCode.Api.Handlers.InventoryHandler>();
+
+            using (var db = Host.Resolve<IDbConnectionFactory>().Open())
             {
-                db.DropAndCreateTable<Product>();
-                db.DropAndCreateTable<ProductImage>();
-                db.DropAndCreateTable<Location>();
-                db.DropAndCreateTable<InventoryTransaction>();
-
                 db.SaveAll(Seeds.Product.Basic);
                 db.SaveAll(Seeds.Location.Basic);
             }
@@ -45,7 +43,7 @@ namespace Derprecated.Api.Test.Handlers
         [TestCase(-1)]
         public void QuantityOnHand_InvalidProductId_Throws(int testId)
         {
-            var handler = Container.Resolve<BausCode.Api.Handlers.InventoryHandler>();
+            var handler = Host.Resolve<BausCode.Api.Handlers.InventoryHandler>();
 
             Assert.Throws<ArgumentOutOfRangeException>(() => handler.GetQuantityOnHand(testId));
         }
@@ -56,7 +54,7 @@ namespace Derprecated.Api.Test.Handlers
         [TestCase(-1)]
         public void Receive_InvalidLocationId_Throws(int testId)
         {
-            var handler = Container.Resolve<BausCode.Api.Handlers.InventoryHandler>();
+            var handler = Host.Resolve<BausCode.Api.Handlers.InventoryHandler>();
 
             Assert.Throws<ArgumentOutOfRangeException>(
                 () => handler.Receive(Seeds.Product.EmptyProduct.Id, testId, 1));
@@ -69,7 +67,7 @@ namespace Derprecated.Api.Test.Handlers
         [TestCase(-1)]
         public void Receive_InvalidProductId_Throws(int testId)
         {
-            var handler = Container.Resolve<BausCode.Api.Handlers.InventoryHandler>();
+            var handler = Host.Resolve<BausCode.Api.Handlers.InventoryHandler>();
 
             Assert.Throws<ArgumentOutOfRangeException>(
                 () => handler.Receive(testId, Seeds.Location.EmptyLocation.Id, 1));
@@ -82,7 +80,7 @@ namespace Derprecated.Api.Test.Handlers
         [TestCase(-1)]
         public void Receive_InvalidQuantity_Throws(decimal testQuantity)
         {
-            var handler = Container.Resolve<BausCode.Api.Handlers.InventoryHandler>();
+            var handler = Host.Resolve<BausCode.Api.Handlers.InventoryHandler>();
 
             Assert.Throws<ArgumentOutOfRangeException>(
                 () =>
@@ -96,7 +94,7 @@ namespace Derprecated.Api.Test.Handlers
         [TestCase(3475)]
         public void Receive_LocationNotFound_Throws(int testId)
         {
-            var handler = Container.Resolve<BausCode.Api.Handlers.InventoryHandler>();
+            var handler = Host.Resolve<BausCode.Api.Handlers.InventoryHandler>();
 
             Assert.Throws<ArgumentNullException>(() => handler.Receive(Seeds.Product.EmptyProduct.Id, testId, 1m));
         }
@@ -107,7 +105,7 @@ namespace Derprecated.Api.Test.Handlers
         [TestCase(3475)]
         public void Receive_ProductNotFound_Throws(int testId)
         {
-            var handler = Container.Resolve<BausCode.Api.Handlers.InventoryHandler>();
+            var handler = Host.Resolve<BausCode.Api.Handlers.InventoryHandler>();
 
             Assert.Throws<ArgumentNullException>(() => handler.Receive(testId, Seeds.Location.EmptyLocation.Id, 1m));
         }
@@ -117,7 +115,7 @@ namespace Derprecated.Api.Test.Handlers
         [Author(Constants.Authors.James)]
         public void Receive_ValidData_CreatesRecordAndIncrementsQuantity()
         {
-            var handler = Container.Resolve<BausCode.Api.Handlers.InventoryHandler>();
+            var handler = Host.Resolve<BausCode.Api.Handlers.InventoryHandler>();
             var testQuantity = 1;
             var observedQuantity = -1m;
 

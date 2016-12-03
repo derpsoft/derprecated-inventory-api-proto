@@ -143,7 +143,8 @@ namespace Derprecated.Api.Test
             {
                 Email = Constants.TestAuthenticate.UserName
             };
-            userRepo.CreateUserAuth(testUser, Constants.TestAuthenticate.Password);
+            if (null == userRepo.GetUserAuthByUserName(testUser.Email))
+                userRepo.CreateUserAuth(testUser, Constants.TestAuthenticate.Password);
 
             // Misc
             container.Register(new ShopifyServiceClient($"https://{appSettings.Get("shopify.store.domain")}")

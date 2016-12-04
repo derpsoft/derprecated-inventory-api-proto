@@ -104,6 +104,8 @@
 
         public void Release(int productId, int locationId, decimal quantity)
         {
+            productId.ThrowIfLessThan(1);
+            locationId.ThrowIfLessThan(1);
             quantity.ThrowIfGreaterThan(0);
 
             var transaction = new InventoryTransaction();
@@ -113,9 +115,10 @@
             transaction.ProductId = product.Id;
             transaction.Quantity = quantity;
             transaction.TransactionType = InventoryTransactionTypes.Out;
-            transaction.UserId = User.Id.ToInt();
+            transaction.UserId = User.UserAuthId.ToInt();
+            transaction.UnitOfMeasureId = 1;
 
-            Db.Save(transaction);
+            Db.Insert(transaction);
         }
 
         /// <summary>

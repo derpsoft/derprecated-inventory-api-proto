@@ -1,12 +1,16 @@
 ﻿namespace Derprecated.Api.Test.Services
 {
     using System;
+    using System.Data;
     using BausCode.Api.Models.Routing;
     using BausCode.Api.Models.Test;
     using BausCode.Api.Models.Test.Seeds;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using NUnit.Framework;
     using ServiceStack;
+    using ServiceStack.Auth;
+    using ServiceStack.OrmLite;
+    using Assert = NUnit.Framework.Assert;
     using BCS = BausCode.Api.Services;
 
     [TestFixture(
@@ -25,6 +29,13 @@
             Host = new TestAppHost("Test::InventoryService")
                 .Init()
                 .Start(BaseUri);
+
+            using (var db = Host.Resolve<IDbConnection>())
+            {
+                db.Save(Product.Light);
+                db.Save(Product.CatTree);
+                db.Save(Location.TestRack);
+            }
         }
 
         [OneTimeTearDown]
@@ -34,22 +45,61 @@
         }
 
         [Test]
+        [TestOf(typeof(BCS.InventoryService))]
+        [Author(Constants.Authors.James)]
+        [TestCategory(Constants.Categories.Integration)]
+        public void Receive_RequiresAuth()
+        {
+            var client = new JsonServiceClient(BaseUri);
+            Assert.Throws<WebServiceException>(() => client.Post(new CreateInventoryTransaction
+            {
+                ItemId = 10000,
+                LocationId = 10000,
+                Quantity = 1
+            }));
+        }
+
+        [Test]
         [TestOf(typeof (BCS.InventoryService))]
         [Author(Constants.Authors.James)]
         [TestCategory(Constants.Categories.Integration)]
-        public void ReceiveQuantity_HappyPath_Receives()
+        public void ReceiveAndReleaseQuantity_HappyPath_ReceivesAndReleases()
         {
-            CreateInventoryTransactionResponse resp = null;
-
+            var productId = Product.Light.Id;
+            var locationId = Location.TestRack.Id;
             var rng = new Random();
             var quant = rng.Next(10) + 1;
             var client = new JsonServiceClient(BaseUri);
             var xact = new CreateInventoryTransaction
                        {
-                           ItemId = Product.Light.Id,
-                           LocationId = Location.TestRack.Id,
+                           ItemId = productId,
+                           LocationId = locationId,
                            Quantity = quant
                        };
+            var count = new GetProductQuantityOnHand {Id = xact.ItemId};
+
+            var login = client.Post(new Authenticate
+            {
+                provider = AuthenticateService.CredentialsProvider,
+                UserName = "test@derprecated.com",
+                Password = "123456"
+            });
+            client.SessionId = login.SessionId;
+
+            client.Post(xact);
+            var qoh = client.Get(count);
+
+            Assert.GreaterOrEqual(quant, 1);
+            Assert.NotNull(qoh);
+            Assert.AreEqual(quant, qoh.Quantity);
+
+            xact.Quantity = -xact.Quantity + 1;
+
+            client.Post(xact);
+            qoh = client.Get(count);
+
+            Assert.NotNull(qoh);
+            Assert.AreEqual(1, qoh.Quantity);
         }
     }
 }

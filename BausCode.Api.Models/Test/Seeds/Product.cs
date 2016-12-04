@@ -25,9 +25,17 @@
         public static readonly Models.Product Light = new Models.Product
                                                       {
                                                           Id = 2,
-                                                          Barcode = "LIGHT",
+                                                          Barcode = "LIGHT2",
                                                           Color = Color.Blue.Name,
                                                           Description = "Test prouduct, blue light"
+                                                      };
+
+        public static readonly Models.Product CatTree = new Models.Product
+                                                      {
+                                                          Id = 3,
+                                                          Barcode = "CATTREE3",
+                                                          Color = Color.Brown.Name,
+                                                          Description = "Test prouduct, cat tree"
                                                       };
 
         public static List<Models.Product> Basic = new List<Models.Product>

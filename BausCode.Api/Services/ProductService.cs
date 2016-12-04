@@ -6,6 +6,7 @@
     using Models;
     using Models.Routing;
     using Models.Shopify;
+    using ServiceStack;
     using ServiceStack.Logging;
     using GetProduct = Models.Routing.GetProduct;
     using GetProducts = Models.Routing.GetProducts;
@@ -16,6 +17,7 @@
         protected static ILog Log = LogManager.GetLogger(typeof (ProductService));
         public ShopifyServiceClient ShopifyServiceClient { get; set; }
 
+        [RequiredPermission(Permissions.CanReadProducts)]
         public object Any(GetProduct request)
         {
             var resp = new ProductResponse();
@@ -24,6 +26,15 @@
             var product = handler.GetProduct(request.Id);
 
             resp.Product = product;
+
+            return resp;
+        }
+
+        [RequiredPermission(Permissions.CanDeleteProducts)]
+        public object Any(DeleteProduct request)
+        {
+            var resp = new DeleteProductResponse();
+            var handler = new ProductHandler(Db, CurrentSession);
 
             return resp;
         }

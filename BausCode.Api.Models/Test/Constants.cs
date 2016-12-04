@@ -2,6 +2,7 @@
 {
     using System;
     using ServiceStack;
+    using ServiceStack.Auth;
 
     public static class Constants
     {
@@ -15,8 +16,17 @@
                                                                  UserAuthId = "1"
                                                              };
 
+        public static readonly Authenticate TestAdminAuthenticate = new Authenticate
+                                                                    {
+                                                                        provider =
+                                                                            AuthenticateService.CredentialsProvider,
+                                                                        UserName = "admin@derprecated.com",
+                                                                        Password = "123456"
+                                                                    };
+
         public static readonly Authenticate TestAuthenticate = new Authenticate
                                                                {
+                                                                   provider = AuthenticateService.CredentialsProvider,
                                                                    UserName = "test@derprecated.com",
                                                                    Password = "123456"
                                                                };

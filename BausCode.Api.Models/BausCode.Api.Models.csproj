@@ -109,7 +109,7 @@
     <Compile Include="Location.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Order.cs" />
-    <Compile Include="PermissionNames.cs" />
+    <Compile Include="Permissions.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="ProductCategory.cs" />
     <Compile Include="ProductExtensions.cs" />
@@ -158,7 +158,7 @@
     <Compile Include="Test\Seeds\Warehouse.cs" />
     <Compile Include="UserPriceOverride.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoleNames.cs" />
+    <Compile Include="Roles.cs" />
     <Compile Include="Routing\CreateCategory.cs" />
     <Compile Include="Routing\CreateCategoryResponse.cs" />
     <Compile Include="Routing\CreateInventoryTransaction.cs" />

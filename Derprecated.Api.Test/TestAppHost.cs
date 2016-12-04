@@ -141,10 +141,20 @@
             var userRepo = container.Resolve<IUserAuthRepository>();
             var testUser = (IUserAuth) new UserAuth
                                        {
-                                           Email = Constants.TestAuthenticate.UserName
+                                           Email = Constants.TestAuthenticate.UserName,
+                                           Roles = new List<string>(new[] {Roles.User})
                                        };
+            var testAdminUser = (IUserAuth) new UserAuth
+                                            {
+                                                Email = Constants.TestAdminAuthenticate.UserName,
+                                                Roles = new List<string>(new[] {Roles.Admin}),
+                                                Permissions = new List<string>(new[] {Permissions.CanDoEverything})
+                                            };
+
             if (null == userRepo.GetUserAuthByUserName(testUser.Email))
                 userRepo.CreateUserAuth(testUser, Constants.TestAuthenticate.Password);
+            if (null == userRepo.GetUserAuthByUserName(testAdminUser.Email))
+                userRepo.CreateUserAuth(testAdminUser, Constants.TestAdminAuthenticate.Password);
 
             // Misc
             container.Register(new ShopifyServiceClient($"https://{appSettings.Get("shopify.store.domain")}")

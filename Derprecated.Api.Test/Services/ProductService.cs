@@ -1,5 +1,6 @@
 ﻿namespace Derprecated.Api.Test.Services
 {
+    using System;
     using System.Data;
     using BausCode.Api.Models;
     using BausCode.Api.Models.Routing;
@@ -41,7 +42,7 @@
         [TestOf(typeof (BCS.ProductService))]
         [Author(Constants.Authors.James)]
         [TestCategory(Constants.Categories.Integration)]
-        public void CreateProduct_HappyPath_Creates()
+        public void Product_HappyPath_CanCRUD()
         {
             SaveProductResponse resp = null;
             var client = new JsonServiceClient(BaseUri);
@@ -100,8 +101,44 @@
         [TestOf(typeof (BCS.ProductService))]
         [Author(Constants.Authors.James)]
         [TestCategory(Constants.Categories.Integration)]
-        public void UpdateProduct_HappyPath_Updates()
+        public void DeleteProduct_RequiresAuth()
         {
+            var client = new JsonServiceClient(BaseUri);
+            var exception = Assert.Throws<WebServiceException>(() => client.Delete(new DeleteProduct {Id = 10000}));
+            Assert.AreEqual(401, exception.StatusCode);
+        }
+
+        [Test]
+        [TestOf(typeof (BCS.ProductService))]
+        [Author(Constants.Authors.James)]
+        [TestCategory(Constants.Categories.Integration)]
+        public void SaveProduct_RequiresAuth()
+        {
+            var client = new JsonServiceClient(BaseUri);
+            var exception = Assert.Throws<WebServiceException>(() => client.Post(new SaveProduct()));
+            Assert.AreEqual(401, exception.StatusCode);
+        }
+
+        [Test]
+        [TestOf(typeof(BCS.ProductService))]
+        [Author(Constants.Authors.James)]
+        [TestCategory(Constants.Categories.Integration)]
+        public void SaveProduct_RequiresRole()
+        {
+            var client = new JsonServiceClient(BaseUri);
+
+            var login = client.Post(Constants.TestAuthenticate);
+            client.SessionId = login.SessionId;
+
+            var authException = Assert.Throws<WebServiceException>(() => client.Post(new SaveProduct()));
+            Assert.AreEqual(403, authException.StatusCode);
+            Assert.AreEqual("Invalid Role", authException.ErrorCode);
+
+            login = client.Post(Constants.TestAdminAuthenticate);
+            client.SessionId = login.SessionId;
+
+            var exception = Assert.Throws<WebServiceException>(() => client.Post(new SaveProduct()));
+            Assert.AreEqual(400, exception.StatusCode);
         }
     }
 }

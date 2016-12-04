@@ -51,12 +51,8 @@
         public void Receive_RequiresAuth()
         {
             var client = new JsonServiceClient(BaseUri);
-            Assert.Throws<WebServiceException>(() => client.Post(new CreateInventoryTransaction
-            {
-                ItemId = 10000,
-                LocationId = 10000,
-                Quantity = 1
-            }));
+            var exception = Assert.Throws<WebServiceException>(() => client.Post(new CreateInventoryTransaction()));
+            Assert.AreEqual(401, exception.StatusCode);
         }
 
         [Test]

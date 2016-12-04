@@ -1,12 +1,12 @@
-﻿using System;
-using System.Data;
-using BausCode.Api.Models;
-using BausCode.Api.Models.Routing;
-using ServiceStack;
-using ServiceStack.OrmLite;
-
-namespace BausCode.Api.Handlers
+﻿namespace BausCode.Api.Handlers
 {
+    using System;
+    using System.Data;
+    using Models;
+    using Models.Routing;
+    using ServiceStack;
+    using ServiceStack.OrmLite;
+
     public class InventoryHandler
     {
         public InventoryHandler(IDbConnection db, UserSession user)
@@ -16,7 +16,7 @@ namespace BausCode.Api.Handlers
         }
 
         private IDbConnection Db { get; }
-        private UserSession User { get; set; }
+        private UserSession User { get; }
 
         /// <summary>
         ///     Receive inventory into the system.
@@ -104,6 +104,8 @@ namespace BausCode.Api.Handlers
 
         public void Release(int productId, int locationId, decimal quantity)
         {
+            productId.ThrowIfLessThan(1);
+            locationId.ThrowIfLessThan(1);
             quantity.ThrowIfGreaterThan(0);
 
             var transaction = new InventoryTransaction();
@@ -113,9 +115,10 @@ namespace BausCode.Api.Handlers
             transaction.ProductId = product.Id;
             transaction.Quantity = quantity;
             transaction.TransactionType = InventoryTransactionTypes.Out;
-            transaction.UserId = User.Id.ToInt();
+            transaction.UserId = User.UserAuthId.ToInt();
+            transaction.UnitOfMeasureId = 1;
 
-            Db.Save(transaction);
+            Db.Insert(transaction);
         }
 
         /// <summary>
@@ -131,8 +134,8 @@ namespace BausCode.Api.Handlers
 
             return Math.Max(0, Db.Scalar<decimal>(
                 Db.From<InventoryTransaction>()
-                    .Where(it => it.ProductId == productId)
-                    .Select(it => Sql.Sum(it.Quantity))
+                  .Where(it => it.ProductId == productId)
+                  .Select(it => Sql.Sum(it.Quantity))
                 ));
         }
     }

@@ -1,8 +1,8 @@
-﻿using ServiceStack;
-using ServiceStack.DataAnnotations;
-
-namespace BausCode.Api.Models.Routing
+﻿namespace BausCode.Api.Models.Routing
 {
+    using ServiceStack;
+    using ServiceStack.DataAnnotations;
+
     [Route("/api/v1/products/typeahead/", "POST")]
     [Route("/api/v1/products/typeahead/{Query}", "GET")]
     public class ProductTypeahead : QueryDb<Product>, IJoin<Product, ProductImage>

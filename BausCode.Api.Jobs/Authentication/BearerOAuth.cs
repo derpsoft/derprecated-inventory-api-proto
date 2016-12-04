@@ -1,11 +1,11 @@
-﻿using System;
-using System.Net;
-using System.Text;
-using BausCode.Api.Jobs.Models;
-using ServiceStack;
-
-namespace BausCode.Api.Jobs.Authentication
+﻿namespace BausCode.Api.Jobs.Authentication
 {
+    using System;
+    using System.Net;
+    using System.Text;
+    using Models;
+    using ServiceStack;
+
     public class BearerOAuth : AuthBase
     {
         public BearerOAuth(string consumerKey, string consumerSecret)
@@ -15,8 +15,8 @@ namespace BausCode.Api.Jobs.Authentication
         }
 
         private BearerOAuth2TokenResponse BearerAuthentication { get; set; }
-        private string ConsumerKey { get; set; }
-        private string ConsumerSecret { get; set; }
+        private string ConsumerKey { get; }
+        private string ConsumerSecret { get; }
 
         public override bool IsAuthenticated()
         {

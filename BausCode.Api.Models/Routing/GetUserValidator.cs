@@ -1,6 +1,6 @@
 ﻿namespace BausCode.Api.Models.Routing
 {
-    class GetUserValidator
+    internal class GetUserValidator
     {
     }
 }

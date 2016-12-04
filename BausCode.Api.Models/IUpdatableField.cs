@@ -2,8 +2,8 @@
 {
     public interface IUpdatableField<T>
     {
-        int Id { get; set; }
         string FieldName { get; }
+        int Id { get; set; }
         T Value { get; set; }
     }
 }

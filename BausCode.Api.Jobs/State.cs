@@ -1,9 +1,9 @@
 ﻿// ReSharper disable UnusedMember.Global
 
-using ServiceStack.DataAnnotations;
-
 namespace BausCode.Api.Jobs
 {
+    using ServiceStack.DataAnnotations;
+
     public class State
     {
         [PrimaryKey]

@@ -1,15 +1,15 @@
-using BausCode.Api.Handlers;
-using BausCode.Api.Models;
-using BausCode.Api.Models.Dto;
-using BausCode.Api.Models.Routing;
-using ServiceStack;
-using ServiceStack.Auth;
-using ServiceStack.Logging;
-using ServiceStack.OrmLite;
-using UserSession = BausCode.Api.Models.Dto.UserSession;
-
 namespace BausCode.Api.Services
 {
+    using Handlers;
+    using Models;
+    using Models.Dto;
+    using Models.Routing;
+    using ServiceStack;
+    using ServiceStack.Auth;
+    using ServiceStack.Logging;
+    using ServiceStack.OrmLite;
+    using UserSession = Models.Dto.UserSession;
+
     public class UserService : BaseService
     {
         protected static ILog Log = LogManager.GetLogger(typeof (UserService));
@@ -92,11 +92,11 @@ namespace BausCode.Api.Services
             {
                 Request.RemoveSession();
                 return service.Authenticate(new Authenticate
-                {
-                    provider = AuthenticateService.CredentialsProvider,
-                    UserName = request.Email,
-                    Password = request.Password
-                });
+                                            {
+                                                provider = AuthenticateService.CredentialsProvider,
+                                                UserName = request.Email,
+                                                Password = request.Password
+                                            });
             }
         }
 
@@ -105,8 +105,8 @@ namespace BausCode.Api.Services
             var response = new GetUsersResponse();
 
             response.Users = Db.Select(Db.From<UserAuth>()
-                .Skip(request.Skip.GetValueOrDefault(0))
-                .Take(request.Take.GetValueOrDefault(25))
+                                         .Skip(request.Skip.GetValueOrDefault(0))
+                                         .Take(request.Take.GetValueOrDefault(25))
                 ).Map(User.From);
             response.Count = Db.Count<UserAuth>();
 

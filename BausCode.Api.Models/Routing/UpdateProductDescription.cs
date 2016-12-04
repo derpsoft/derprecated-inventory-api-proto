@@ -1,12 +1,12 @@
-﻿using ServiceStack;
-
-namespace BausCode.Api.Models.Routing
+﻿namespace BausCode.Api.Models.Routing
 {
+    using ServiceStack;
+
     [Route("/api/v1/products/{Id}/description", "PUT,POST,PATCH")]
     public class UpdateProductDescription : IUpdatableField<string>, IReturn<ProductResponse>
     {
-        public int Id { get; set; }
         public string FieldName => "Description";
+        public int Id { get; set; }
         public string Value { get; set; }
     }
 }

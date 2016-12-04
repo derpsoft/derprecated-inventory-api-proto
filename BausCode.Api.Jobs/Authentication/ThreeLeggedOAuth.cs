@@ -1,22 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
-using BausCode.Api.Jobs.Models;
-using ServiceStack;
-using ServiceStack.Data;
-using ServiceStack.Text;
-
-namespace BausCode.Api.Jobs.Authentication
+﻿namespace BausCode.Api.Jobs.Authentication
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Security.Cryptography;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using Models;
+    using ServiceStack;
+    using ServiceStack.Data;
+    using ServiceStack.Text;
+
     public class ThreeLeggedOAuth : AuthBase
     {
         public ThreeLeggedOAuth(string consumerKey, string consumerSecret, string accessToken,
-            string accessTokenSecret,
-            IDbConnectionFactory dbConnectionFactory)
+                                string accessTokenSecret,
+                                IDbConnectionFactory dbConnectionFactory)
         {
             ConsumerKey = consumerKey;
             ConsumerSecret = consumerSecret;
@@ -25,12 +25,12 @@ namespace BausCode.Api.Jobs.Authentication
             DbConnectionFactory = dbConnectionFactory;
         }
 
-        private string AccessToken { get; set; }
-        private string AccessTokenSecret { get; set; }
-        private IDbConnectionFactory DbConnectionFactory { get; set; }
+        private string AccessToken { get; }
+        private string AccessTokenSecret { get; }
         private ThreeLeggedOAuthTokenResponse BearerAuthentication { get; set; }
-        private string ConsumerKey { get; set; }
-        private string ConsumerSecret { get; set; }
+        private string ConsumerKey { get; }
+        private string ConsumerSecret { get; }
+        private IDbConnectionFactory DbConnectionFactory { get; set; }
 
         public override bool IsAuthenticated()
         {
@@ -56,14 +56,14 @@ namespace BausCode.Api.Jobs.Authentication
             var nonce = GetNonce();
 
             var baseParams = new List<KeyValuePair<string, string>>
-            {
-                Pair(@"oauth_consumer_key", ConsumerKey),
-                Pair(@"oauth_nonce", nonce),
-                Pair(@"oauth_signature_method", @"HMAC-SHA1"),
-                Pair(@"oauth_timestamp", ts.ToString()),
-                Pair(@"oauth_token", GetToken()),
-                Pair(@"oauth_version", "1.0")
-            };
+                             {
+                                 Pair(@"oauth_consumer_key", ConsumerKey),
+                                 Pair(@"oauth_nonce", nonce),
+                                 Pair(@"oauth_signature_method", @"HMAC-SHA1"),
+                                 Pair(@"oauth_timestamp", ts.ToString()),
+                                 Pair(@"oauth_token", GetToken()),
+                                 Pair(@"oauth_version", "1.0")
+                             };
 
             var dtoParams = dto.ToStringDictionary();
 
@@ -72,12 +72,12 @@ namespace BausCode.Api.Jobs.Authentication
 
             return
                 baseParams.OrderBy(kvp => kvp.Key.PercentEncode())
-                    .Select(kvp => "{0}=\"{1}\"".Fmt(kvp.Key.PercentEncode(), kvp.Value.PercentEncode()))
-                    .Join(", ");
+                          .Select(kvp => "{0}=\"{1}\"".Fmt(kvp.Key.PercentEncode(), kvp.Value.PercentEncode()))
+                          .Join(", ");
         }
 
         private string CalculateSignature(string httpMethod, Uri requestUri,
-            params KeyValuePair<string, string>[] values)
+                                          params KeyValuePair<string, string>[] values)
         {
             var paramString = values
                 .OrderBy(kvp => kvp.Key.PercentEncode())

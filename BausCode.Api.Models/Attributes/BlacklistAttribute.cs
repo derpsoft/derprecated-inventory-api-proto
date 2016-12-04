@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace BausCode.Api.Models.Attributes
+﻿namespace BausCode.Api.Models.Attributes
 {
+    using System;
+
     public class BlacklistAttribute : Attribute
     {
     }

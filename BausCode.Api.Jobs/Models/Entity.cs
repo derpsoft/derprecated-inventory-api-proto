@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
-
-namespace BausCode.Api.Jobs.Models
+﻿namespace BausCode.Api.Jobs.Models
 {
+    using System.Collections.Generic;
+    using System.Runtime.Serialization;
+
     [DataContract]
     public class Entity
     {

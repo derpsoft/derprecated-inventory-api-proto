@@ -1,7 +1,7 @@
-﻿using System.Net;
-
-namespace BausCode.Api.Jobs.Authentication
+﻿namespace BausCode.Api.Jobs.Authentication
 {
+    using System.Net;
+
     /// <summary>
     ///     Not yet threadsafe
     /// </summary>

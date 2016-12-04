@@ -1,11 +1,11 @@
-﻿using System.Data;
-using BausCode.Api.Models;
-using ServiceStack;
-using ServiceStack.Auth;
-using ServiceStack.OrmLite;
-
-namespace BausCode.Api.Handlers
+﻿namespace BausCode.Api.Handlers
 {
+    using System.Data;
+    using Models;
+    using ServiceStack;
+    using ServiceStack.Auth;
+    using ServiceStack.OrmLite;
+
     public class UserHandler
     {
         public UserHandler(IDbConnection db, IUserAuthRepository userAuthRepository, UserSession user)
@@ -15,9 +15,10 @@ namespace BausCode.Api.Handlers
             UserAuthRepository = userAuthRepository;
         }
 
-        private IUserAuthRepository UserAuthRepository { get; }
         private IDbConnection Db { get; }
         private UserSession User { get; }
+
+        private IUserAuthRepository UserAuthRepository { get; }
 
         private UserAuth GetUser(int id)
         {

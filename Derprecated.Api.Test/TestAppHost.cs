@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using BausCode.Api;
-using BausCode.Api.Models;
-using BausCode.Api.Models.Test;
-using BausCode.Api.Services;
-using Funq;
-using ServiceStack;
-using ServiceStack.Auth;
-using ServiceStack.Caching;
-using ServiceStack.Configuration;
-using ServiceStack.Data;
-using ServiceStack.OrmLite;
-using ServiceStack.Text;
-using ServiceStack.Validation;
-
-namespace Derprecated.Api.Test
+﻿namespace Derprecated.Api.Test
 {
+    using System;
+    using System.Collections.Generic;
+    using BausCode.Api;
+    using BausCode.Api.Models;
+    using BausCode.Api.Models.Test;
+    using BausCode.Api.Services;
+    using Funq;
+    using ServiceStack;
+    using ServiceStack.Auth;
+    using ServiceStack.Caching;
+    using ServiceStack.Configuration;
+    using ServiceStack.Data;
+    using ServiceStack.OrmLite;
+    using ServiceStack.Text;
+    using ServiceStack.Validation;
+
     internal class TestAppHost : AppSelfHostBase
     {
         public TestAppHost(string name) : base(name, typeof (BaseService).Assembly)
@@ -71,33 +71,33 @@ namespace Derprecated.Api.Test
 
             // Db filters
             OrmLiteConfig.InsertFilter = (dbCmd, row) =>
-            {
-                if (row is IAuditable)
-                {
-                    var auditRow = row as IAuditable;
-                    auditRow.CreateDate = auditRow.ModifyDate = DateTime.UtcNow;
-                }
+                                         {
+                                             if (row is IAuditable)
+                                             {
+                                                 var auditRow = row as IAuditable;
+                                                 auditRow.CreateDate = auditRow.ModifyDate = DateTime.UtcNow;
+                                             }
 
-                if (row is Product)
-                {
-                    var product = row as Product;
-                    product.OnInsert();
-                }
-            };
+                                             if (row is Product)
+                                             {
+                                                 var product = row as Product;
+                                                 product.OnInsert();
+                                             }
+                                         };
             OrmLiteConfig.UpdateFilter = (dbCmd, row) =>
-            {
-                if (row is IAuditable)
-                {
-                    var auditRow = row as IAuditable;
-                    auditRow.ModifyDate = DateTime.UtcNow;
-                }
+                                         {
+                                             if (row is IAuditable)
+                                             {
+                                                 var auditRow = row as IAuditable;
+                                                 auditRow.ModifyDate = DateTime.UtcNow;
+                                             }
 
-                if (row is Product)
-                {
-                    var product = row as Product;
-                    product.OnUpdate();
-                }
-            };
+                                             if (row is Product)
+                                             {
+                                                 var product = row as Product;
+                                                 product.OnUpdate();
+                                             }
+                                         };
 
             // Schema init
             using (var ctx = container.Resolve<IDbConnectionFactory>().Open())
@@ -127,7 +127,7 @@ namespace Derprecated.Api.Test
                 () => new UserSession(),
                 new IAuthProvider[]
                 {
-//                    new TwitterAuthProvider(appSettings),
+                    //                    new TwitterAuthProvider(appSettings),
                     new CredentialsAuthProvider(appSettings)
                     {
                         SkipPasswordVerificationForInProcessRequests = true
@@ -140,18 +140,18 @@ namespace Derprecated.Api.Test
 
             var userRepo = container.Resolve<IUserAuthRepository>();
             var testUser = (IUserAuth) new UserAuth
-            {
-                Email = Constants.TestAuthenticate.UserName
-            };
+                                       {
+                                           Email = Constants.TestAuthenticate.UserName
+                                       };
             if (null == userRepo.GetUserAuthByUserName(testUser.Email))
                 userRepo.CreateUserAuth(testUser, Constants.TestAuthenticate.Password);
 
             // Misc
             container.Register(new ShopifyServiceClient($"https://{appSettings.Get("shopify.store.domain")}")
-            {
-                UserName = appSettings.Get("shopify.api.key"),
-                Password = appSettings.Get("shopify.api.password")
-            });
+                               {
+                                   UserName = appSettings.Get("shopify.api.key"),
+                                   Password = appSettings.Get("shopify.api.password")
+                               });
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using ServiceStack;
-
-namespace BausCode.Api.Models.Routing
+﻿namespace BausCode.Api.Models.Routing
 {
+    using ServiceStack;
+
     [Route("/api/v1/users", "GET")]
     public class GetUsers : IReturn<GetUsersResponse>
     {

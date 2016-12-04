@@ -1,19 +1,19 @@
-﻿using System.Data;
-using BausCode.Api.Models;
-using ServiceStack.OrmLite;
-
-namespace BausCode.Api.Handlers
+﻿namespace BausCode.Api.Handlers
 {
+    using System.Data;
+    using Models;
+    using ServiceStack.OrmLite;
+
     public class LocationHandler
     {
-        private IDbConnection Db { get; set; }
-        private UserSession User { get; set; }
-
         public LocationHandler(IDbConnection db, UserSession user)
         {
             Db = db;
             User = user;
         }
+
+        private IDbConnection Db { get; }
+        private UserSession User { get; set; }
 
         public Location GetLocation(int id)
         {

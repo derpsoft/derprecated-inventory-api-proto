@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using ServiceStack.DataAnnotations;
-
-namespace BausCode.Api.Models.Shopify
+﻿namespace BausCode.Api.Models.Shopify
 {
+    using System.Collections.Generic;
+    using ServiceStack.DataAnnotations;
+
     // ReSharper disable once ClassNeverInstantiated.Global
     public class ProductsResponse
     {

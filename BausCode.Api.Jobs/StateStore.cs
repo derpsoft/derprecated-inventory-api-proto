@@ -1,12 +1,12 @@
-﻿using System;
-using System.Data;
-using System.Linq;
-using ServiceStack;
-using ServiceStack.Data;
-using ServiceStack.OrmLite;
-
-namespace BausCode.Api.Jobs
+﻿namespace BausCode.Api.Jobs
 {
+    using System;
+    using System.Data;
+    using System.Linq;
+    using ServiceStack;
+    using ServiceStack.Data;
+    using ServiceStack.OrmLite;
+
     public class StateStore : IStateStore
     {
         private bool isDisposed;
@@ -21,7 +21,25 @@ namespace BausCode.Api.Jobs
             Context = context;
         }
 
-        private IDbConnection Context { get; set; }
+        private IDbConnection Context { get; }
+
+        private State Get(string key)
+        {
+            key.ThrowIfNullOrEmpty("key");
+
+            return Context.Where<State>(new {Key = key.ToLowerInvariant()}).FirstOrDefault();
+        }
+
+        private void Dispose(bool managed)
+        {
+            if (managed)
+            {
+                if (null != Context)
+                {
+                    Context.Dispose();
+                }
+            }
+        }
 
         public T Get<T>(string key)
         {
@@ -52,24 +70,6 @@ namespace BausCode.Api.Jobs
                 Dispose(true);
                 isDisposed = true;
                 GC.SuppressFinalize(this);
-            }
-        }
-
-        private State Get(string key)
-        {
-            key.ThrowIfNullOrEmpty("key");
-
-            return Context.Where<State>(new {Key = key.ToLowerInvariant()}).FirstOrDefault();
-        }
-
-        private void Dispose(bool managed)
-        {
-            if (managed)
-            {
-                if (null != Context)
-                {
-                    Context.Dispose();
-                }
             }
         }
     }

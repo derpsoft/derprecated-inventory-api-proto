@@ -1,19 +1,14 @@
-﻿using System;
-using System.IO;
-using ServiceStack;
-using ServiceStack.Web;
-
-namespace BausCode.Api.Jobs
+﻿namespace BausCode.Api.Jobs
 {
+    using System;
+    using System.IO;
+    using ServiceStack;
+    using ServiceStack.Web;
+
     public class HybridClient<TRequest, TResponse> : ServiceClientBase
         where TRequest : ServiceClientBase
         where TResponse : ServiceClientBase
     {
-        public override string Format
-        {
-            get { return Activator.CreateInstance<TResponse>().Format; }
-        }
-
         public override string Accept
         {
             get { return Activator.CreateInstance<TResponse>().ContentType; }
@@ -22,6 +17,11 @@ namespace BausCode.Api.Jobs
         public override string ContentType
         {
             get { return Activator.CreateInstance<TRequest>().ContentType; }
+        }
+
+        public override string Format
+        {
+            get { return Activator.CreateInstance<TResponse>().Format; }
         }
 
         public override StreamDeserializerDelegate StreamDeserializer

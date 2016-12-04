@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace BausCode.Api
+﻿namespace BausCode.Api
 {
+    using System;
+
     public static class DecimalExtensions
     {
         public static void ThrowIfGreaterThan(this decimal input, decimal greaterThan)

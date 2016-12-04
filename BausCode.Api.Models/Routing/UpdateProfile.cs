@@ -1,8 +1,8 @@
-﻿using BausCode.Api.Models.Attributes;
-using ServiceStack;
-
-namespace BausCode.Api.Models.Routing
+﻿namespace BausCode.Api.Models.Routing
 {
+    using Attributes;
+    using ServiceStack;
+
     [EnsureHttps(SkipIfDebugMode = true, SkipIfXForwardedFor = true)]
     [Authenticate]
     [Route("/api/v1/me", "PUT, POST, PATCH")]
@@ -12,9 +12,9 @@ namespace BausCode.Api.Models.Routing
         public string DisplayName { get; set; }
 
         [Whitelist]
-        public string UserName { get; set; }
+        public string PhoneNumber { get; set; }
 
         [Whitelist]
-        public string PhoneNumber { get; set; }
+        public string UserName { get; set; }
     }
 }

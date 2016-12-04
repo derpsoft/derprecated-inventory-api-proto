@@ -1,22 +1,22 @@
-﻿using System;
-using System.Configuration;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using BausCode.Api.Models;
-using BausCode.Api.Models.Attributes;
-using BausCode.Api.Models.Shopify;
-using Funq;
-using ServiceStack;
-using ServiceStack.Configuration;
-using ServiceStack.Data;
-using ServiceStack.MiniProfiler.Storage;
-using ServiceStack.OrmLite;
-using Product = BausCode.Api.Models.Product;
-
-// ReSharper disable AccessToDisposedClosure
+﻿ // ReSharper disable AccessToDisposedClosure
 
 namespace Derprecated.Jobs.ShopifyMigrator
 {
+    using System;
+    using System.Configuration;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using BausCode.Api.Models;
+    using BausCode.Api.Models.Attributes;
+    using BausCode.Api.Models.Shopify;
+    using Funq;
+    using ServiceStack;
+    using ServiceStack.Configuration;
+    using ServiceStack.Data;
+    using ServiceStack.MiniProfiler.Storage;
+    using ServiceStack.OrmLite;
+    using Product = BausCode.Api.Models.Product;
+
     internal class Program
     {
         static Program()
@@ -49,55 +49,57 @@ namespace Derprecated.Jobs.ShopifyMigrator
 
             // DB
             container.Register<IDbConnectionFactory>(c =>
-            {
-                var connectionString =
-                    ConfigurationManager.ConnectionStrings["AzureSql"].ConnectionString;
+                                                     {
+                                                         var connectionString =
+                                                             ConfigurationManager.ConnectionStrings["AzureSql"]
+                                                                 .ConnectionString;
 
-                return new OrmLiteConnectionFactory(connectionString, SqlServerDialect.Provider);
-            });
+                                                         return new OrmLiteConnectionFactory(connectionString,
+                                                             SqlServerDialect.Provider);
+                                                     });
 
             // Db filters
             OrmLiteConfig.InsertFilter = (dbCmd, row) =>
-            {
-                if (row is IInsertFilter)
-                {
-                    var insert = row as IInsertFilter;
-                    insert.OnBeforeInsert();
-                }
+                                         {
+                                             if (row is IInsertFilter)
+                                             {
+                                                 var insert = row as IInsertFilter;
+                                                 insert.OnBeforeInsert();
+                                             }
 
-                if (row is IAuditable)
-                {
-                    var auditRow = row as IAuditable;
-                    auditRow.CreateDate = auditRow.ModifyDate = DateTime.UtcNow;
-                }
-            };
+                                             if (row is IAuditable)
+                                             {
+                                                 var auditRow = row as IAuditable;
+                                                 auditRow.CreateDate = auditRow.ModifyDate = DateTime.UtcNow;
+                                             }
+                                         };
             OrmLiteConfig.UpdateFilter = (dbCmd, row) =>
-            {
-                if (row is IUpdateFilter)
-                {
-                    var update = row as IUpdateFilter;
-                    update.OnBeforeUpdate();
-                }
+                                         {
+                                             if (row is IUpdateFilter)
+                                             {
+                                                 var update = row as IUpdateFilter;
+                                                 update.OnBeforeUpdate();
+                                             }
 
-                if (row is IAuditable)
-                {
-                    var auditRow = row as IAuditable;
-                    auditRow.ModifyDate = DateTime.UtcNow;
-                }
-            };
+                                             if (row is IAuditable)
+                                             {
+                                                 var auditRow = row as IAuditable;
+                                                 auditRow.ModifyDate = DateTime.UtcNow;
+                                             }
+                                         };
 
             container.Register(c =>
-            {
-                var domain = appSettings.Get("shopify.store.domain");
-                var apiKey = appSettings.Get("shopify.api.key");
-                var password = appSettings.Get("shopify.api.password");
+                               {
+                                   var domain = appSettings.Get("shopify.store.domain");
+                                   var apiKey = appSettings.Get("shopify.api.key");
+                                   var password = appSettings.Get("shopify.api.password");
 
-                return new JsonServiceClient($"https://{domain}")
-                {
-                    UserName = apiKey,
-                    Password = password
-                };
-            });
+                                   return new JsonServiceClient($"https://{domain}")
+                                          {
+                                              UserName = apiKey,
+                                              Password = password
+                                          };
+                               });
 
 
             using (var db = Container.Resolve<IDbConnectionFactory>().Open())
@@ -123,69 +125,75 @@ namespace Derprecated.Jobs.ShopifyMigrator
                 var shopifyProducts = client.Get(new GetProducts {Limit = shopifyCount.Count});
 
                 var count = shopifyProducts.Products.AsParallel()
-                    .SelectMany(p =>
-                        p.Variants.Map(v =>
-                        {
-                            var x = Product.From(p)
-                                .PopulateFromPropertiesWithAttribute(v, typeof (WhitelistAttribute));
+                                           .SelectMany(p =>
+                                               p.Variants.Map(v =>
+                                                              {
+                                                                  var x = Product.From(p)
+                                                                                 .PopulateFromPropertiesWithAttribute(
+                                                                                     v, typeof (WhitelistAttribute));
 
-                            x.ShopifyVariantId = v.Id;
+                                                                  x.ShopifyVariantId = v.Id;
 
-                            return x;
-                        })
+                                                                  return x;
+                                                              })
                     ).Select(p =>
-                    {
-                        Product product;
+                             {
+                                 Product product;
 
-                        using (var db = Container.Resolve<IDbConnectionFactory>().Open())
-                        {
-                            product = db.Where<Product>(new {p.ShopifyId, p.ShopifyVariantId}).SingleOrDefault();
+                                 using (var db = Container.Resolve<IDbConnectionFactory>().Open())
+                                 {
+                                     product =
+                                         db.Where<Product>(new {p.ShopifyId, p.ShopifyVariantId}).SingleOrDefault();
 
-                            if (product == default(Product))
-                            {
-                                Console.WriteLine($"New [{p.ShopifyId}] {p.Title.Truncate(40)}...");
-                                product = p;
-                            }
-                            else
-                            {
-                                db.LoadReferences(product);
-                                product.Merge(p);
+                                     if (product == default(Product))
+                                     {
+                                         Console.WriteLine($"New [{p.ShopifyId}] {p.Title.Truncate(40)}...");
+                                         product = p;
+                                     }
+                                     else
+                                     {
+                                         db.LoadReferences(product);
+                                         product.Merge(p);
 
-                                Console.WriteLine(
-                                    $"Existing [{product.ShopifyId} -> {product.Id}] {p.Title.Truncate(40)}...");
-                            }
+                                         Console.WriteLine(
+                                             $"Existing [{product.ShopifyId} -> {product.Id}] {p.Title.Truncate(40)}...");
+                                     }
 
-                            product.Tags.Split(',')
-                                .Map(x => new Tag {Lowercase = x.ToLowerSafe().Trim(), Name = x.Trim()})
-                                .ExecAll(x =>
-                                {
-                                    var tagId = -1;
-                                    if (!db.Exists<Tag>(new {x.Lowercase}))
-                                    {
-                                        db.Save(x);
-                                        tagId = (int) db.LastInsertId();
-                                    }
-                                    else
-                                    {
-                                        tagId = db.Scalar<int>(
-                                            db.From<Tag>()
-                                                .Select(t => t.Id)
-                                                .Where(t => t.Lowercase == x.Lowercase)
-                                                .Limit(1)
-                                            );
-                                    }
+                                     product.Tags.Split(',')
+                                            .Map(x => new Tag {Lowercase = x.ToLowerSafe().Trim(), Name = x.Trim()})
+                                            .ExecAll(x =>
+                                                     {
+                                                         var tagId = -1;
+                                                         if (!db.Exists<Tag>(new {x.Lowercase}))
+                                                         {
+                                                             db.Save(x);
+                                                             tagId = (int) db.LastInsertId();
+                                                         }
+                                                         else
+                                                         {
+                                                             tagId = db.Scalar<int>(
+                                                                 db.From<Tag>()
+                                                                   .Select(t => t.Id)
+                                                                   .Where(t => t.Lowercase == x.Lowercase)
+                                                                   .Limit(1)
+                                                                 );
+                                                         }
 
-                                    var productTag = new ProductTag {ProductId = product.Id, TagId = tagId};
-                                    if (!db.Exists<ProductTag>(productTag))
-                                    {
-                                        db.Save(productTag);
-                                    }
-                                });
+                                                         var productTag = new ProductTag
+                                                                          {
+                                                                              ProductId = product.Id,
+                                                                              TagId = tagId
+                                                                          };
+                                                         if (!db.Exists<ProductTag>(productTag))
+                                                         {
+                                                             db.Save(productTag);
+                                                         }
+                                                     });
 
-                            db.Save(product, true);
-                        }
-                        return product;
-                    }).Count();
+                                     db.Save(product, true);
+                                 }
+                                 return product;
+                             }).Count();
 
                 Console.WriteLine($"Saved {count} Products.\n");
             }

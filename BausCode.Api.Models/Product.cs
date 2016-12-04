@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using BausCode.Api.Models.Attributes;
-using ServiceStack.DataAnnotations;
-
-namespace BausCode.Api.Models
+﻿namespace BausCode.Api.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Attributes;
+    using ServiceStack.DataAnnotations;
+
     public class Product : IAuditable
     {
         public Product()
@@ -13,10 +13,39 @@ namespace BausCode.Api.Models
             Images = new List<ProductImage>();
         }
 
+        [Whitelist]
+        [EqualityCheck]
+        public string Barcode { get; set; }
+
+        [Whitelist]
+        [EqualityCheck]
+        public string Color { get; set; }
+
+        public DateTime CreateDate { get; set; }
+
+        [Whitelist]
+        [EqualityCheck]
+        public string Description { get; set; }
+
+        [Whitelist]
+        [EqualityCheck]
+        public int Grams { get; set; }
+
         [PrimaryKey]
         [AutoIncrement]
         [EqualityCheck]
         public int Id { get; set; }
+
+        [Reference]
+        public List<ProductImage> Images { get; set; }
+
+        public DateTime ModifyDate { get; set; }
+
+        [Whitelist]
+        [EqualityCheck]
+        public decimal Price { get; set; }
+
+        public ulong RowVersion { get; set; }
 
         [EqualityCheck]
         public long? ShopifyId { get; set; }
@@ -26,11 +55,7 @@ namespace BausCode.Api.Models
 
         [Whitelist]
         [EqualityCheck]
-        public string Title { get; set; }
-
-        [Whitelist]
-        [EqualityCheck]
-        public string Description { get; set; }
+        public string Sku { get; set; }
 
         [Whitelist]
         [EqualityCheck]
@@ -38,47 +63,22 @@ namespace BausCode.Api.Models
 
         [Whitelist]
         [EqualityCheck]
-        public decimal Price { get; set; }
+        public string Title { get; set; }
 
         [Whitelist]
         [EqualityCheck]
-        public string Sku { get; set; }
-
-        [Whitelist]
-        [EqualityCheck]
-        public int Grams { get; set; }
-
-        [Whitelist]
-        [EqualityCheck]
-        public string Barcode { get; set; }
+        public string Vendor { get; set; }
 
         [Whitelist]
         [EqualityCheck]
         public decimal Weight { get; set; }
 
         /// <summary>
-        /// Acceptable values are one of: lb, kg, oz, g
+        ///     Acceptable values are one of: lb, kg, oz, g
         /// </summary>
         [Whitelist]
         [EqualityCheck]
         public string WeightUnit { get; set; }
-
-        [Whitelist]
-        [EqualityCheck]
-        public string Color { get; set; }
-
-        [Whitelist]
-        [EqualityCheck]
-        public string Vendor { get; set; }
-
-        public DateTime CreateDate { get; set; }
-
-        public DateTime ModifyDate { get; set; }
-
-        public ulong RowVersion { get; set; }
-
-        [Reference]
-        public List<ProductImage> Images { get; set; }
 
 
         /// <summary>

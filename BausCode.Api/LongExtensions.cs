@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace BausCode.Api
+﻿namespace BausCode.Api
 {
+    using System;
+
     public static class LongExtensions
     {
         public static void ThrowIfGreaterThan(this long input, long greaterThan)

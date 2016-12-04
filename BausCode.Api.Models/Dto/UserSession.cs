@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-
-namespace BausCode.Api.Models.Dto
+﻿namespace BausCode.Api.Models.Dto
 {
+    using System.Collections.Generic;
+
     public class UserSession
     {
-        public bool IsAuthenticated { get; set; }
         public string DisplayName { get; set; }
+        public bool IsAuthenticated { get; set; }
+        public List<string> Permissions { get; set; }
         public string PrimaryEmail { get; set; }
         public List<string> Roles { get; set; }
-        public List<string> Permissions { get; set; }
 
         public static UserSession From(Models.UserSession source)
         {

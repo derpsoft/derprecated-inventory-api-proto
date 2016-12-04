@@ -1,32 +1,13 @@
-﻿using System;
-using ServiceStack;
-using ServiceStack.Caching;
-
-namespace BausCode.Api.Jobs
+﻿namespace BausCode.Api.Jobs
 {
+    using System;
+    using ServiceStack;
+    using ServiceStack.Caching;
+
     public class CounterStore : ICounterStore
     {
-        private bool IsDisposed { get; set; }
         public ICacheClient Client { get; set; }
-
-        /// <summary>
-        ///     Increment the given counter.
-        /// </summary>
-        /// <param name="counter"></param>
-        /// <returns></returns>
-        public long Increment(Counter counter)
-        {
-            counter.ThrowIfNull();
-
-            return IncrementBy(counter.CreateUrn(), counter.DefaultIncrement);
-        }
-
-        public long Get(Counter counter)
-        {
-            counter.ThrowIfNull();
-
-            return Get(counter.CreateUrn());
-        }
+        private bool IsDisposed { get; set; }
 
         /// <summary>
         ///     Decrement the value of a counter by a specific amount.
@@ -79,6 +60,25 @@ namespace BausCode.Api.Jobs
         private bool Reset(string key)
         {
             return Set(key, 0);
+        }
+
+        /// <summary>
+        ///     Increment the given counter.
+        /// </summary>
+        /// <param name="counter"></param>
+        /// <returns></returns>
+        public long Increment(Counter counter)
+        {
+            counter.ThrowIfNull();
+
+            return IncrementBy(counter.CreateUrn(), counter.DefaultIncrement);
+        }
+
+        public long Get(Counter counter)
+        {
+            counter.ThrowIfNull();
+
+            return Get(counter.CreateUrn());
         }
 
         #region IDisposable

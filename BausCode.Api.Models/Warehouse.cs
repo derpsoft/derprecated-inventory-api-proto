@@ -1,14 +1,13 @@
-﻿using System;
-
-namespace BausCode.Api.Models
+﻿namespace BausCode.Api.Models
 {
+    using System;
+
     public class Warehouse : IAuditable
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-
         public DateTime CreateDate { get; set; }
+        public int Id { get; set; }
         public DateTime ModifyDate { get; set; }
+        public string Name { get; set; }
         public ulong RowVersion { get; set; }
     }
 }

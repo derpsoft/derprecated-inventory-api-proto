@@ -1,24 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using ServiceStack;
-using ServiceStack.Text;
-using ServiceStack.Web;
-
-namespace BausCode.Api.Jobs
+﻿namespace BausCode.Api.Jobs
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using ServiceStack;
+    using ServiceStack.Text;
+    using ServiceStack.Web;
+
     public class WwwFormUrlEncodedClient : ServiceClientBase
     {
-        public override string Format
-        {
-            get { return ApiConstants.FORMAT_X_WWW_FORM_URLENCODED; }
-        }
-
         public override string ContentType
         {
             get { return ApiConstants.CONTENT_TYPE_X_WWW_FORM_URLENCODED; }
+        }
+
+        public override string Format
+        {
+            get { return ApiConstants.FORMAT_X_WWW_FORM_URLENCODED; }
         }
 
         public override StreamDeserializerDelegate StreamDeserializer
@@ -30,8 +30,8 @@ namespace BausCode.Api.Jobs
         {
             var body =
                 request.ToStringDictionary()
-                    .Select(kvp => "{0}={1}".Fmt(kvp.Key.UrlEncode(), kvp.Value.UrlEncode()))
-                    .Join("&");
+                       .Select(kvp => "{0}={1}".Fmt(kvp.Key.UrlEncode(), kvp.Value.UrlEncode()))
+                       .Join("&");
             var bodyBytes = Encoding.ASCII.GetBytes(body);
             stream.Write(bodyBytes, 0, bodyBytes.Length);
         }
@@ -48,13 +48,13 @@ namespace BausCode.Api.Jobs
             var response = type.CreateInstance();
 
             body.Split('&').ExecAll(raw =>
-            {
-                var split = raw.Split('=');
-                var kvp = new KeyValuePair<string, string>(split[0], split[1]);
+                                    {
+                                        var split = raw.Split('=');
+                                        var kvp = new KeyValuePair<string, string>(split[0], split[1]);
 
-                var prop = type.GetProperty(kvp.Key.UrlDecode());
-                prop.SetValue(response, kvp.Value.UrlDecode().To(prop.PropertyType));
-            });
+                                        var prop = type.GetProperty(kvp.Key.UrlDecode());
+                                        prop.SetValue(response, kvp.Value.UrlDecode().To(prop.PropertyType));
+                                    });
 
             return response;
         }

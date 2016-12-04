@@ -1,15 +1,15 @@
-﻿using System;
-using System.Configuration;
-using BausCode.Api.Models;
-using Funq;
-using ServiceStack;
-using ServiceStack.Caching;
-using ServiceStack.Configuration;
-using ServiceStack.Data;
-using ServiceStack.OrmLite;
-
-namespace BausCode.Api.Jobs
+﻿namespace BausCode.Api.Jobs
 {
+    using System;
+    using System.Configuration;
+    using Api.Models;
+    using Funq;
+    using ServiceStack;
+    using ServiceStack.Caching;
+    using ServiceStack.Configuration;
+    using ServiceStack.Data;
+    using ServiceStack.OrmLite;
+
     public abstract class ProgramBase
     {
         private readonly Container Container;
@@ -51,31 +51,34 @@ namespace BausCode.Api.Jobs
         {
             // DB
             container.Register<IDbConnectionFactory>(c =>
-            {
-                var connectionString = ConfigurationManager.ConnectionStrings["AzureSql"].ConnectionString;
-                return new OrmLiteConnectionFactory(connectionString, SqlServerDialect.Provider);
-            });
+                                                     {
+                                                         var connectionString =
+                                                             ConfigurationManager.ConnectionStrings["AzureSql"]
+                                                                 .ConnectionString;
+                                                         return new OrmLiteConnectionFactory(connectionString,
+                                                             SqlServerDialect.Provider);
+                                                     });
 
             // Cache
             container.Register<ICacheClient>(new MemoryCacheClient());
 
             // Filters
             OrmLiteConfig.InsertFilter = (dbCmd, row) =>
-            {
-                var auditRow = row as IAuditable;
-                if (null != auditRow)
-                {
-                    auditRow.CreateDate = auditRow.ModifyDate = DateTime.UtcNow;
-                }
-            };
+                                         {
+                                             var auditRow = row as IAuditable;
+                                             if (null != auditRow)
+                                             {
+                                                 auditRow.CreateDate = auditRow.ModifyDate = DateTime.UtcNow;
+                                             }
+                                         };
             OrmLiteConfig.UpdateFilter = (dbCmd, row) =>
-            {
-                var auditRow = row as IAuditable;
-                if (null != auditRow)
-                {
-                    auditRow.ModifyDate = DateTime.UtcNow;
-                }
-            };
+                                         {
+                                             var auditRow = row as IAuditable;
+                                             if (null != auditRow)
+                                             {
+                                                 auditRow.ModifyDate = DateTime.UtcNow;
+                                             }
+                                         };
 
             // Settings
             container.Register(new AppSettings());

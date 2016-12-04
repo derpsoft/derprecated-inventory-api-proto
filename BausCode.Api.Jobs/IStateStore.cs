@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace BausCode.Api.Jobs
+﻿namespace BausCode.Api.Jobs
 {
+    using System;
+
     public interface IStateStore : IDisposable
     {
         T Get<T>(string key);

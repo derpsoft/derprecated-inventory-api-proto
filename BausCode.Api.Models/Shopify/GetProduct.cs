@@ -1,7 +1,7 @@
-﻿using ServiceStack;
-
-namespace BausCode.Api.Models.Shopify
+﻿namespace BausCode.Api.Models.Shopify
 {
+    using ServiceStack;
+
     [Route("/admin/products/{Id}.json", "GET")]
     public class GetProduct : IReturn<ProductResponse>
     {

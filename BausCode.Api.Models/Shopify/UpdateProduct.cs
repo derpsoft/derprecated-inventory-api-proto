@@ -1,8 +1,8 @@
-﻿using System.Runtime.Serialization;
-using ServiceStack;
-
-namespace BausCode.Api.Models.Shopify
+﻿namespace BausCode.Api.Models.Shopify
 {
+    using System.Runtime.Serialization;
+    using ServiceStack;
+
     [Route("/admin/products/{id}.json", "PUT")]
     [DataContract]
     public class UpdateProduct : IReturn<ProductResponse>

@@ -1,7 +1,7 @@
-﻿using ServiceStack;
-
-namespace BausCode.Api.Models.Routing
+﻿namespace BausCode.Api.Models.Routing
 {
+    using ServiceStack;
+
     [Route("/api/v1/products/save", "POST")]
     public class SaveProduct : IReturn<SaveProductResponse>
     {

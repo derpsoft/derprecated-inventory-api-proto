@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using BausCode.Api.Models.Attributes;
-using ServiceStack;
-
-namespace BausCode.Api.Models
+﻿namespace BausCode.Api.Models
 {
+    using System;
+    using ServiceStack;
+
     public static class ProductExtensions
     {
         public static Type ProductType = typeof (Product);

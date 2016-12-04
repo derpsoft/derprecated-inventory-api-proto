@@ -1,12 +1,12 @@
-﻿using System;
-using System.Net.Mail;
-using System.Text.RegularExpressions;
-using BausCode.Api.Models.Routing;
-using ServiceStack;
-using ServiceStack.Auth;
-
-namespace BausCode.Api.Services
+﻿namespace BausCode.Api.Services
 {
+    using System;
+    using System.Net.Mail;
+    using System.Text.RegularExpressions;
+    using Models.Routing;
+    using ServiceStack;
+    using ServiceStack.Auth;
+
     public class PasswordService : BaseService
     {
         private static readonly TimeSpan Expiration = TimeSpan.FromHours(4);
@@ -37,11 +37,11 @@ namespace BausCode.Api.Services
             using (var service = ResolveService<AuthenticateService>())
             {
                 return service.Authenticate(new Authenticate
-                {
-                    provider = AuthenticateService.CredentialsProvider,
-                    UserName = user.Email,
-                    Password = request.Password
-                });
+                                            {
+                                                provider = AuthenticateService.CredentialsProvider,
+                                                UserName = user.Email,
+                                                Password = request.Password
+                                            });
             }
         }
 
@@ -73,7 +73,9 @@ namespace BausCode.Api.Services
                         <p>
                             Click on the following link to reset your password:
                             <br/><br/>
-                            <a href=""{link}"">{link}</a>
+                            <a href=""{
+                    link}"">{link
+                    }</a>
                             <br/><br/>
                             This link will expire in 4 hours.
                         </p>

@@ -1,44 +1,48 @@
-﻿using System;
-using ServiceStack.DataAnnotations;
-
-namespace BausCode.Api.Models
+﻿namespace BausCode.Api.Models
 {
+    using System;
+    using ServiceStack.DataAnnotations;
+    using Shopify;
+
     public class ProductImage : IAuditable
     {
+        public DateTime CreateDate { get; set; }
+
         [PrimaryKey]
         [AutoIncrement]
         public int Id { get; set; }
 
-        public long ShopifyId { get; set; }
+        public DateTime ModifyDate { get; set; }
 
         [ForeignKey(typeof (Product), OnDelete = "CASCADE", OnUpdate = "CASCADE")]
         public int ProductId { get; set; }
 
-        public DateTime CreateDate { get; set; }
-        public DateTime ModifyDate { get; set; }
         public ulong RowVersion { get; set; }
+
+        public long ShopifyId { get; set; }
 
         public string SourceUrl { get; set; }
 
-        
-        public static ProductImage From(Shopify.Image source)
+
+        public static ProductImage From(Image source)
         {
             var dest = new ProductImage
-            {
-                ShopifyId = source.Id.GetValueOrDefault(),
-                SourceUrl = source.Url
-            };
+                       {
+                           ShopifyId = source.Id.GetValueOrDefault(),
+                           SourceUrl = source.Url
+                       };
 
 
             return dest;
         }
+
         public static ProductImage From(ProductImage source)
         {
             var dest = new ProductImage
-            {
-                ShopifyId = source.Id,
-                SourceUrl = source.SourceUrl
-            };
+                       {
+                           ShopifyId = source.Id,
+                           SourceUrl = source.SourceUrl
+                       };
 
 
             return dest;

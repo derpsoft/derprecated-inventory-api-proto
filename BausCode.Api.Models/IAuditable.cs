@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace BausCode.Api.Models
+﻿namespace BausCode.Api.Models
 {
+    using System;
+
     public interface IAuditable
     {
         DateTime CreateDate { get; set; }

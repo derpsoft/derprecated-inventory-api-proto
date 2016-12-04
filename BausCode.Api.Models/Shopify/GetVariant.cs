@@ -1,8 +1,7 @@
-﻿using System.Runtime.Serialization;
-using ServiceStack;
-
-namespace BausCode.Api.Models.Shopify
+﻿namespace BausCode.Api.Models.Shopify
 {
+    using ServiceStack;
+
     [Route("/admin/variants/{Id}.json", "GET")]
     public class GetVariant : IReturn<VariantResponse>
     {

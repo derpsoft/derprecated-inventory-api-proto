@@ -1,9 +1,9 @@
-﻿using ServiceStack;
-
-namespace BausCode.Api.Models.Routing
+﻿namespace BausCode.Api.Models.Routing
 {
+    using ServiceStack;
+
     /// <summary>
-    /// Used for all warehouse operations, including receiving, moving, selling, quantity changes, etc.
+    ///     Used for all warehouse operations, including receiving, moving, selling, quantity changes, etc.
     /// </summary>
     [Route("/api/v1/warehouse-transaction", "POST")]
     public class CreateWarehouseTransaction : IReturn<CreateWarehouseTransactionResponse>

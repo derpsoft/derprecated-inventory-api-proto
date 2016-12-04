@@ -1,16 +1,13 @@
-﻿using System;
-using BausCode.Api.Models;
-using BausCode.Api.Models.Test;
-using Funq;
-using NUnit.Framework;
-using ServiceStack;
-using ServiceStack.Data;
-using ServiceStack.OrmLite;
-// ReSharper disable once RedundantUsingDirective
-using Seeds = BausCode.Api.Models.Test.Seeds;
-
-namespace Derprecated.Api.Test.Handlers
+﻿namespace Derprecated.Api.Test.Handlers
 {
+    using System;
+    using BausCode.Api.Models.Test;
+    using BausCode.Api.Models.Test.Seeds;
+    using NUnit.Framework;
+    using ServiceStack;
+    using ServiceStack.Data;
+    using ServiceStack.OrmLite;
+
     [TestFixture]
     [Parallelizable]
     [Author(Constants.Authors.James)]
@@ -31,8 +28,8 @@ namespace Derprecated.Api.Test.Handlers
 
             using (var db = Host.Resolve<IDbConnectionFactory>().Open())
             {
-                db.SaveAll(Seeds.Product.Basic);
-                db.SaveAll(Seeds.Location.Basic);
+                db.SaveAll(Product.Basic);
+                db.SaveAll(Location.Basic);
             }
         }
 
@@ -57,7 +54,7 @@ namespace Derprecated.Api.Test.Handlers
             var handler = Host.Resolve<BausCode.Api.Handlers.InventoryHandler>();
 
             Assert.Throws<ArgumentOutOfRangeException>(
-                () => handler.Receive(Seeds.Product.EmptyProduct.Id, testId, 1));
+                () => handler.Receive(Product.EmptyProduct.Id, testId, 1));
         }
 
         [Test]
@@ -70,7 +67,7 @@ namespace Derprecated.Api.Test.Handlers
             var handler = Host.Resolve<BausCode.Api.Handlers.InventoryHandler>();
 
             Assert.Throws<ArgumentOutOfRangeException>(
-                () => handler.Receive(testId, Seeds.Location.EmptyLocation.Id, 1));
+                () => handler.Receive(testId, Location.EmptyLocation.Id, 1));
         }
 
         [Test]
@@ -84,8 +81,8 @@ namespace Derprecated.Api.Test.Handlers
 
             Assert.Throws<ArgumentOutOfRangeException>(
                 () =>
-                    handler.Receive(Seeds.Product.EmptyProduct.Id,
-                        Seeds.Location.EmptyLocation.Id, testQuantity));
+                    handler.Receive(Product.EmptyProduct.Id,
+                        Location.EmptyLocation.Id, testQuantity));
         }
 
         [Test]
@@ -96,7 +93,7 @@ namespace Derprecated.Api.Test.Handlers
         {
             var handler = Host.Resolve<BausCode.Api.Handlers.InventoryHandler>();
 
-            Assert.Throws<ArgumentNullException>(() => handler.Receive(Seeds.Product.EmptyProduct.Id, testId, 1m));
+            Assert.Throws<ArgumentNullException>(() => handler.Receive(Product.EmptyProduct.Id, testId, 1m));
         }
 
         [Test]
@@ -107,7 +104,7 @@ namespace Derprecated.Api.Test.Handlers
         {
             var handler = Host.Resolve<BausCode.Api.Handlers.InventoryHandler>();
 
-            Assert.Throws<ArgumentNullException>(() => handler.Receive(testId, Seeds.Location.EmptyLocation.Id, 1m));
+            Assert.Throws<ArgumentNullException>(() => handler.Receive(testId, Location.EmptyLocation.Id, 1m));
         }
 
         [Test]
@@ -119,9 +116,10 @@ namespace Derprecated.Api.Test.Handlers
             var testQuantity = 1;
             var observedQuantity = -1m;
 
-            Assert.DoesNotThrow(() => handler.Receive(Seeds.Product.EmptyProduct.Id, Seeds.Location.EmptyLocation.Id, testQuantity));
+            Assert.DoesNotThrow(
+                () => handler.Receive(Product.EmptyProduct.Id, Location.EmptyLocation.Id, testQuantity));
             Assert.AreNotEqual(observedQuantity, testQuantity);
-            Assert.DoesNotThrow(() => observedQuantity = handler.GetQuantityOnHand(Seeds.Product.EmptyProduct.Id));
+            Assert.DoesNotThrow(() => observedQuantity = handler.GetQuantityOnHand(Product.EmptyProduct.Id));
             Assert.AreEqual(testQuantity, observedQuantity);
         }
     }

@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace BausCode.Api
+﻿namespace BausCode.Api
 {
+    using System;
+
     public static class IntegerExtensions
     {
         public static void ThrowIfGreaterThan(this int input, int greaterThan)

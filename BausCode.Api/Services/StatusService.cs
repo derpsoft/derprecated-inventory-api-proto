@@ -1,9 +1,8 @@
-﻿using BausCode.Api.Models.Routing;
-using ServiceStack;
-using ServiceStack.Logging;
-
-namespace BausCode.Api.Services
+﻿namespace BausCode.Api.Services
 {
+    using Models.Routing;
+    using ServiceStack.Logging;
+
     public class StatusService : BaseService
     {
         protected static ILog Log = LogManager.GetLogger(typeof (StatusService));

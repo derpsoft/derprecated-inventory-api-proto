@@ -1,26 +1,25 @@
-﻿using System;
-using ServiceStack;
-using ServiceStack.Auth;
-
-namespace BausCode.Api.Models.Test
+﻿namespace BausCode.Api.Models.Test
 {
+    using System;
+    using ServiceStack;
+
     public static class Constants
     {
-        public static readonly UserSession TestUserSession = new UserSession()
-        {
-            Email = "test@derprecated.com",
-            CreatedAt = DateTime.Now.AddDays(-1),
-            UserName = "unitTester",
-            FullName = "Unit Test Robot",
-            Id = SessionExtensions.CreateRandomSessionId(),
-            UserAuthId = "1",
-        };
+        public static readonly UserSession TestUserSession = new UserSession
+                                                             {
+                                                                 Email = "test@derprecated.com",
+                                                                 CreatedAt = DateTime.Now.AddDays(-1),
+                                                                 UserName = "unitTester",
+                                                                 FullName = "Unit Test Robot",
+                                                                 Id = SessionExtensions.CreateRandomSessionId(),
+                                                                 UserAuthId = "1"
+                                                             };
 
-        public static readonly Authenticate TestAuthenticate = new Authenticate()
-        {
-            UserName = "test@derprecated.com",
-            Password = "123456",
-        };
+        public static readonly Authenticate TestAuthenticate = new Authenticate
+                                                               {
+                                                                   UserName = "test@derprecated.com",
+                                                                   Password = "123456"
+                                                               };
 
         public static class Categories
         {

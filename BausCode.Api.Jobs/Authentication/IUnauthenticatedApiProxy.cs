@@ -1,7 +1,7 @@
-﻿using ServiceStack;
-
-namespace BausCode.Api.Jobs.Authentication
+﻿namespace BausCode.Api.Jobs.Authentication
 {
+    using ServiceStack;
+
     public interface IUnauthenticatedApiProxy
     {
         TOut Authenticate<TIn, TOut>(TIn request)

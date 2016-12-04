@@ -1,8 +1,8 @@
-﻿using ServiceStack;
-using ServiceStack.FluentValidation;
-
-namespace BausCode.Api.Models.Validation
+﻿namespace BausCode.Api.Models.Validation
 {
+    using ServiceStack;
+    using ServiceStack.FluentValidation;
+
     public class RegisterValidator : AbstractValidator<Register>
     {
         public RegisterValidator()

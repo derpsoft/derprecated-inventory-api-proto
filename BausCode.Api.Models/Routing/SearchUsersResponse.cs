@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-
-namespace BausCode.Api.Models.Routing
+﻿namespace BausCode.Api.Models.Routing
 {
+    using System.Collections.Generic;
+    using Dto;
+
     public class SearchUsersResponse
     {
-        public List<Dto.User> Users { get; set; }
+        public List<User> Users { get; set; }
     }
 }

@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using BausCode.Api.Handlers;
-using BausCode.Api.Models;
-using BausCode.Api.Models.Routing;
-using BausCode.Api.Models.Shopify;
-using ServiceStack.Logging;
-using GetProduct = BausCode.Api.Models.Routing.GetProduct;
-using GetProducts = BausCode.Api.Models.Routing.GetProducts;
-using ProductResponse = BausCode.Api.Models.Routing.ProductResponse;
-
-namespace BausCode.Api.Services
+﻿namespace BausCode.Api.Services
 {
+    using System.Collections.Generic;
+    using System.Globalization;
+    using Handlers;
+    using Models;
+    using Models.Routing;
+    using Models.Shopify;
+    using ServiceStack.Logging;
+    using GetProduct = Models.Routing.GetProduct;
+    using GetProducts = Models.Routing.GetProducts;
+    using ProductResponse = Models.Routing.ProductResponse;
+
     public class ProductService : BaseService
     {
         protected static ILog Log = LogManager.GetLogger(typeof (ProductService));
@@ -55,17 +55,17 @@ namespace BausCode.Api.Services
             else
             {
                 shopifyProduct.Variants = new List<Variant>
-                {
-                    new Variant
-                    {
-                        Option1 = product.Color,
-                        Barcode = product.Barcode,
-                        Sku = product.Sku,
-                        Price = product.Price.ToString(CultureInfo.InvariantCulture),
-                        Weight = product.Weight,
-                        WeightUnit = product.WeightUnit,
-                    }
-                };
+                                          {
+                                              new Variant
+                                              {
+                                                  Option1 = product.Color,
+                                                  Barcode = product.Barcode,
+                                                  Sku = product.Sku,
+                                                  Price = product.Price.ToString(CultureInfo.InvariantCulture),
+                                                  Weight = product.Weight,
+                                                  WeightUnit = product.WeightUnit
+                                              }
+                                          };
                 shopifyProduct = shopifyHandler.Create(shopifyProduct);
                 // ReSharper disable once PossibleInvalidOperationException
                 productHandler.SetShopifyId(product.Id, shopifyProduct.Id.Value);

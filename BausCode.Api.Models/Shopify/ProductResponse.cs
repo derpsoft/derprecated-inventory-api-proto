@@ -1,8 +1,8 @@
-﻿using System.Runtime.Serialization;
-using ServiceStack;
-
-namespace BausCode.Api.Models.Shopify
+﻿namespace BausCode.Api.Models.Shopify
 {
+    using System.Runtime.Serialization;
+    using ServiceStack;
+
     [DataContract]
     public class ProductResponse
     {

@@ -1,12 +1,12 @@
-﻿using System;
-using ServiceStack;
-
-namespace BausCode.Api.Jobs
+﻿namespace BausCode.Api.Jobs
 {
+    using System;
+    using ServiceStack;
+
     public abstract class Counter
     {
         protected Counter(ICounterStore counterStore, string name, TimeSpan resetInterval, uint defaultIncrement = 1,
-            uint defaultDecrement = 1, long max = long.MaxValue)
+                          uint defaultDecrement = 1, long max = long.MaxValue)
         {
             counterStore.ThrowIfNull();
             name.ThrowIfNullOrEmpty();
@@ -21,17 +21,7 @@ namespace BausCode.Api.Jobs
             Max = max;
         }
 
-        private ICounterStore CounterStore { get; set; }
-
-        /// <summary>
-        ///     The name or Id of the counter.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        ///     The default value to increment by.
-        /// </summary>
-        public uint DefaultIncrement { get; set; }
+        private ICounterStore CounterStore { get; }
 
         /// <summary>
         ///     The default value to decrement by.
@@ -39,14 +29,24 @@ namespace BausCode.Api.Jobs
         public uint DefaultDecrement { get; set; }
 
         /// <summary>
-        ///     The counter reset interval.
+        ///     The default value to increment by.
         /// </summary>
-        public TimeSpan ResetInterval { get; set; }
+        public uint DefaultIncrement { get; set; }
 
         /// <summary>
         ///     The maximum value for this counter.
         /// </summary>
         public long Max { get; set; }
+
+        /// <summary>
+        ///     The name or Id of the counter.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        ///     The counter reset interval.
+        /// </summary>
+        public TimeSpan ResetInterval { get; set; }
 
         public bool IsMax()
         {

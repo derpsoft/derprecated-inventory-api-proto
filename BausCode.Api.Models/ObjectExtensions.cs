@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using ServiceStack;
-
-namespace BausCode.Api.Models
+﻿namespace BausCode.Api.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using ServiceStack;
+
     public static class ObjectExtensions
     {
         public static Dictionary<string, object> ToDictionaryOfObjectsFromPropertiesWithAttribute<T, TA>(this T source)
@@ -13,12 +13,12 @@ namespace BausCode.Api.Models
             where TA : Attribute
         {
             return source.GetType().GetPublicProperties()
-                .Where(x => x.GetCustomAttributes<TA>().Any())
-                .ToDictionary(x =>
-                {
-                    var v = x.GetProperty(source);
-                    return new KeyValuePair<string, object>(x.Name, v);
-                });
+                         .Where(x => x.GetCustomAttributes<TA>().Any())
+                         .ToDictionary(x =>
+                                       {
+                                           var v = x.GetProperty(source);
+                                           return new KeyValuePair<string, object>(x.Name, v);
+                                       });
         }
 
         public static bool DeepEquals<T>(this T source, T compare)

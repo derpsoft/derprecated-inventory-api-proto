@@ -1,8 +1,8 @@
-﻿using BausCode.Api.Models.Test;
-using NUnit.Framework;
-
-namespace Derprecated.Api.Test
+﻿namespace Derprecated.Api.Test
 {
+    using BausCode.Api.Models.Test;
+    using NUnit.Framework;
+
     [TestFixture]
     public class TestTests
     {

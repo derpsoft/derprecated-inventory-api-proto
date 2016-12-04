@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using BausCode.Api.Jobs.Authentication;
-using BausCode.Api.Jobs.Models;
-using ServiceStack;
-
-namespace BausCode.Api.Jobs
+﻿namespace BausCode.Api.Jobs
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using Authentication;
+    using Models;
+    using ServiceStack;
+
     public class ApiProxy
     {
         public ApiProxy(string baseUri)
@@ -14,7 +14,7 @@ namespace BausCode.Api.Jobs
             BaseUri = new Uri(baseUri);
         }
 
-        private Uri BaseUri { get; set; }
+        private Uri BaseUri { get; }
 
         public BearerOAuth2TokenResponse Authenticate(BearerOAuth auth, BearerOAuth2Token request)
         {

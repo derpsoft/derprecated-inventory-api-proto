@@ -1,11 +1,11 @@
-﻿using System.Data;
-using System.Linq;
-using BausCode.Api.Models;
-using ServiceStack;
-using ServiceStack.OrmLite;
-
-namespace BausCode.Api.Handlers
+﻿namespace BausCode.Api.Handlers
 {
+    using System.Data;
+    using System.Linq;
+    using Models;
+    using ServiceStack;
+    using ServiceStack.OrmLite;
+
     internal class PriceHandler
     {
         public PriceHandler(IDbConnection db, UserSession user)
@@ -21,10 +21,10 @@ namespace BausCode.Api.Handlers
         {
             var userId = User.UserAuthId.ToInt();
             var price = Db.Select<decimal>(Db.From<UserPriceOverride>()
-                .Select(x => x.Price)
-                .Where(x => x.UserAuthId == userId)
-                .And(x => x.ProductId == product.Id)
-                .Limit(1)
+                                             .Select(x => x.Price)
+                                             .Where(x => x.UserAuthId == userId)
+                                             .And(x => x.ProductId == product.Id)
+                                             .Limit(1)
                 );
 
             if (price.Count > 0)

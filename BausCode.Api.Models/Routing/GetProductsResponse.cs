@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-
-namespace BausCode.Api.Models.Routing
+﻿namespace BausCode.Api.Models.Routing
 {
+    using System.Collections.Generic;
+
     public class GetProductsResponse
     {
-        public List<Product> Products { get; set; } 
         public long Count { get; set; }
+        public List<Product> Products { get; set; }
     }
 }

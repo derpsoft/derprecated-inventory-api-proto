@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using BausCode.Api.Models.Shopify;
-using BausCode.Api.Models.Test;
-using Funq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NUnit.Framework;
-using ServiceStack;
-using ServiceStack.Configuration;
-using Assert = NUnit.Framework.Assert;
-// ReSharper disable once RedundantUsingDirective
-using Seeds = BausCode.Api.Models.Test.Seeds;
-// ReSharper disable once RedundantUsingDirective
-using BC = BausCode.Api.Handlers;
-
-namespace Derprecated.Api.Test.Handlers
+﻿namespace Derprecated.Api.Test.Handlers
 {
+    using System;
+    using System.Collections.Generic;
+    using BausCode.Api.Models.Shopify;
+    using BausCode.Api.Models.Test;
+    using Funq;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
+    using ServiceStack;
+    using ServiceStack.Configuration;
+    using Assert = NUnit.Framework.Assert;
+    using BC = BausCode.Api.Handlers;
+
     [TestFixture]
     [Parallelizable]
     [Author(Constants.Authors.James)]
@@ -28,10 +25,10 @@ namespace Derprecated.Api.Test.Handlers
             var appSettings = new AppSettings();
 
             Container.Register(new JsonServiceClient($"https://{appSettings.Get("shopify.store.domain")}")
-            {
-                UserName = appSettings.Get("shopify.api.key"),
-                Password = appSettings.Get("shopify.api.password")
-            });
+                               {
+                                   UserName = appSettings.Get("shopify.api.key"),
+                                   Password = appSettings.Get("shopify.api.password")
+                               });
 
             Container.RegisterAutoWired<BC.ShopifyHandler>();
         }
@@ -46,21 +43,21 @@ namespace Derprecated.Api.Test.Handlers
             Product result = null;
             var nonce = rng.Next(100) + 1;
             var newProduct = new Product
-            {
-                Title = $"ShopifyHandler test product {nonce}",
-                Tags = "test",
-                BodyHtml = $"TEST PRODUCT. DO NOT SELL. TEST DATA FOLLOWS<br><br>{nonce}",
-                IsPublished = false,
-                Variants = new List<Variant>
-                {
-                    new Variant
-                    {
-                        Price = $"{nonce}000000000000.00",
-                        Sku = "TEST",
-                        Barcode = "TEST"
-                    }
-                },
-            };
+                             {
+                                 Title = $"ShopifyHandler test product {nonce}",
+                                 Tags = "test",
+                                 BodyHtml = $"TEST PRODUCT. DO NOT SELL. TEST DATA FOLLOWS<br><br>{nonce}",
+                                 IsPublished = false,
+                                 Variants = new List<Variant>
+                                            {
+                                                new Variant
+                                                {
+                                                    Price = $"{nonce}000000000000.00",
+                                                    Sku = "TEST",
+                                                    Barcode = "TEST"
+                                                }
+                                            }
+                             };
 
             Assert.DoesNotThrow(() => result = handler.Create(newProduct));
             Assert.NotNull(result);
@@ -209,12 +206,12 @@ namespace Derprecated.Api.Test.Handlers
         {
             var handler = Container.Resolve<BC.ShopifyHandler>();
             var update = new Image
-            {
-                Id = Constants.Shopify.IntegrationTestImageId,
-                ProductId = Constants.Shopify.IntegrationTestProductId,
-                VariantIds = new List<long> {Constants.Shopify.IntegrationTestVariantId},
-                Url = "https://unsplash.it/500/500/?random"
-            };
+                         {
+                             Id = Constants.Shopify.IntegrationTestImageId,
+                             ProductId = Constants.Shopify.IntegrationTestProductId,
+                             VariantIds = new List<long> {Constants.Shopify.IntegrationTestVariantId},
+                             Url = "https://unsplash.it/500/500/?random"
+                         };
             Image result = null;
 
             Assert.DoesNotThrow(() => result = handler.Update(update));
@@ -251,10 +248,10 @@ namespace Derprecated.Api.Test.Handlers
             var handler = Container.Resolve<BC.ShopifyHandler>();
             var nonce = new Random().Next(100);
             var update = new Product
-            {
-                Id = Constants.Shopify.IntegrationTestProductId,
-                BodyHtml = $"DO NOT DELETE. DO NOT SELL. TEST DATA FOLLOWS.<br><br>{nonce}"
-            };
+                         {
+                             Id = Constants.Shopify.IntegrationTestProductId,
+                             BodyHtml = $"DO NOT DELETE. DO NOT SELL. TEST DATA FOLLOWS.<br><br>{nonce}"
+                         };
             Product result = null;
 
             Assert.DoesNotThrow(() => result = handler.Update(update));
@@ -292,10 +289,10 @@ namespace Derprecated.Api.Test.Handlers
             var handler = Container.Resolve<BC.ShopifyHandler>();
             var nonce = new Random().Next(100) + 1;
             var update = new Variant
-            {
-                Id = Constants.Shopify.IntegrationTestVariantId,
-                Price = $"{nonce}000000000000.00"
-            };
+                         {
+                             Id = Constants.Shopify.IntegrationTestVariantId,
+                             Price = $"{nonce}000000000000.00"
+                         };
             Variant result = null;
 
             Assert.DoesNotThrow(() => result = handler.Update(update));

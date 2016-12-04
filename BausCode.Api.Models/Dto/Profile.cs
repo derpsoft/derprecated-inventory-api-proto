@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-
-namespace BausCode.Api.Models.Dto
+﻿namespace BausCode.Api.Models.Dto
 {
+    using System.Collections.Generic;
+
     public class Profile
     {
-        public string PrimaryEmail { get; set; }
         public string DisplayName { get; set; }
+        public string PrimaryEmail { get; set; }
         public List<string> Roles { get; set; }
 
         public static Profile From(Models.UserSession source)

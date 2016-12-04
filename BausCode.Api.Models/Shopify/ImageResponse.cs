@@ -1,7 +1,7 @@
-﻿using ServiceStack.DataAnnotations;
-
-namespace BausCode.Api.Models.Shopify
+﻿namespace BausCode.Api.Models.Shopify
 {
+    using ServiceStack.DataAnnotations;
+
     public class ImageResponse
     {
         [Alias("image")]

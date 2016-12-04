@@ -155,6 +155,7 @@
     <Compile Include="Test\Seeds\InventoryTransaction.cs" />
     <Compile Include="Test\Seeds\Location.cs" />
     <Compile Include="Test\Seeds\Product.cs" />
+    <Compile Include="Test\Seeds\Warehouse.cs" />
     <Compile Include="UserPriceOverride.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleNames.cs" />

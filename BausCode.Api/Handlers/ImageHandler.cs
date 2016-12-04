@@ -1,15 +1,15 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.IO;
-using Microsoft.WindowsAzure.Storage.Blob;
-using ServiceStack;
-using ServiceStack.Configuration;
-using ServiceStack.Web;
-
-namespace BausCode.Api.Handlers
+﻿namespace BausCode.Api.Handlers
 {
+    using System;
+    using System.Drawing;
+    using System.Drawing.Drawing2D;
+    using System.Drawing.Imaging;
+    using System.IO;
+    using Microsoft.WindowsAzure.Storage.Blob;
+    using ServiceStack;
+    using ServiceStack.Configuration;
+    using ServiceStack.Web;
+
     public class ImageHandler
     {
         public ImageHandler(AppSettings appSettings, CloudBlobClient blobClient)
@@ -18,8 +18,9 @@ namespace BausCode.Api.Handlers
             Client = blobClient;
         }
 
-        private string Container { get; }
         private CloudBlobClient Client { get; }
+
+        private string Container { get; }
 
         public static string GetRandomFilename()
         {

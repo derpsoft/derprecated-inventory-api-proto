@@ -1,7 +1,7 @@
-﻿using ServiceStack;
-
-namespace BausCode.Api.Models.Routing
+﻿namespace BausCode.Api.Models.Routing
 {
+    using ServiceStack;
+
     public class ProductResponse
     {
         public Product Product { get; set; }

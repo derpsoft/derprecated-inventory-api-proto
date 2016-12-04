@@ -1,7 +1,7 @@
-﻿using System.Runtime.Serialization;
-
-namespace BausCode.Api.Models.Shopify
+﻿namespace BausCode.Api.Models.Shopify
 {
+    using System.Runtime.Serialization;
+
     [DataContract]
     public class VariantResponse
     {

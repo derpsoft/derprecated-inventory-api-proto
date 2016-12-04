@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace BausCode.Api.Jobs.Models
+﻿namespace BausCode.Api.Jobs.Models
 {
+    using System;
+
     public class SearchTweetsRateLimitCounter : Counter
     {
         private const string NAME = "SearchTweetsRateLimitCounter";

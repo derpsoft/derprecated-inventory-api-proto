@@ -1,20 +1,20 @@
-﻿using System.Runtime.Serialization;
-using ServiceStack;
-using ServiceStack.DataAnnotations;
-
-namespace BausCode.Api.Jobs.Models
+﻿namespace BausCode.Api.Jobs.Models
 {
+    using System.Runtime.Serialization;
+    using ServiceStack;
+    using ServiceStack.DataAnnotations;
+
     [DataContract]
     [Route("/1.1/statuses/update.json")]
     public class UpdateStatus : IReturn<UpdateStatusResponse>
     {
-        [DataMember(Name = "status")]
-        [Alias("status")]
-        public string Status { get; set; }
-
         [DataMember(Name = "in_reply_to_status_id")]
         [Alias("in_reply_to_status_id")]
         public long InReplyToStatusId { get; set; }
+
+        [DataMember(Name = "status")]
+        [Alias("status")]
+        public string Status { get; set; }
 
         /// <summary>
         ///     Conditional serializing method to skip params that are not set, like since_id and max_id

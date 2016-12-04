@@ -1,7 +1,7 @@
-﻿using ServiceStack;
-
-namespace BausCode.Api.Models.Routing
+﻿namespace BausCode.Api.Models.Routing
 {
+    using ServiceStack;
+
     /// <summary>
     ///     Used for all inventory operations, including receiving, moving, selling, quantity changes, etc.
     /// </summary>

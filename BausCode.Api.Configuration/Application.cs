@@ -1,25 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Net;
-using System.Net.Mail;
-using System.Reflection;
-using BausCode.Api.Models;
-using Funq;
-using ServiceStack;
-using ServiceStack.Admin;
-using ServiceStack.Auth;
-using ServiceStack.Configuration;
-using ServiceStack.Data;
-using ServiceStack.Logging;
-using ServiceStack.Logging.NLogger;
-using ServiceStack.OrmLite;
-using ServiceStack.Redis;
-using ServiceStack.Text;
-using ServiceStack.Validation;
-
-namespace BausCode.Api.Configuration
+﻿namespace BausCode.Api.Configuration
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Net;
+    using System.Net.Mail;
+    using System.Reflection;
+    using Funq;
+    using Models;
+    using ServiceStack;
+    using ServiceStack.Admin;
+    using ServiceStack.Auth;
+    using ServiceStack.Configuration;
+    using ServiceStack.Data;
+    using ServiceStack.Logging;
+    using ServiceStack.Logging.NLogger;
+    using ServiceStack.OrmLite;
+    using ServiceStack.Redis;
+    using ServiceStack.Text;
+    using ServiceStack.Validation;
+
     public class Application : AppHostBase
     {
         public Application(string applicationName, Assembly assembly)
@@ -67,10 +67,13 @@ namespace BausCode.Api.Configuration
 
             // DB
             container.Register<IDbConnectionFactory>(c =>
-            {
-                var connectionString = ConfigurationManager.ConnectionStrings["AzureSql"].ConnectionString;
-                return new OrmLiteConnectionFactory(connectionString, SqlServerDialect.Provider);
-            });
+                                                     {
+                                                         var connectionString =
+                                                             ConfigurationManager.ConnectionStrings["AzureSql"]
+                                                                 .ConnectionString;
+                                                         return new OrmLiteConnectionFactory(connectionString,
+                                                             SqlServerDialect.Provider);
+                                                     });
 
             // Redis
             container.Register<IRedisClientsManager>(
@@ -84,33 +87,33 @@ namespace BausCode.Api.Configuration
 
             // Db filters
             OrmLiteConfig.InsertFilter = (dbCmd, row) =>
-            {
-                if (row is IAuditable)
-                {
-                    var auditRow = row as IAuditable;
-                    auditRow.CreateDate = auditRow.ModifyDate = DateTime.UtcNow;
-                }
+                                         {
+                                             if (row is IAuditable)
+                                             {
+                                                 var auditRow = row as IAuditable;
+                                                 auditRow.CreateDate = auditRow.ModifyDate = DateTime.UtcNow;
+                                             }
 
-                if (row is Product)
-                {
-                    var product = row as Product;
-                    product.OnInsert();
-                }
-            };
+                                             if (row is Product)
+                                             {
+                                                 var product = row as Product;
+                                                 product.OnInsert();
+                                             }
+                                         };
             OrmLiteConfig.UpdateFilter = (dbCmd, row) =>
-            {
-                if (row is IAuditable)
-                {
-                    var auditRow = row as IAuditable;
-                    auditRow.ModifyDate = DateTime.UtcNow;
-                }
+                                         {
+                                             if (row is IAuditable)
+                                             {
+                                                 var auditRow = row as IAuditable;
+                                                 auditRow.ModifyDate = DateTime.UtcNow;
+                                             }
 
-                if (row is Product)
-                {
-                    var product = row as Product;
-                    product.OnUpdate();
-                }
-            };
+                                             if (row is Product)
+                                             {
+                                                 var product = row as Product;
+                                                 product.OnUpdate();
+                                             }
+                                         };
 
             // Schema init
             var userRepo = (OrmLiteAuthRepository) container.Resolve<IUserAuthRepository>();
@@ -126,9 +129,9 @@ namespace BausCode.Api.Configuration
             }
 #if DEBUG
             var testUser = (IUserAuth) new UserAuth
-            {
-                Email = "james@bauscode.com"
-            };
+                                       {
+                                           Email = "james@bauscode.com"
+                                       };
             var existing = userRepo.GetUserAuthByUserName(testUser.Email);
             if (null == existing)
             {
@@ -138,12 +141,14 @@ namespace BausCode.Api.Configuration
 
             // Mail
             container.Register(new SmtpClient
-            {
-                Host = appSettings.Get("mail.host"),
-                Port = appSettings.Get("mail.port", 587),
-                Credentials = new NetworkCredential(appSettings.Get("mail.username"), appSettings.Get("mail.password")),
-                EnableSsl = appSettings.Get("mail.useSsl", true)
-            });
+                               {
+                                   Host = appSettings.Get("mail.host"),
+                                   Port = appSettings.Get("mail.port", 587),
+                                   Credentials =
+                                       new NetworkCredential(appSettings.Get("mail.username"),
+                                       appSettings.Get("mail.password")),
+                                   EnableSsl = appSettings.Get("mail.useSsl", true)
+                               });
 
             // Plugins
             Plugins.Add(new CorsFeature(allowCredentials: true, allowedHeaders: "Content-Type, X-Requested-With",
@@ -174,10 +179,10 @@ namespace BausCode.Api.Configuration
 
             // Misc
             container.Register(new ShopifyServiceClient($"https://{appSettings.Get("shopify.store.domain")}")
-            {
-                UserName = appSettings.Get("shopify.api.key"),
-                Password = appSettings.Get("shopify.api.password")
-            });
+                               {
+                                   UserName = appSettings.Get("shopify.api.key"),
+                                   Password = appSettings.Get("shopify.api.password")
+                               });
         }
     }
 }

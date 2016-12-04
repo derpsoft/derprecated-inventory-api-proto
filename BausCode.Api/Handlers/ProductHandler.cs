@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using BausCode.Api.Models;
-using BausCode.Api.Models.Attributes;
-using BausCode.Api.Models.Routing;
-using ServiceStack;
-using ServiceStack.OrmLite;
-
-namespace BausCode.Api.Handlers
+﻿namespace BausCode.Api.Handlers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using Models;
+    using ServiceStack;
+    using ServiceStack.OrmLite;
+
     public class ProductHandler
     {
         public ProductHandler(IDbConnection db, UserSession user)
@@ -59,26 +56,26 @@ namespace BausCode.Api.Handlers
             return product;
         }
 
-//        /// <summary>
-//        ///     Update an existing Product.
-//        /// </summary>
-//        /// <param name="id">The ID of the Product to update.</param>
-//        /// <param name="updatedProduct">The values to update the existing Product with.</param>
-//        /// <returns></returns>
-//        public Product Update(int id, UpdateProduct updatedProduct)
-//        {
-//            updatedProduct.ThrowIfNull();
-//
-//            var product = GetProduct(id);
-//            product.ThrowIfNull();
-//
-//            product = product
-//                .PopulateFromPropertiesWithAttribute(updatedProduct, typeof (WhitelistAttribute));
-//
-//            Db.Save(product, true);
-//
-//            return product;
-//        }
+        //        /// <summary>
+        //        ///     Update an existing Product.
+        //        /// </summary>
+        //        /// <param name="id">The ID of the Product to update.</param>
+        //        /// <param name="updatedProduct">The values to update the existing Product with.</param>
+        //        /// <returns></returns>
+        //        public Product Update(int id, UpdateProduct updatedProduct)
+        //        {
+        //            updatedProduct.ThrowIfNull();
+        //
+        //            var product = GetProduct(id);
+        //            product.ThrowIfNull();
+        //
+        //            product = product
+        //                .PopulateFromPropertiesWithAttribute(updatedProduct, typeof (WhitelistAttribute));
+        //
+        //            Db.Save(product, true);
+        //
+        //            return product;
+        //        }
 
         public Product Update<T>(int id, IUpdatableField<T> update)
         {
@@ -98,7 +95,7 @@ namespace BausCode.Api.Handlers
         {
             var q = Db.From<Product>();
 
-            Db.UpdateOnly(new Product() {ShopifyId = shopifyId},
+            Db.UpdateOnly(new Product {ShopifyId = shopifyId},
                 q.Update(x => x.ShopifyId).Where(x => x.Id == productId));
         }
     }

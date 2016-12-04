@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace BausCode.Api
+﻿namespace BausCode.Api
 {
+    using System;
+
     public static class DateTimeExtensions
     {
         public static DateTime RoundToNearestInterval(this DateTime dt, TimeSpan d)

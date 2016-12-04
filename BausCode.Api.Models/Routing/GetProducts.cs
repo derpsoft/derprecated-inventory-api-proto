@@ -1,8 +1,7 @@
-﻿using ServiceStack;
-using ServiceStack.DataAnnotations;
-
-namespace BausCode.Api.Models.Routing
+﻿namespace BausCode.Api.Models.Routing
 {
+    using ServiceStack;
+
     [Route("/api/v1/products", "GET")]
     public class GetProducts : IReturn<GetProductsResponse>
     {

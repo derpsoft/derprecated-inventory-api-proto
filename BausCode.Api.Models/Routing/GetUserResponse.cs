@@ -1,7 +1,9 @@
 ﻿namespace BausCode.Api.Models.Routing
 {
+    using Dto;
+
     public class GetUserResponse
     {
-        public Dto.UserSession User { get; set; }
+        public UserSession User { get; set; }
     }
 }

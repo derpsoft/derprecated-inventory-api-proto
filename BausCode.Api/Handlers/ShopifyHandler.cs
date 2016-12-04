@@ -1,9 +1,9 @@
-﻿using System;
-using BausCode.Api.Models.Shopify;
-using ServiceStack;
-
-namespace BausCode.Api.Handlers
+﻿namespace BausCode.Api.Handlers
 {
+    using System;
+    using Models.Shopify;
+    using ServiceStack;
+
     public class ShopifyHandler
     {
         public ShopifyHandler(JsonServiceClient client)

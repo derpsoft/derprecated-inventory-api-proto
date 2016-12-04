@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace BausCode.Api.Jobs
+﻿namespace BausCode.Api.Jobs
 {
+    using System;
+
     public static class ThrottleContext
     {
         public static T Execute<T>(Counter throttle, Func<T> func)

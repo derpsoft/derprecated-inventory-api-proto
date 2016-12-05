@@ -62,12 +62,7 @@
                                  Vendor = Constants.Vendors.JlcConcept
                              };
 
-            var login = client.Post(new Authenticate
-                                    {
-                                        provider = AuthenticateService.CredentialsProvider,
-                                        UserName = "test@derprecated.com",
-                                        Password = "123456"
-                                    });
+            var login = client.Post(Constants.TestAdminAuthenticate);
 
             client.SessionId = login.SessionId;
 

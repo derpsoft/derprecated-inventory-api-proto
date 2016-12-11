@@ -3,6 +3,7 @@
     using ServiceStack;
 
     [Route("/api/v1/warehouses", "POST")]
+    [Authenticate]
     public class CreateWarehouse : IReturn<CreateWarehouseResponse>
     {
     }

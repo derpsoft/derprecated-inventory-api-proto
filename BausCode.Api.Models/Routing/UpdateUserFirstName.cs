@@ -3,6 +3,7 @@
     using ServiceStack;
 
     [Route("/api/v1/user/{Id}/firstName", "PUT,POST,PATCH")]
+    [Authenticate]
     public class UpdateUserFirstName : IUpdatableField<string>
     {
         public string FieldName => "FirstName";

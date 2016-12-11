@@ -3,6 +3,7 @@
     using ServiceStack;
 
     [Route("/api/v1/warehouses/{Id}", "DELETE")]
+    [Authenticate]
     public class DeleteWarehouse : IReturn<DeleteWarehouseResponse>
     {
     }

@@ -5,6 +5,7 @@
 
     [Route("/api/v1/products/typeahead/", "POST")]
     [Route("/api/v1/products/typeahead/{Query}", "GET")]
+    [Authenticate]
     public class ProductTypeahead : QueryDb<Product>, IJoin<Product, ProductImage>
     {
         [Required]

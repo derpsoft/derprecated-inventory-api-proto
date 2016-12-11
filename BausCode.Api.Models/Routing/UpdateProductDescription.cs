@@ -3,6 +3,7 @@
     using ServiceStack;
 
     [Route("/api/v1/products/{Id}/description", "PUT,POST,PATCH")]
+    [Authenticate]
     public class UpdateProductDescription : IUpdatableField<string>, IReturn<ProductResponse>
     {
         public string FieldName => "Description";

@@ -5,6 +5,8 @@
     using ServiceStack.Auth;
 
     [Route("/api/v1/users/search")]
+    [Authenticate]
+    [RequiredRole(ApplyTo.All, Roles.Admin)]
     public class SearchUsers : QueryDb<UserAuth, User>
     {
         [QueryDbField(Term = QueryTerm.Or, Template = "LOWER({Field}) like {Value}", Field = "Email",

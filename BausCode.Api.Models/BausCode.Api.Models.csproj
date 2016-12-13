@@ -188,7 +188,7 @@
     <Compile Include="Routing\GetProductsResponse.cs" />
     <Compile Include="Routing\GetQueueStatus.cs" />
     <Compile Include="Routing\GetQueueStatusResponse.cs" />
-    <Compile Include="Routing\GetUser.cs" />
+    <Compile Include="Routing\GetProfile.cs" />
     <Compile Include="Routing\GetUserResponse.cs" />
     <Compile Include="Routing\GetUsers.cs" />
     <Compile Include="Routing\GetUsersResponse.cs" />

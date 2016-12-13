@@ -3,8 +3,9 @@
     using ServiceStack;
 
     [Route("/api/v1/me", "GET")]
+    [Route("/api/v1/profile", "GET")]
     [Authenticate]
-    public class GetUser : IReturn<GetUserResponse>
+    public class GetProfile : IReturn<GetUserResponse>
     {
     }
 }

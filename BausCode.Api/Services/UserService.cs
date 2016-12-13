@@ -8,19 +8,18 @@ namespace BausCode.Api.Services
     using ServiceStack.Auth;
     using ServiceStack.Logging;
     using ServiceStack.OrmLite;
-    using UserSession = Models.Dto.UserSession;
 
     public class UserService : BaseService
     {
         protected static ILog Log = LogManager.GetLogger(typeof (UserService));
 
-        public object Any(GetUser request)
+        public object Any(GetProfile request)
         {
-            var response = new GetUserResponse();
+            var res = new ProfileResponse();
 
-            response.User = UserSession.From(SessionAs<Models.UserSession>());
+            res.Profile = Profile.From(CurrentSession);
 
-            return new HttpResult(response);
+            return new HttpResult(res);
         }
 
         private object UpdateUserField<T>(IUpdatableField<T> request)

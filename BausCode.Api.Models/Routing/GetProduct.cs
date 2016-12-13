@@ -6,7 +6,7 @@
 
     [Route("/api/v1/products/{Id}", "GET")]
     [Authenticate]
-    [RequiredPermission(Permissions.CanReadProducts)]
+    [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanReadProducts)]
     public class GetProduct : IReturn<ProductResponse>
     {
         public List<string> Fields { get; set; }

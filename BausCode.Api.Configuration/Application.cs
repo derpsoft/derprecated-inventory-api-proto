@@ -85,7 +85,8 @@
             container.RegisterValidators(typeof (IAuditable).Assembly);
 
             // Auth
-            container.Register<IUserAuthRepository>(c => new OrmLiteAuthRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IUserAuthRepository>(
+                c => new OrmLiteAuthRepository(c.Resolve<IDbConnectionFactory>()) {UseDistinctRoleTables = true});
 
             // Db filters
             OrmLiteConfig.InsertFilter = (dbCmd, row) =>
@@ -119,8 +120,8 @@
 
             // Schema init
             var userRepo = (OrmLiteAuthRepository) container.Resolve<IUserAuthRepository>();
-
             userRepo.InitSchema();
+
             using (var ctx = container.Resolve<IDbConnectionFactory>().Open())
             {
                 ctx.CreateTableIfNotExists<ApiKey>();
@@ -133,12 +134,16 @@
 #if DEBUG
             var testUser = (IUserAuth) new UserAuth
                                        {
-                                           Email = "james@bauscode.com"
+                                           Email = "james@derprecated.com"
                                        };
             var existing = userRepo.GetUserAuthByUserName(testUser.Email);
             if (null == existing)
             {
                 userRepo.CreateUserAuth(testUser, "12345");
+            }
+            else
+            {
+                userRepo.AssignRoles(existing.Id, new List<string> {Roles.Admin});
             }
 #endif
 

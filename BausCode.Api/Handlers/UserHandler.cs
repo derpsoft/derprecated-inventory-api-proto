@@ -1,6 +1,7 @@
 ﻿namespace BausCode.Api.Handlers
 {
     using System.Data;
+    using System.Linq;
     using Models;
     using ServiceStack;
     using ServiceStack.Auth;

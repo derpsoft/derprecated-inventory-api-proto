@@ -15,11 +15,11 @@
         {
             base.OnAuthenticated(authService, session, tokens, authInfo);
 
-            var userId = UserAuthId.ToInt();
+            //var userId = UserAuthId.ToInt();
 
-            using (var ctx = authService.TryResolve<IDbConnectionFactory>().Open())
-            {
-            }
+            //using (var ctx = authService.TryResolve<IDbConnectionFactory>().Open())
+            //{
+            //}
         }
     }
 }

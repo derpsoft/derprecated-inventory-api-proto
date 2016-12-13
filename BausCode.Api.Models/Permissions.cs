@@ -61,5 +61,25 @@
         ///     Delete vendors.
         /// </summary>
         public const string CanDeleteVendors = "deleteVendors";
+
+        /// <summary>
+        ///     All User permissions
+        /// </summary>
+        public const string CanManageUsers = "manageUsers";
+
+        /// <summary>
+        ///     Read access to users.
+        /// </summary>
+        public const string CanReadUsers = "readUsers";
+
+        /// <summary>
+        ///     Write access to users.
+        /// </summary>
+        public const string CanUpsertUsers = "upsertUsers";
+
+        /// <summary>
+        ///     Delete users.
+        /// </summary>
+        public const string CanDeleteUsers = "deleteUsers";
     }
 }

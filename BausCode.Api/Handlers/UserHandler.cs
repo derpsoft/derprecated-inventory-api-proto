@@ -26,6 +26,19 @@
             return UserAuthRepository.GetUserAuth(id) as UserAuth;
         }
 
+        public UserAuth Update(int id, UserAuth user)
+        {
+            id.ThrowIfLessThan(1);
+            user.ThrowIfNull();
+
+            var existing = UserAuthRepository.GetUserAuth(id);
+            var updates = new UserAuth().PopulateWith(existing).PopulateWithNonDefaultValues(user);
+
+            UserAuthRepository.UpdateUserAuth(existing, updates);
+
+            return updates;
+        }
+
         public UserAuth Update<T>(int id, IUpdatableField<T> update)
         {
             update.ThrowIfNull();

@@ -13,7 +13,9 @@
 
         public DateTime ModifyDate { get; set; }
 
+        [StringLength(50)]
         public string Name { get; set; }
+
         public ulong RowVersion { get; set; }
     }
 }

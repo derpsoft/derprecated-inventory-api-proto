@@ -116,6 +116,7 @@
     <Compile Include="ProductExtensions.cs" />
     <Compile Include="ProductImage.cs" />
     <Compile Include="ProductTag.cs" />
+    <Compile Include="Routing\CreateVendor.cs" />
     <Compile Include="Routing\GetPriceOverrides.cs" />
     <Compile Include="Routing\GetPriceOverridesResponse.cs" />
     <Compile Include="Routing\GetUser.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="UnitOfMeasure.cs" />
     <Compile Include="UserAuthExtensions.cs" />
     <Compile Include="UserSession.cs" />
+    <Compile Include="Validation\CreateVendorValidator.cs" />
     <Compile Include="Validation\GetUserValidator.cs" />
     <Compile Include="Validation\GetVendorValidator.cs" />
     <Compile Include="Validation\RegisterValidator.cs" />

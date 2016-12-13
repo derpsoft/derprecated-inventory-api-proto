@@ -20,7 +20,7 @@
 
         private IUserAuthRepository UserAuthRepository { get; }
 
-        private UserAuth GetUser(int id)
+        public UserAuth GetUser(int id)
         {
             id.ThrowIfLessThan(1);
             return UserAuthRepository.GetUserAuth(id) as UserAuth;

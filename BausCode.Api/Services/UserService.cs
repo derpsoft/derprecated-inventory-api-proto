@@ -111,5 +111,17 @@ namespace BausCode.Api.Services
 
             return response;
         }
+
+        public object Any(GetUser request)
+        {
+            var response = new GetUserResponse();
+            var handler = new UserHandler(Db, UserAuthRepository, CurrentSession);
+            var user = handler.GetUser(request.Id);
+
+            if (null != user)
+                response.User = User.From(user);
+
+            return response;
+        }
     }
 }

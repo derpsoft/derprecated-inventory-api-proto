@@ -52,6 +52,8 @@
             // Settings
             SetConfig(new HostConfig());
 
+            RoleNames.Admin = Roles.Admin;
+
             JsConfig.EmitCamelCaseNames = true;
             JsConfig.ExcludeTypeInfo = true;
             JsConfig<UserSession>.IncludeTypeInfo = true;
@@ -172,8 +174,11 @@
                     new TwitterAuthProvider(appSettings),
                     new CredentialsAuthProvider(appSettings)
                 },
-                "/login"
-                ));
+                "/login")
+                        {
+                            IncludeAssignRoleServices = true,
+                            ValidateUniqueEmails = true
+                        });
             Plugins.Add(new ValidationFeature());
             Plugins.Add(new AutoQueryFeature {MaxLimit = 100});
             Plugins.Add(new AdminFeature());

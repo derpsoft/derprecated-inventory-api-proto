@@ -1,5 +1,6 @@
 ﻿namespace BausCode.Api.Handlers
 {
+    using System.Collections.Generic;
     using System.Data;
     using System.Linq;
     using Models;
@@ -47,6 +48,30 @@
             user.SetProperty(update.FieldName, update.Value);
             Db.UpdateOnly(user, new[] {update.FieldName}, p => p.Id == user.Id);
             return user;
+        }
+
+        public List<string> GetRoles(int id)
+        {
+            var user = GetUser(id);
+            return UserAuthRepository.GetRoles(user).ToList();
+        }
+
+        public List<string> GetRoles()
+        {
+            User.ThrowIfNull();
+            return GetRoles(User.UserAuthId.ToInt());
+        }
+
+        public List<string> GetPermissions()
+        {
+            User.ThrowIfNull();
+            return GetPermissions(User.UserAuthId.ToInt());
+        }
+
+        public List<string> GetPermissions(int id)
+        {
+            var user = GetUser(id);
+            return UserAuthRepository.GetPermissions(user).ToList();
         }
     }
 }

@@ -98,6 +98,7 @@
     <Compile Include="Dto\Profile.cs" />
     <Compile Include="Dto\User.cs" />
     <Compile Include="Dto\UserSession.cs" />
+    <Compile Include="Dto\Vendor.cs" />
     <Compile Include="IAuditable.cs" />
     <Compile Include="IInsertFilter.cs" />
     <Compile Include="InventoryTraceTransaction.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Routing\GetPriceOverrides.cs" />
     <Compile Include="Routing\GetPriceOverridesResponse.cs" />
     <Compile Include="Routing\GetUser.cs" />
+    <Compile Include="Routing\GetVendor.cs" />
     <Compile Include="Routing\ProductResponse.cs" />
     <Compile Include="Routing\ProductTypeahead.cs" />
     <Compile Include="Routing\ProductTypeaheadResponse.cs" />
@@ -125,6 +127,7 @@
     <Compile Include="Routing\QuantityOnHandResponse.cs" />
     <Compile Include="Routing\SaveProduct.cs" />
     <Compile Include="Routing\SaveProductResponse.cs" />
+    <Compile Include="Routing\VendorResponse.cs" />
     <Compile Include="Shopify\CountImages.cs" />
     <Compile Include="Shopify\CountResponse.cs" />
     <Compile Include="Shopify\CreateImage.cs" />
@@ -216,7 +219,9 @@
     <Compile Include="UserAuthExtensions.cs" />
     <Compile Include="UserSession.cs" />
     <Compile Include="Validation\GetUserValidator.cs" />
+    <Compile Include="Validation\GetVendorValidator.cs" />
     <Compile Include="Validation\RegisterValidator.cs" />
+    <Compile Include="Vendor.cs" />
     <Compile Include="Warehouse.cs" />
     <Compile Include="WarehouseTransaction.cs" />
   </ItemGroup>

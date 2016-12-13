@@ -109,6 +109,7 @@
                 ctx.DropAndCreateTable<Location>();
                 ctx.DropAndCreateTable<InventoryTransaction>();
                 ctx.DropAndCreateTable<UserPriceOverride>();
+                ctx.DropAndCreateTable<Vendor>();
             }
 
             // Plugins

@@ -126,6 +126,7 @@
                 ctx.CreateTableIfNotExists<ProductImage>();
                 ctx.CreateTableIfNotExists<ProductTag>();
                 ctx.CreateTableIfNotExists<UserPriceOverride>();
+                ctx.CreateTableIfNotExists<Vendor>();
             }
 #if DEBUG
             var testUser = (IUserAuth) new UserAuth

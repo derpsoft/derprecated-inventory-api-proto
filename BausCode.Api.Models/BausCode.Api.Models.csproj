@@ -128,6 +128,7 @@
     <Compile Include="Routing\QuantityOnHandResponse.cs" />
     <Compile Include="Routing\SaveProduct.cs" />
     <Compile Include="Routing\SaveProductResponse.cs" />
+    <Compile Include="Routing\UpdateUser.cs" />
     <Compile Include="Routing\VendorResponse.cs" />
     <Compile Include="Shopify\CountImages.cs" />
     <Compile Include="Shopify\CountResponse.cs" />
@@ -223,6 +224,7 @@
     <Compile Include="Validation\GetUserValidator.cs" />
     <Compile Include="Validation\GetVendorValidator.cs" />
     <Compile Include="Validation\RegisterValidator.cs" />
+    <Compile Include="Validation\UpdateUserValidator.cs" />
     <Compile Include="Vendor.cs" />
     <Compile Include="Warehouse.cs" />
     <Compile Include="WarehouseTransaction.cs" />

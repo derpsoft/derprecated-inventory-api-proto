@@ -1,9 +1,11 @@
 ﻿namespace BausCode.Api.Models.Routing
 {
     using Dto;
+    using ServiceStack;
 
     public class GetUserResponse
     {
-        public UserSession User { get; set; }
+        public ResponseStatus ResponseStatus { get; set; }
+        public User User { get; set; }
     }
 }

@@ -97,6 +97,7 @@
     <Compile Include="Handlers\ShopifyHandler.cs" />
     <Compile Include="Services\InventoryService.cs" />
     <Compile Include="Services\ProductService.cs" />
+    <Compile Include="Services\UserService.cs" />
     <Compile Include="TestAppHost.cs" />
     <Compile Include="TestTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

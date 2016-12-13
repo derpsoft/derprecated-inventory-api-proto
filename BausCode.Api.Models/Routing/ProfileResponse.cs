@@ -6,9 +6,9 @@
     {
         public ProfileResponse()
         {
-            Profile = new Profile();
+            Profile = new Dto.Profile();
         }
 
-        public Profile Profile { get; set; }
+        public Dto.Profile Profile { get; set; }
     }
 }

@@ -117,6 +117,7 @@
     <Compile Include="ProductTag.cs" />
     <Compile Include="Routing\GetPriceOverrides.cs" />
     <Compile Include="Routing\GetPriceOverridesResponse.cs" />
+    <Compile Include="Routing\GetUser.cs" />
     <Compile Include="Routing\ProductResponse.cs" />
     <Compile Include="Routing\ProductTypeahead.cs" />
     <Compile Include="Routing\ProductTypeaheadResponse.cs" />
@@ -188,7 +189,7 @@
     <Compile Include="Routing\GetProductsResponse.cs" />
     <Compile Include="Routing\GetQueueStatus.cs" />
     <Compile Include="Routing\GetQueueStatusResponse.cs" />
-    <Compile Include="Routing\GetUser.cs" />
+    <Compile Include="Routing\GetProfile.cs" />
     <Compile Include="Routing\GetUserResponse.cs" />
     <Compile Include="Routing\GetUsers.cs" />
     <Compile Include="Routing\GetUsersResponse.cs" />
@@ -214,6 +215,7 @@
     <Compile Include="UnitOfMeasure.cs" />
     <Compile Include="UserAuthExtensions.cs" />
     <Compile Include="UserSession.cs" />
+    <Compile Include="Validation\GetUserValidator.cs" />
     <Compile Include="Validation\RegisterValidator.cs" />
     <Compile Include="Warehouse.cs" />
     <Compile Include="WarehouseTransaction.cs" />

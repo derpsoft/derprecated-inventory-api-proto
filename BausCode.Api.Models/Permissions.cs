@@ -5,46 +5,61 @@
         /// <summary>
         ///     All permissions.
         /// </summary>
-        public const string CanDoEverything = "CanDoEverything";
+        public const string CanDoEverything = "everything";
+
+        /// <summary>
+        ///     All Product permissions.
+        /// </summary>
+        public const string CanManageProducts = "manageProducts";
 
         /// <summary>
         ///     Read a product.
         /// </summary>
-        public const string CanReadProducts = "CanReadProducts";
-
-        /// <summary>
-        ///     Create a new product.
-        /// </summary>
-        public const string CanCreateProducts = "CanCreateProducts";
+        public const string CanReadProducts = "readProducts";
 
         /// <summary>
         ///     Update a product.
         /// </summary>
-        public const string CanUpdateProducts = "CanUpdateProducts";
-
-        /// <summary>
-        ///     Save a product. Equivalent to CanCreateProducts plus CanUpdateProducts.
-        /// </summary>
-        public const string CanSaveProducts = "CanSaveProducts";
+        public const string CanUpsertProducts = "upsertProducts";
 
         /// <summary>
         ///     Delete a product.
         /// </summary>
-        public const string CanDeleteProducts = "CanDeleteProducts";
+        public const string CanDeleteProducts = "deleteProducts";
 
         /// <summary>
         ///     Increment inventory.
         /// </summary>
-        public const string CanReceiveInventory = "CanReceiveInventory";
+        public const string CanReceiveInventory = "receiveInventory";
 
         /// <summary>
         ///     Decrement inventory.
         /// </summary>
-        public const string CanReleaseInventory = "CanReleaseInventory";
+        public const string CanReleaseInventory = "releaseInventory";
 
         /// <summary>
-        ///     Save inventory. Equivalent to CanReceiveInventory plus CanReleaseInventory
+        ///     Manage inventory. Equivalent to CanReceiveInventory plus CanReleaseInventory
         /// </summary>
-        public const string CanSaveInventory = "CanSaveInventory";
+        public const string CanManageInventory = "manageInventory";
+
+        /// <summary>
+        ///     All Vendor permissions.
+        /// </summary>
+        public const string CanManageVendors = "manageVendors";
+
+        /// <summary>
+        ///     Read access to vendors.
+        /// </summary>
+        public const string CanReadVendors = "readVendors";
+
+        /// <summary>
+        ///     Write access to vendors.
+        /// </summary>
+        public const string CanUpsertVendors = "upsertVendors";
+
+        /// <summary>
+        ///     Delete vendors.
+        /// </summary>
+        public const string CanDeleteVendors = "deleteVendors";
     }
 }

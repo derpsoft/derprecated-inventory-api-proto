@@ -11,7 +11,7 @@
 
     [TestFixture(
         Description =
-            "Tests the full happy-path create, update, and delete of a product that does not exist in any coordinated system."
+            "Tests the happy-path get for a user."
         )]
     [Author(Constants.Authors.James)]
     internal class UserService

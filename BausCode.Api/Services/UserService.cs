@@ -16,6 +16,7 @@ namespace BausCode.Api.Services
         public object Any(GetProfile request)
         {
             var res = new ProfileResponse();
+            var handler = new UserHandler(Db, UserAuthRepository, CurrentSession);
 
             res.Profile = Profile.From(CurrentSession);
 
@@ -132,6 +133,26 @@ namespace BausCode.Api.Services
                 response.User = User.From(user);
 
             return response;
+        }
+
+        public object Any(UserRoles request)
+        {
+            var resp = new RolesResponse();
+            var handler = new UserHandler(Db, UserAuthRepository, CurrentSession);
+
+            resp.Roles = handler.GetRoles();
+
+            return resp;
+        }
+
+        public object Any(UserPermissions request)
+        {
+            var resp = new PermissionsResponse();
+            var handler = new UserHandler(Db, UserAuthRepository, CurrentSession);
+
+            resp.Permissions = handler.GetPermissions();
+
+            return resp;
         }
     }
 }

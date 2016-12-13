@@ -38,7 +38,7 @@ namespace BausCode.Api.Services
             var resp = new GetUserResponse();
             var handler = new UserHandler(Db, UserAuthRepository, CurrentSession);
 
-            resp.User = User.From(handler.Update(request.Id, new UserAuth().PopulateWith(request)));
+            resp.User = User.From(handler.Update(request.Id, new UserAuth().PopulateWithNonDefaultValues(request)));
 
             return resp;
         }

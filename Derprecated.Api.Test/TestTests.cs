@@ -1,6 +1,6 @@
 ﻿namespace Derprecated.Api.Test
 {
-    using BausCode.Api.Models.Test;
+    using Models.Test;
     using NUnit.Framework;
 
     [TestFixture]

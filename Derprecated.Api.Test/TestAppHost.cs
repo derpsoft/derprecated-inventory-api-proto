@@ -2,11 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
-    using BausCode.Api;
-    using BausCode.Api.Models;
-    using BausCode.Api.Models.Test;
-    using BausCode.Api.Services;
+    using Api.Services;
     using Funq;
+    using Models;
+    using Models.Test;
     using ServiceStack;
     using ServiceStack.Auth;
     using ServiceStack.Caching;

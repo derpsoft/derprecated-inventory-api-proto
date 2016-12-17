@@ -2,16 +2,15 @@
 {
     using System;
     using System.Data;
-    using BausCode.Api.Models;
-    using BausCode.Api.Models.Routing;
-    using BausCode.Api.Models.Test;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Models;
+    using Models.Routing;
+    using Models.Test;
     using NUnit.Framework;
     using ServiceStack;
     using ServiceStack.Auth;
     using ServiceStack.OrmLite;
     using Assert = NUnit.Framework.Assert;
-    using BCS = BausCode.Api.Services;
 
     [TestFixture(
         Description =
@@ -39,7 +38,7 @@
         }
 
         [Test]
-        [TestOf(typeof (BCS.ProductService))]
+        [TestOf(typeof (Api.Services.ProductService))]
         [Author(Constants.Authors.James)]
         [TestCategory(Constants.Categories.Integration)]
         public void Product_HappyPath_CanCRUD()
@@ -85,7 +84,7 @@
         }
 
         [Test]
-        [TestOf(typeof (BCS.ProductService))]
+        [TestOf(typeof (Api.Services.ProductService))]
         [Author(Constants.Authors.James)]
         [TestCategory(Constants.Categories.Integration)]
         public void DeleteProduct_HappyPath_Deletes()
@@ -93,7 +92,7 @@
         }
 
         [Test]
-        [TestOf(typeof (BCS.ProductService))]
+        [TestOf(typeof (Api.Services.ProductService))]
         [Author(Constants.Authors.James)]
         [TestCategory(Constants.Categories.Integration)]
         public void DeleteProduct_RequiresAuth()
@@ -104,7 +103,7 @@
         }
 
         [Test]
-        [TestOf(typeof (BCS.ProductService))]
+        [TestOf(typeof (Api.Services.ProductService))]
         [Author(Constants.Authors.James)]
         [TestCategory(Constants.Categories.Integration)]
         public void SaveProduct_RequiresAuth()
@@ -115,7 +114,7 @@
         }
 
         [Test]
-        [TestOf(typeof(BCS.ProductService))]
+        [TestOf(typeof(Api.Services.ProductService))]
         [Author(Constants.Authors.James)]
         [TestCategory(Constants.Categories.Integration)]
         public void SaveProduct_RequiresRole()

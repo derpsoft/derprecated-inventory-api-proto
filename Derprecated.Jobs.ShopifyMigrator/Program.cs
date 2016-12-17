@@ -6,16 +6,16 @@ namespace Derprecated.Jobs.ShopifyMigrator
     using System.Configuration;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
-    using BausCode.Api.Models;
-    using BausCode.Api.Models.Attributes;
-    using BausCode.Api.Models.Shopify;
+    using Api.Models;
+    using Api.Models.Attributes;
+    using Api.Models.Shopify;
     using Funq;
     using ServiceStack;
     using ServiceStack.Configuration;
     using ServiceStack.Data;
     using ServiceStack.MiniProfiler.Storage;
     using ServiceStack.OrmLite;
-    using Product = BausCode.Api.Models.Product;
+    using Product = Api.Models.Product;
 
     internal class Program
     {

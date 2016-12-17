@@ -2,16 +2,15 @@
 {
     using System;
     using System.Data;
-    using BausCode.Api.Models.Routing;
-    using BausCode.Api.Models.Test;
-    using BausCode.Api.Models.Test.Seeds;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Models.Routing;
+    using Models.Test;
+    using Models.Test.Seeds;
     using NUnit.Framework;
     using ServiceStack;
     using ServiceStack.Auth;
     using ServiceStack.OrmLite;
     using Assert = NUnit.Framework.Assert;
-    using BCS = BausCode.Api.Services;
 
     [TestFixture(
         Description =
@@ -45,7 +44,7 @@
         }
 
         [Test]
-        [TestOf(typeof(BCS.InventoryService))]
+        [TestOf(typeof(Api.Services.InventoryService))]
         [Author(Constants.Authors.James)]
         [TestCategory(Constants.Categories.Integration)]
         public void Receive_RequiresAuth()
@@ -56,7 +55,7 @@
         }
 
         [Test]
-        [TestOf(typeof (BCS.InventoryService))]
+        [TestOf(typeof (Api.Services.InventoryService))]
         [Author(Constants.Authors.James)]
         [TestCategory(Constants.Categories.Integration)]
         public void ReceiveAndReleaseQuantity_HappyPath_ReceivesAndReleases()

@@ -7,7 +7,10 @@
     {
         public CreateVendorValidator()
         {
-            RuleFor(x => x.Name)
+            RuleFor(x => x.Vendor)
+                .NotNull();
+
+            RuleFor(x => x.Vendor.Name)
                 .NotEmpty()
                 .Length(0, 50);
         }

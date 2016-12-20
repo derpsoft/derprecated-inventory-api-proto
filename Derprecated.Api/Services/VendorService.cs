@@ -25,7 +25,7 @@
             var handler = new VendorHandler(Db, CurrentSession);
             var newVendor = handler.Save(new Models.Vendor
                                          {
-                                             Name = request.Name
+                                             Name = request.Vendor.Name
                                          });
 
             resp.Vendor = Vendor.From(newVendor);

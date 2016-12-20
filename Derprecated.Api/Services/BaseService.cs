@@ -1,6 +1,6 @@
 ﻿namespace Derprecated.Api.Services
 {
-    using Models;
+    using Api.Models;
     using ServiceStack;
     using ServiceStack.Auth;
     using ServiceStack.Configuration;

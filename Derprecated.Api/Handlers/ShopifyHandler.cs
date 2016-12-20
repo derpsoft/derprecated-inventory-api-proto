@@ -1,7 +1,7 @@
 ﻿namespace Derprecated.Api.Handlers
 {
     using System;
-    using Models.Shopify;
+    using Api.Models.Shopify;
     using ServiceStack;
 
     public class ShopifyHandler

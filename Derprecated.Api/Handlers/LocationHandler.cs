@@ -1,7 +1,7 @@
 ﻿namespace Derprecated.Api.Handlers
 {
     using System.Data;
-    using Models;
+    using Api.Models;
     using ServiceStack.OrmLite;
 
     public class LocationHandler

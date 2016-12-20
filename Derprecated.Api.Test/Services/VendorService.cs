@@ -52,7 +52,8 @@
 
             client.SessionId = login.SessionId;
 
-            Assert.DoesNotThrow(() => resp = client.Post(new CreateVendor {Name = Constants.Vendors.JlcConcept}));
+            Assert.DoesNotThrow(
+                () => resp = client.Post(new CreateVendor {Vendor = new Vendor {Name = Constants.Vendors.JlcConcept}}));
             Assert.NotNull(resp);
             Assert.NotNull(resp.Vendor);
             Assert.AreEqual(resp.Vendor.Name, Constants.Vendors.JlcConcept);

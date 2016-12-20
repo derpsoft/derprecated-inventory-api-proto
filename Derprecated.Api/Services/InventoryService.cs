@@ -1,8 +1,8 @@
 ﻿namespace Derprecated.Api.Services
 {
     using System;
+    using Api.Models.Routing;
     using Handlers;
-    using Models.Routing;
     using ServiceStack.Logging;
 
     public class InventoryService : BaseService

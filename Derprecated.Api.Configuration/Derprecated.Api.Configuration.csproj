@@ -9,10 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Derprecated.Api.Configuration</RootNamespace>
     <AssemblyName>Derprecated.Api.Configuration</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -146,16 +147,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Derprecated.Api.Models\Derprecated.Api.Models.csproj">
-      <Project>{00383FAE-FA69-4AE2-B48D-2352453026D7}</Project>
-      <Name>Derprecated.Api.Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Derprecated.Api\Derprecated.Api.csproj">
-      <Project>{45037878-CC59-4EB4-8B03-AC5BA6E67441}</Project>
-      <Name>Derprecated.Api</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

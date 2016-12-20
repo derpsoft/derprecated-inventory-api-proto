@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using Models;
+    using Api.Models;
     using ServiceStack;
     using ServiceStack.OrmLite;
 

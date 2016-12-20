@@ -2,10 +2,10 @@
 {
     using System.Collections.Generic;
     using System.Globalization;
+    using Api.Models;
+    using Api.Models.Routing;
+    using Api.Models.Shopify;
     using Handlers;
-    using Models;
-    using Models.Routing;
-    using Models.Shopify;
     using ServiceStack;
     using ServiceStack.Logging;
     using GetProduct = Models.Routing.GetProduct;
@@ -57,7 +57,7 @@
             var shopifyHandler = new ShopifyHandler(ShopifyServiceClient);
 
             var product = productHandler.Save(request.Product);
-            var shopifyProduct = Models.Shopify.Product.From(product);
+            var shopifyProduct = Api.Models.Shopify.Product.From(product);
 
             if (shopifyProduct.Id.HasValue)
             {

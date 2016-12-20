@@ -1,7 +1,6 @@
 ﻿namespace Derprecated.Api.Models.Test.Seeds
 {
     using System.Collections.Generic;
-    using System.Drawing;
 
     public static class Product
     {
@@ -9,7 +8,7 @@
                                                              {
                                                                  Id = 1,
                                                                  Barcode = "",
-                                                                 Color = Color.Transparent.Name,
+                                                                 Color = "Transparent",
                                                                  Description = "",
                                                                  Grams = 0,
                                                                  Images = new List<ProductImage>(),
@@ -26,7 +25,7 @@
                                                       {
                                                           Id = 2,
                                                           Barcode = "LIGHT2",
-                                                          Color = Color.Blue.Name,
+                                                          Color = "Blue",
                                                           Description = "Test prouduct, blue light"
                                                       };
 
@@ -34,7 +33,7 @@
                                                       {
                                                           Id = 3,
                                                           Barcode = "CATTREE3",
-                                                          Color = Color.Brown.Name,
+                                                          Color = "Brown",
                                                           Description = "Test prouduct, cat tree"
                                                       };
 

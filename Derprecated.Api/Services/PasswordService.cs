@@ -1,9 +1,10 @@
 ﻿namespace Derprecated.Api.Services
 {
     using System;
-    using System.Net.Mail;
     using System.Text.RegularExpressions;
-    using Models.Routing;
+    using Api.Models.Routing;
+    using MailKit.Net.Smtp;
+    using MimeKit;
     using ServiceStack;
     using ServiceStack.Auth;
 
@@ -61,27 +62,27 @@
                 RegexOptions.IgnoreCase);
             var link = new ResetPassword {Email = user.Email, Token = secret};
 
-            var message = new MailMessage();
-            message.From = new MailAddress(AppSettings.Get("mail.from"));
-            message.To.Add(new MailAddress(user.Email));
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress(AppSettings.Get("mail.from")));
+            message.To.Add(new MailboxAddress(user.Email));
             message.Subject = "[Derprecated] Password Reset";
-            message.Body =
-                $@"
+            message.Body = new TextPart("html")
+                           {
+                               Text =
+                                   $@"
                 <html>
                     <head></head>
                     <body>
                         <p>
                             Click on the following link to reset your password:
                             <br/><br/>
-                            <a href=""{
-                    link}"">{link
-                    }</a>
+                            <a href=""{link}"">{link}</a>
                             <br/><br/>
                             This link will expire in 4 hours.
                         </p>
                     </body>
-                </html>";
-            message.IsBodyHtml = true;
+                </html>
+                "};
 
             Redis.Set($"password:secret:{user.Email}", secret, Expiration);
             SmtpClient.Send(message);

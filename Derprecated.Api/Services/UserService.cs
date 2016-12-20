@@ -1,9 +1,9 @@
 namespace Derprecated.Api.Services
 {
+    using Api.Models;
+    using Api.Models.Dto;
+    using Api.Models.Routing;
     using Handlers;
-    using Models;
-    using Models.Dto;
-    using Models.Routing;
     using ServiceStack;
     using ServiceStack.Auth;
     using ServiceStack.Logging;

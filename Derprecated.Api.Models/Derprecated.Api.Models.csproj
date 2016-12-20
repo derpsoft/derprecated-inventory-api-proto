@@ -130,6 +130,7 @@
     <Compile Include="Routing\RolesResponse.cs" />
     <Compile Include="Routing\SaveProduct.cs" />
     <Compile Include="Routing\SaveProductResponse.cs" />
+    <Compile Include="Routing\SearchVendors.cs" />
     <Compile Include="Routing\UpdateUser.cs" />
     <Compile Include="Routing\UserPermissions.cs" />
     <Compile Include="Routing\UserRoles.cs" />

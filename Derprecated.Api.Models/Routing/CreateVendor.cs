@@ -9,6 +9,6 @@
     public class CreateVendor : IReturn<VendorResponse>
     {
         [Required]
-        public string Name { get; set; }
+        public Vendor Vendor { get; set; }
     }
 }

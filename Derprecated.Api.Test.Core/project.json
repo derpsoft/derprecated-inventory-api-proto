@@ -1,13 +1,31 @@
-﻿{
-  "version": "1.0.0-*",
+{
+  "version": "1.1.0-*",
 
   "dependencies": {
-    "NETStandard.Library": "1.6.0"
+    "NUnit": "3.5.*",
+    "dotnet-test-nunit": "3.4.0-beta-*",
+    "Derprecated.Api": "1.0.0-*",
+    "ServiceStack.OrmLite.Sqlite.Core": "1.0.*",
+    "ServiceStack.Common.Core": "1.0.*",
+    "Derprecated.Api.Models": "1.0.0-*",
+    "Microsoft.NETCore.App": "1.1.0",
+    "NETStandard.Library": "1.6.1"
+  },
+
+  "testRunner": "nunit",
+
+  "runtimes": {
+    "win7-x64": {}
   },
 
   "frameworks": {
-    "netstandard1.6": {
-      "imports": "dnxcore50"
+    "netcoreapp1.0": {
+      "imports": [
+        "netcoreapp1.0",
+        "portable-net45+win8"
+      ],
+      "dependencies": {
+      }
     }
   }
 }

@@ -2,7 +2,6 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "NETStandard.Library": "1.6.0",
     "ServiceStack.Core": "1.0.*",
     "ServiceStack.Redis.Core": "1.0.*",
     "ServiceStack.Common.Core": "1.0.*",
@@ -15,7 +14,9 @@
     "Derprecated.Api.Models": "1.0.*",
     "Derprecated.Api": "1.0.*",
     "System.Linq": "4.3.*",
-    "MimeKit": "1.10.*"
+    "MimeKit": "1.10.*",
+    "NETStandard.Library": "1.6.1",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.*"
   },
 
   "frameworks": {

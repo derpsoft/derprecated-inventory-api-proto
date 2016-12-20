@@ -8,9 +8,11 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using Models.Configuration;
     using NLog.Extensions.Logging;
     using Services;
     using ServiceStack;
+    using ServiceStack.Text;
 
     public class Startup
     {
@@ -34,12 +36,13 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
-            services.AddSingleton(Configuration);
+            services.AddSingleton<IConfiguration>(Configuration);
+            services.Configure<ApplicationConfiguration>(Configuration);
         }
 
         private string FindLicense(IConfigurationRoot parentConfig)
         {
-            return parentConfig.GetSection("AppSettings")["ss.license"];
+            return parentConfig.GetSection("serviceStack")["license"];
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

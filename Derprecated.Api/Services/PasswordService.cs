@@ -63,7 +63,7 @@
             var link = new ResetPassword {Email = user.Email, Token = secret};
 
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(AppSettings.Get("mail.from")));
+            message.From.Add(new MailboxAddress(Configuration.Mail.From));
             message.To.Add(new MailboxAddress(user.Email));
             message.Subject = "[Derprecated] Password Reset";
             message.Body = new TextPart("html")

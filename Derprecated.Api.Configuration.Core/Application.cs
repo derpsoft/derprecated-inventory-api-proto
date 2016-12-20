@@ -6,8 +6,8 @@
     using System.Reflection;
     using Funq;
     using MailKit.Net.Smtp;
-    using Microsoft.Extensions.Configuration;
     using Models;
+    using Models.Configuration;
     using ServiceStack;
     using ServiceStack.Auth;
     using ServiceStack.Configuration;
@@ -40,13 +40,13 @@
             container.Register(baseSettings);
             container.Register(c => new MultiAppSettings(c.Resolve<AppSettings>()));
             var appSettings = container.Resolve<MultiAppSettings>();
-            var configuration = container.Resolve<IConfigurationRoot>();
+            var configuration = container.Resolve<Microsoft.Extensions.Options.IOptions<ApplicationConfiguration>>().Value;
 
             // DB
             container.Register<IDbConnectionFactory>(c =>
                                                      {
                                                          var connectionString =
-                                                             configuration.GetConnectionString("AzureSql");
+                                                             configuration.ConnectionStrings.AzureSql;
                                                          return new OrmLiteConnectionFactory(connectionString,
                                                              SqlServerDialect.Provider);
                                                      });
@@ -55,7 +55,7 @@
             container.Register<IRedisClientsManager>(c =>
                                                      {
                                                          var connectionString =
-                                                             configuration.GetConnectionString("AzureRedis");
+                                                             configuration.ConnectionStrings.AzureRedis;
                                                          return new RedisManagerPool(connectionString);
                                                      });
 
@@ -129,11 +129,11 @@
             // Mail
             container.Register(c =>
                                {
-                                   var host = appSettings.Get("mail.host");
-                                   var port = appSettings.Get("mail.port", 587);
-                                   var useSsl = appSettings.Get("mail.useSsl", true);
-                                   var creds = new NetworkCredential(appSettings.Get("mail.username"),
-                                       appSettings.Get("mail.password"));
+                                   var host = configuration.Mail.Host;
+                                   var port = configuration.Mail.Port;
+                                   var useSsl = configuration.Mail.UseSsl;
+                                   var creds = new NetworkCredential(configuration.Mail.Username,
+                                       configuration.Mail.Password);
 
                                    var client = new SmtpClient();
                                    client.Connect(host, port, useSsl);
@@ -160,8 +160,7 @@
                 () => new UserSession(),
                 new IAuthProvider[]
                 {
-                    new TwitterAuthProvider(appSettings),
-                    new CredentialsAuthProvider(appSettings)
+                    new CredentialsAuthProvider()
                 },
                 "/login")
                         {
@@ -172,10 +171,10 @@
             Plugins.Add(new AutoQueryFeature {MaxLimit = 100});
 
             // Misc
-            container.Register(new ShopifyServiceClient($"https://{appSettings.Get("shopify.store.domain")}")
+            container.Register(new ShopifyServiceClient($"https://{configuration.Shopify.Domain}")
                                {
-                                   UserName = appSettings.Get("shopify.api.key"),
-                                   Password = appSettings.Get("shopify.api.password")
+                                   UserName = configuration.Shopify.ApiKey,
+                                   Password = configuration.Shopify.Password,
                                });
         }
     }

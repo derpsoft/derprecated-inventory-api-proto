@@ -23,7 +23,7 @@
             : base("Derprecated::Api::{0}".Fmt(applicationName), assembly)
         {
         }
-        
+
         public override void Configure(Container container)
         {
             // Settings
@@ -120,7 +120,9 @@
             var existing = userRepo.GetUserAuthByUserName(testUser.Email);
             if (null == existing)
             {
-                userRepo.CreateUserAuth(testUser, "12345");
+                var newUser = userRepo.CreateUserAuth(testUser, "12345");
+                userRepo.AssignRoles(newUser, new List<string> {Roles.Admin},
+                    new List<string> {Permissions.CanDoEverything});
             }
 #endif
 

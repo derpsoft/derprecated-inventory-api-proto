@@ -1,5 +1,6 @@
 ﻿namespace Derprecated.Api.Host.Core
 {
+    using System.Net.Security;
     using Configuration.Core;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -38,15 +39,15 @@
 
         private string FindLicense(IConfigurationRoot parentConfig)
         {
-            return parentConfig.GetSection("appSettings")["ss.license"];
+            return parentConfig.GetSection("AppSettings")["ss.license"];
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole();
-            loggerFactory.AddNLog();
 
+            //loggerFactory.AddNLog();
             //env.ConfigureNLog("nlog.config");
 
             if (env.IsDevelopment())
@@ -57,7 +58,7 @@
             app.UseServiceStack(new Application("Web",
                 typeof (BaseService).GetAssembly()));
 
-            app.Run(async context => { await context.Response.WriteAsync("Hello World!"); });
+            app.Run(async context => { context.Response.Redirect("/metadata"); });
         }
     }
 }

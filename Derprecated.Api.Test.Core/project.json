@@ -8,8 +8,11 @@
     "ServiceStack.OrmLite.Sqlite.Core": "1.0.*",
     "ServiceStack.Common.Core": "1.0.*",
     "Derprecated.Api.Models": "1.0.0-*",
-    "Microsoft.NETCore.App": "1.1.0",
-    "NETStandard.Library": "1.6.1"
+    "NETStandard.Library": "1.6.1",
+    "Microsoft.NETCore.App": {
+      "version": "1.1.*",
+      "type": "platform"
+    },
   },
 
   "testRunner": "nunit",

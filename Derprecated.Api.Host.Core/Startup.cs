@@ -1,18 +1,14 @@
 ﻿namespace Derprecated.Api.Host.Core
 {
-    using System.Net.Security;
     using Configuration.Core;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Models.Configuration;
-    using NLog.Extensions.Logging;
     using Services;
     using ServiceStack;
-    using ServiceStack.Text;
 
     public class Startup
     {

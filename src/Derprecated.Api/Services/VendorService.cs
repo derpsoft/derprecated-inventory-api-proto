@@ -1,8 +1,9 @@
 ﻿namespace Derprecated.Api.Services
 {
-    using Api.Models.Dto;
-    using Api.Models.Routing;
     using Handlers;
+    using Models.Dto;
+    using Models.Routing;
+    using ServiceStack;
     using ServiceStack.Logging;
 
     public class VendorService : BaseService
@@ -23,12 +24,27 @@
         {
             var resp = new VendorResponse();
             var handler = new VendorHandler(Db, CurrentSession);
-            var newVendor = handler.Save(new Api.Models.Vendor
+            var newVendor = handler.Save(new Models.Vendor
                                          {
                                              Name = request.Vendor.Name
                                          });
 
             resp.Vendor = Vendor.From(newVendor);
+
+            return resp;
+        }
+
+        public object Any(UpdateVendor request)
+        {
+            var resp = new VendorResponse();
+            var handler = new VendorHandler(Db, CurrentSession);
+            var update = handler.Save(new Models.Vendor
+                                      {
+                                          Id = request.Id
+                                      }.PopulateWith(request.Vendor));
+
+            resp.Vendor = Vendor.From(update);
+
 
             return resp;
         }

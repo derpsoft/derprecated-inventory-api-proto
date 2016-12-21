@@ -2,11 +2,12 @@
 {
     using ServiceStack;
 
-    [Route("/api/v1/warehouses", "POST")]
+    [Route("/api/v1/warehouses/{Id}", "PUT, PATCH")]
     [Authenticate]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageWarehouses, Permissions.CanUpsertWarehouses)]
-    public class CreateWarehouse : IReturn<WarehouseResponse>
+    public class UpdateWarehouse : IReturn<WarehouseResponse>
     {
-        public Warehouse Warehouse { get; set; }
+        public int Id { get; set; }
+        public Dto.Warehouse Warehouse { get; set; }
     }
 }

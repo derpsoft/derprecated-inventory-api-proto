@@ -81,5 +81,26 @@
         ///     Delete users.
         /// </summary>
         public const string CanDeleteUsers = "deleteUsers";
+
+
+        /// <summary>
+        ///     All Warehouse permissions.
+        /// </summary>
+        public const string CanManageWarehouses = "manageWarehouses";
+
+        /// <summary>
+        ///     Read access to warehouses.
+        /// </summary>
+        public const string CanReadWarehouses = "readWarehouses";
+
+        /// <summary>
+        ///     Write access to warehouses.
+        /// </summary>
+        public const string CanUpsertWarehouses = "upsertWarehouses";
+
+        /// <summary>
+        ///     Delete warehouses.
+        /// </summary>
+        public const string CanDeleteWarehouses = "deleteWarehouses";
     }
 }

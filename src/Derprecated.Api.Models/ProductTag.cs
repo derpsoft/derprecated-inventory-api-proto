@@ -3,7 +3,7 @@
     using ServiceStack.DataAnnotations;
 
     // ReSharper disable once RedundantExplicitParamsArrayCreation
-    [CompositeIndex(new[] {"ProductId", "TagId"})]
+    [CompositeIndex(new[] { "ProductId", "TagId" })]
     public class ProductTag
     {
         [ForeignKey(typeof (Product), OnDelete = "CASCADE", OnUpdate = "CASCADE")]

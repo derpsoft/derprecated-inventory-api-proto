@@ -111,6 +111,7 @@
                 ctx.CreateTableIfNotExists<ApiKey>();
                 ctx.CreateTableIfNotExists<Product>();
                 ctx.CreateTableIfNotExists<ProductImage>();
+                ctx.CreateTableIfNotExists<Tag>();
                 ctx.CreateTableIfNotExists<ProductTag>();
                 ctx.CreateTableIfNotExists<UserPriceOverride>();
                 ctx.CreateTableIfNotExists<Vendor>();

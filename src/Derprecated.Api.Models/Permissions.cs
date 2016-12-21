@@ -3,6 +3,26 @@
     public static class Permissions
     {
         /// <summary>
+        ///     All Location permissions.
+        /// </summary>
+        public const string CanManageLocations = "manageLocations";
+
+        /// <summary>
+        ///     Read locations.
+        /// </summary>
+        public const string CanReadLocations = "readLocations";
+
+        /// <summary>
+        ///     Create and update a location
+        /// </summary>
+        public const string CanUpsertLocations = "upsertLocations";
+
+        /// <summary>
+        ///     Delete a location
+        /// </summary>
+        public const string CanDeleteLocations = "deleteLocations";
+
+        /// <summary>
         ///     All permissions.
         /// </summary>
         public const string CanDoEverything = "everything";

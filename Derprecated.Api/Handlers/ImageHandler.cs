@@ -5,6 +5,7 @@
     using System.Drawing.Drawing2D;
     using System.Drawing.Imaging;
     using System.IO;
+    using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Blob;
     using ServiceStack;
     using ServiceStack.Configuration;
@@ -68,9 +69,9 @@
                 }
 
                 dest.Position = 0;
-                blob.UploadFromStream(dest);
+                blob.UploadFromStreamAsync(dest).Wait();
                 blob.Properties.ContentType = "image/png";
-                blob.SetProperties();
+                blob.SetPropertiesAsync().Wait();
             }
 
             return blob;
@@ -81,7 +82,8 @@
             Uri result;
             var container = Client.GetContainerReference(Container);
 
-            container.CreateIfNotExists(BlobContainerPublicAccessType.Container);
+            container.CreateIfNotExistsAsync(BlobContainerPublicAccessType.Container, new BlobRequestOptions(), new OperationContext())
+                .Wait();
             result = Upload(container, source.InputStream).Uri;
 
             return result;

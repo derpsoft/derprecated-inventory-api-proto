@@ -2,8 +2,8 @@
 {
     using System;
     using System.Data;
-    using Models;
-    using Models.Routing;
+    using Api.Models;
+    using Api.Models.Routing;
     using ServiceStack;
     using ServiceStack.OrmLite;
 

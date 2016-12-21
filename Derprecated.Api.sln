@@ -3,17 +3,26 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Derprecated.Api.Configuration.Core", "Derprecated.Api.Configuration.Core\Derprecated.Api.Configuration.Core.xproj", "{39385567-9D18-41C4-9C53-4DD71020FC33}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1C8AD0AD-BF52-4A31-B125-5050C2311764}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Derprecated.Api.Test.Core", "Derprecated.Api.Test.Core\Derprecated.Api.Test.Core.xproj", "{D243D2A6-3CC6-4BC7-AC38-23EA0F1B6738}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{9A058BEF-B16A-4A20-B009-1E02FD82FDBB}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Derprecated.Api.Models", "Derprecated.Api.Models\Derprecated.Api.Models.xproj", "{AC726810-6418-4551-97EC-3BE2B443998F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D4EBC995-A42A-473F-BF8A-7AE959FC39B4}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Derprecated.Api", "Derprecated.Api\Derprecated.Api.xproj", "{5C680FD3-144A-4570-BC8B-21642971F3D0}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Derprecated.Api.Configuration.Core", "src\Derprecated.Api.Configuration.Core\Derprecated.Api.Configuration.Core.xproj", "{39385567-9D18-41C4-9C53-4DD71020FC33}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Derprecated.Api.Host.Core", "Derprecated.Api.Host.Core\Derprecated.Api.Host.Core.xproj", "{AF7B4CB8-3A93-4348-95C8-FAA711134C76}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Derprecated.Api.Test.Core", "test\Derprecated.Api.Test.Core\Derprecated.Api.Test.Core.xproj", "{D243D2A6-3CC6-4BC7-AC38-23EA0F1B6738}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Derprecated.Jobs.ShopifyMigrator.Core", "Derprecated.Jobs.ShopifyMigrator.Core\Derprecated.Jobs.ShopifyMigrator.Core.xproj", "{B03CACA7-C605-4066-A944-5DC7493658B5}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Derprecated.Api.Models", "src\Derprecated.Api.Models\Derprecated.Api.Models.xproj", "{AC726810-6418-4551-97EC-3BE2B443998F}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Derprecated.Api", "src\Derprecated.Api\Derprecated.Api.xproj", "{5C680FD3-144A-4570-BC8B-21642971F3D0}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Derprecated.Api.Host.Core", "src\Derprecated.Api.Host.Core\Derprecated.Api.Host.Core.xproj", "{AF7B4CB8-3A93-4348-95C8-FAA711134C76}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Derprecated.Jobs.ShopifyMigrator.Core", "src\Derprecated.Jobs.ShopifyMigrator.Core\Derprecated.Jobs.ShopifyMigrator.Core.xproj", "{B03CACA7-C605-4066-A944-5DC7493658B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,5 +57,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{39385567-9D18-41C4-9C53-4DD71020FC33} = {1C8AD0AD-BF52-4A31-B125-5050C2311764}
+		{D243D2A6-3CC6-4BC7-AC38-23EA0F1B6738} = {9A058BEF-B16A-4A20-B009-1E02FD82FDBB}
+		{AC726810-6418-4551-97EC-3BE2B443998F} = {1C8AD0AD-BF52-4A31-B125-5050C2311764}
+		{5C680FD3-144A-4570-BC8B-21642971F3D0} = {1C8AD0AD-BF52-4A31-B125-5050C2311764}
+		{AF7B4CB8-3A93-4348-95C8-FAA711134C76} = {1C8AD0AD-BF52-4A31-B125-5050C2311764}
+		{B03CACA7-C605-4066-A944-5DC7493658B5} = {1C8AD0AD-BF52-4A31-B125-5050C2311764}
 	EndGlobalSection
 EndGlobal

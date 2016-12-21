@@ -1,7 +1,9 @@
 ﻿namespace Derprecated.Api.Handlers
 {
+    using System;
     using System.Data;
-    using Api.Models;
+    using Models;
+    using ServiceStack;
     using ServiceStack.OrmLite;
 
     public class LocationHandler
@@ -15,10 +17,26 @@
         private IDbConnection Db { get; }
         private UserSession User { get; set; }
 
-        public Location GetLocation(int id)
+        public Location Get(int id)
         {
             id.ThrowIfLessThan(1);
             return Db.SingleById<Location>(id);
+        }
+
+        public Location Save(Location location)
+        {
+            location.ThrowIfNull();
+            if (location.Id >= 1)
+            {
+                var existing = Get(location.Id);
+                if (default(Location) == existing)
+                    throw new ArgumentException("invalid Id for existing location", nameof(location));
+
+                location = existing.PopulateWith(location);
+            }
+            Db.Save(location);
+
+            return location;
         }
     }
 }

@@ -10,6 +10,7 @@
     using Models.Configuration;
     using ServiceStack;
     using ServiceStack.Auth;
+    using ServiceStack.Caching;
     using ServiceStack.Configuration;
     using ServiceStack.Data;
     using ServiceStack.OrmLite;
@@ -40,7 +41,8 @@
             container.Register(baseSettings);
             container.Register(c => new MultiAppSettings(c.Resolve<AppSettings>()));
             var appSettings = container.Resolve<MultiAppSettings>();
-            var configuration = container.Resolve<Microsoft.Extensions.Options.IOptions<ApplicationConfiguration>>().Value;
+            var configuration =
+                container.Resolve<Microsoft.Extensions.Options.IOptions<ApplicationConfiguration>>().Value;
 
             // DB
             container.Register<IDbConnectionFactory>(c =>
@@ -52,15 +54,16 @@
                                                      });
 
             // Redis
-            container.Register<IRedisClientsManager>(c =>
-                                                     {
-                                                         var connectionString =
-                                                             configuration.ConnectionStrings.AzureRedis;
-                                                         return new RedisManagerPool(connectionString);
-                                                     });
+            //container.Register<IRedisClientsManager>(c =>
+            //                                         {
+            //                                             var connectionString =
+            //                                                 configuration.ConnectionStrings.AzureRedis;
+            //                                             return new RedisManagerPool(connectionString);
+            //                                         });
 
             // Cache
-            container.Register(c => c.Resolve<IRedisClientsManager>().GetCacheClient());
+            //container.Register(c => c.Resolve<IRedisClientsManager>().GetCacheClient());
+            container.Register<ICacheClient>(new MemoryCacheClient {FlushOnDispose = false});
 
             // Validators
             container.RegisterValidators(typeof (IAuditable).GetAssembly());
@@ -174,7 +177,7 @@
             container.Register(new ShopifyServiceClient($"https://{configuration.Shopify.Domain}")
                                {
                                    UserName = configuration.Shopify.ApiKey,
-                                   Password = configuration.Shopify.Password,
+                                   Password = configuration.Shopify.Password
                                });
         }
     }

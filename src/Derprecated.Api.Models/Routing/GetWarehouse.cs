@@ -4,7 +4,9 @@
 
     [Route("/api/v1/warehouses/{Id}", "GET")]
     [Authenticate]
-    public class GetWarehouse : IReturn<GetWarehouseResponse>
+    [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageWarehouses, Permissions.CanReadWarehouses)]
+    public class GetWarehouse : IReturn<WarehouseResponse>
     {
+        public int Id { get; set; }
     }
 }

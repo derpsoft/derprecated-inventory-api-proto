@@ -2,9 +2,10 @@
 {
     using ServiceStack;
 
-    [Route("/api/v1/vendors/search")]
+    [Route("/api/v1/warehouses/search")]
     [Authenticate]
-    public class SearchVendors : QueryDb<Vendor, Dto.Vendor>
+    [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageWarehouses, Permissions.CanReadWarehouses)]
+    public class SearchWarehouses : QueryDb<Warehouse, Dto.Warehouse>
     {
         [QueryDbField(Term = QueryTerm.Or)]
         public int Id { get; set; }

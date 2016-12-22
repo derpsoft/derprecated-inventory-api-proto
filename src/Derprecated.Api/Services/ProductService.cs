@@ -1,15 +1,17 @@
 ﻿namespace Derprecated.Api.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
-    using Api.Models;
-    using Api.Models.Routing;
-    using Api.Models.Shopify;
     using Handlers;
+    using Models;
+    using Models.Routing;
+    using Models.Shopify;
     using ServiceStack;
     using ServiceStack.Logging;
     using GetProduct = Models.Routing.GetProduct;
     using GetProducts = Models.Routing.GetProducts;
+    using Product = Models.Dto.Product;
     using ProductResponse = Models.Routing.ProductResponse;
 
     public class ProductService : BaseService
@@ -17,22 +19,23 @@
         protected static ILog Log = LogManager.GetLogger(typeof (ProductService));
         public ShopifyServiceClient ShopifyServiceClient { get; set; }
 
-        [RequiredPermission(Permissions.CanReadProducts)]
         public object Any(GetProduct request)
         {
             var resp = new ProductResponse();
-            var handler = new ProductHandler(Db, CurrentSession);
+            var productHandler = new ProductHandler(Db, CurrentSession);
+            var inventoryHandler = new InventoryHandler(Db, CurrentSession);
+            var product = productHandler.GetProduct(request.Id);
 
-            var product = handler.GetProduct(request.Id);
-
-            resp.Product = product;
+            resp.Product = Product.From(product);
+            resp.Product.QuantityOnHand = inventoryHandler.GetQuantityOnHand(product.Id);
 
             return resp;
         }
 
-        [RequiredPermission(Permissions.CanDeleteProducts)]
+
         public object Any(DeleteProduct request)
         {
+            throw new NotImplementedException();
             var resp = new DeleteProductResponse();
             var handler = new ProductHandler(Db, CurrentSession);
 
@@ -57,7 +60,7 @@
             var shopifyHandler = new ShopifyHandler(ShopifyServiceClient);
 
             var product = productHandler.Save(request.Product);
-            var shopifyProduct = Api.Models.Shopify.Product.From(product);
+            var shopifyProduct = Models.Shopify.Product.From(product);
 
             if (shopifyProduct.Id.HasValue)
             {
@@ -83,7 +86,7 @@
                 product.ShopifyId = shopifyProduct.Id.Value;
             }
 
-            resp.Product = product;
+            resp.Product = Product.From(product);
 
             return resp;
         }
@@ -111,11 +114,17 @@
         public object Any(GetProducts request)
         {
             var resp = new GetProductsResponse();
-            var handler = new ProductHandler(Db, CurrentSession);
-            var products = handler.GetProducts(request.Skip, request.Take);
+            var productHandler = new ProductHandler(Db, CurrentSession);
+            var inventoryHandler = new InventoryHandler(Db, CurrentSession);
 
-            resp.Products = products;
-            resp.Count = handler.Count();
+            var products = productHandler.GetProducts(request.Skip, request.Take);
+            resp.Products = products.Map(product =>
+                                         {
+                                             var p = Product.From(product);
+                                             p.QuantityOnHand = inventoryHandler.GetQuantityOnHand(p.Id);
+                                             return p;
+                                         });
+            resp.Count = productHandler.Count();
 
             return resp;
         }

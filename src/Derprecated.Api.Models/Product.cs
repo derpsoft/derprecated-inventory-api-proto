@@ -47,6 +47,7 @@
 
         public ulong RowVersion { get; set; }
 
+        [Whitelist]
         [EqualityCheck]
         public long? ShopifyId { get; set; }
 

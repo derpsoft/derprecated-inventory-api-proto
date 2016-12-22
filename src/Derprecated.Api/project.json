@@ -13,6 +13,7 @@
     "ServiceStack.OrmLite.Core": "1.0.*",
     "ServiceStack.Text.Core": "1.0.*",
     "System.Linq": "4.3.*",
+    "System.Linq.Parallel": "4.3.0",
     "WindowsAzure.Storage": "7.2.*"
   },
 

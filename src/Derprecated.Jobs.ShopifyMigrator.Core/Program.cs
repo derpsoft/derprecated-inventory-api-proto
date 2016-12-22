@@ -6,6 +6,7 @@
     using System.Linq;
     using Api.Models;
     using Api.Models.Attributes;
+    using Api.Models.Configuration;
     using Api.Models.Shopify;
     using Funq;
     using Microsoft.Extensions.Configuration;
@@ -19,6 +20,11 @@
     {
         static Program()
         {
+            var builder = new ConfigurationBuilder();
+            builder.SetBasePath(Directory.GetCurrentDirectory());
+            builder.AddJsonFile("appsettings.json");
+            Configuration = builder.Build();
+
             var license = FindLicense();
             if (!license.IsNullOrEmpty())
             {
@@ -27,11 +33,6 @@
 
             Container = new Container();
             Configure(Container);
-
-            var builder = new ConfigurationBuilder();
-            builder.SetBasePath(Directory.GetCurrentDirectory());
-            builder.AddJsonFile("appsettings.json");
-            Configuration = builder.Build();
         }
 
         private static IConfigurationRoot Configuration { get; }
@@ -39,13 +40,20 @@
 
         private static string FindLicense()
         {
-            return Configuration.GetSection("appSettings")["ss.license"];
+            return Configuration.GetSection("serviceStack")["license"];
         }
 
         [SuppressMessage("ReSharper", "InvertIf")]
         private static void Configure(Container container)
         {
             var appSettings = new AppSettings();
+            var configuration = new ApplicationConfiguration();
+            configuration.Shopify = new Shopify
+                                    {
+                                        Domain = Configuration["shopify:domain"],
+                                        ApiKey = Configuration["shopify:apiKey"],
+                                        Password = Configuration["shopify:password"]
+                                    };
 
             // DB
             container.Register<IDbConnectionFactory>(c =>
@@ -89,9 +97,9 @@
 
             container.Register(c =>
                                {
-                                   var domain = appSettings.Get("shopify.store.domain");
-                                   var apiKey = appSettings.Get("shopify.api.key");
-                                   var password = appSettings.Get("shopify.api.password");
+                                   var domain = configuration.Shopify.Domain;
+                                   var apiKey = configuration.Shopify.ApiKey;
+                                   var password = configuration.Shopify.Password;
 
                                    return new JsonServiceClient($"https://{domain}")
                                           {
@@ -146,7 +154,7 @@
 
                                      if (product == default(Product))
                                      {
-                                         Console.WriteLine($"New [{p.ShopifyId}] {p.Title.Take(40)}...");
+                                         Console.WriteLine($"New [{p.ShopifyId}] {p.Title.Take(40).Join()}...");
                                          product = p;
                                      }
                                      else
@@ -155,7 +163,7 @@
                                          product.Merge(p);
 
                                          Console.WriteLine(
-                                             $"Existing [{product.ShopifyId} -> {product.Id}] {p.Title.Take(40)}...");
+                                             $"Existing [{product.ShopifyId} -> {product.Id}] {p.Title.Take(40).Join()}...");
                                      }
 
                                      product.Tags.Split(',')

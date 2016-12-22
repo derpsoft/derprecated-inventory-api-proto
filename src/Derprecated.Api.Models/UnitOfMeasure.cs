@@ -4,6 +4,8 @@
 
     public class UnitOfMeasure : IAuditable
     {
+        public const string EACH = "each";
+
         public DateTime CreateDate { get; set; }
         public int Id { get; set; }
         public DateTime ModifyDate { get; set; }

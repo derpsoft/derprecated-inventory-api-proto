@@ -2,9 +2,9 @@
 {
     using ServiceStack;
 
-    public class ProductResponse
+    public class OrderResponse
     {
-        public Dto.Product Product { get; set; }
         public ResponseStatus ResponseStatus { get; set; }
+        public Dto.Order Order { get; set; }
     }
 }

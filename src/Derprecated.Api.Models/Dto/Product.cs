@@ -25,6 +25,11 @@ namespace Derprecated.Api.Models.Dto
         public decimal Weight { get; set; }
         public string WeightUnit { get; set; }
 
+        public decimal QuantityOnHand { get; set; }
+        public string UnitOfMeasure { get; set; } = "each";
+
+        public long? ShopifyId { get; set; }
+
         public static Product From(Models.Product source)
         {
             var product = new Product

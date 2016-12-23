@@ -3,11 +3,14 @@
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Linq;
     using Models;
     using ServiceStack.OrmLite;
 
     public class ReportHandler
     {
+        private static readonly string[] AcceptableGroupBy = {DateSegments.Day, DateSegments.Week, DateSegments.Month};
+
         public ReportHandler(IDbConnection db, UserSession user)
         {
             Db = db;
@@ -20,6 +23,14 @@
         public Dictionary<DateTime, int> GetSalesByVendor(DateTime startDate, DateTime endDate, string groupBy,
                                                           int vendorId)
         {
+            if (startDate >= endDate)
+                throw new ArgumentOutOfRangeException(nameof(startDate),
+                    $"{nameof(startDate)} should come before {nameof(endDate)}");
+
+            if (!AcceptableGroupBy.Contains(groupBy))
+                throw new ArgumentOutOfRangeException(nameof(groupBy), groupBy,
+                    $"must be one of {string.Join(", ", AcceptableGroupBy)}");
+
             return
                 Db.Dictionary<DateTime, int>(
                     $@"
@@ -46,6 +57,14 @@
         public Dictionary<DateTime, int> GetSalesByProduct(DateTime startDate, DateTime endDate, string groupBy,
                                                            int productId)
         {
+            if (startDate >= endDate)
+                throw new ArgumentOutOfRangeException(nameof(startDate),
+                    $"{nameof(startDate)} should come before {nameof(endDate)}");
+
+            if (!AcceptableGroupBy.Contains(groupBy))
+                throw new ArgumentOutOfRangeException(nameof(groupBy), groupBy,
+                    $"must be one of {string.Join(", ", AcceptableGroupBy)}");
+
             return
                 Db.Dictionary<DateTime, int>(
                     $@"
@@ -70,6 +89,14 @@
 
         public Dictionary<DateTime, int> GetSalesByTotal(DateTime startDate, DateTime endDate, string groupBy)
         {
+            if (startDate >= endDate)
+                throw new ArgumentOutOfRangeException(nameof(startDate),
+                    $"{nameof(startDate)} should come before {nameof(endDate)}");
+
+            if (!AcceptableGroupBy.Contains(groupBy))
+                throw new ArgumentOutOfRangeException(nameof(groupBy), groupBy,
+                    $"must be one of {string.Join(", ", AcceptableGroupBy)}");
+
             return
                 Db.Dictionary<DateTime, int>(
                     $@"

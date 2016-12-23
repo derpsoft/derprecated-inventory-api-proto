@@ -116,6 +116,7 @@
                 ctx.CreateTableIfNotExists<UserPriceOverride>();
                 ctx.CreateTableIfNotExists<Vendor>();
                 ctx.CreateTableIfNotExists<InventoryTransaction>();
+                ctx.CreateTableIfNotExists<Sale>();
             }
 #if DEBUG
             var testUser = new UserAuth

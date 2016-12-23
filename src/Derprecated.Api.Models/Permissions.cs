@@ -122,5 +122,10 @@
         ///     Delete warehouses.
         /// </summary>
         public const string CanDeleteWarehouses = "deleteWarehouses";
+
+        /// <summary>
+        ///     Can read all reports.
+        /// </summary>
+        public const string CanReadReports = "readReports";
     }
 }

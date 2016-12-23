@@ -39,6 +39,7 @@ namespace Derprecated.Api.Services
             var handler = new UserHandler(Db, UserAuthRepository, CurrentSession);
 
             resp.User = User.From(handler.Update(request.Id, new UserAuth().PopulateWithNonDefaultValues(request)));
+            resp.User.Permissions = handler.GetPermissions(resp.User.Id);
 
             return resp;
         }
@@ -130,7 +131,10 @@ namespace Derprecated.Api.Services
             var user = handler.GetUser(request.Id);
 
             if (null != user)
+            {
                 response.User = User.From(user);
+                response.User.Permissions = handler.GetPermissions(user.Id);
+            }
 
             return response;
         }

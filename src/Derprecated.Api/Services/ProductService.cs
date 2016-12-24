@@ -117,7 +117,7 @@
             var productHandler = new ProductHandler(Db, CurrentSession);
             var inventoryHandler = new InventoryHandler(Db, CurrentSession);
 
-            var products = productHandler.GetProducts(request.Skip, request.Take);
+            var products = productHandler.List(request.Skip, request.Take);
             resp.Products = products.Map(product =>
                                          {
                                              var p = Product.From(product);

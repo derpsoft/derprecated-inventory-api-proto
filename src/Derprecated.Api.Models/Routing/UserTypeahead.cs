@@ -8,7 +8,6 @@
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageUsers, Permissions.CanReadUsers)]
     public class UserTypeahead : IReturn<UsersResponse>
     {
-        [Required]
         [StringLength(20)]
         public string Query { get; set; }
     }

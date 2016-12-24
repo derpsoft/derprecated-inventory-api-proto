@@ -8,7 +8,6 @@
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageWarehouses, Permissions.CanReadWarehouses)]
     public class WarehouseTypeahead : IReturn<WarehousesResponse>
     {
-        [Required]
         [StringLength(20)]
         public string Query { get; set; }
     }

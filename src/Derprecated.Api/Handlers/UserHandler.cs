@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
-    using Api.Models;
+    using Models;
     using ServiceStack;
     using ServiceStack.Auth;
     using ServiceStack.OrmLite;
@@ -26,6 +26,20 @@
         {
             id.ThrowIfLessThan(1);
             return UserAuthRepository.GetUserAuth(id) as UserAuth;
+        }
+
+        public long Count()
+        {
+            return Db.Count<UserAuth>();
+        }
+
+        public List<UserAuth> List(int skip = 0, int take = 25)
+        {
+            return Db.Select(
+                Db.From<UserAuth>()
+                  .Skip(skip)
+                  .Take(take)
+                );
         }
 
         public UserAuth Update(int id, UserAuth user)

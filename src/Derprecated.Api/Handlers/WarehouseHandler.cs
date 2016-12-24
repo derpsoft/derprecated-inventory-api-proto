@@ -1,6 +1,7 @@
 ﻿namespace Derprecated.Api.Handlers
 {
     using System;
+    using System.Collections.Generic;
     using System.Data;
     using Models;
     using ServiceStack;
@@ -22,6 +23,20 @@
             id.ThrowIfLessThan(1);
 
             return Db.SingleById<Warehouse>(id);
+        }
+
+        public long Count()
+        {
+            return Db.Count<Warehouse>();
+        }
+
+        public List<Warehouse> List(int skip = 0, int take = 25)
+        {
+            return Db.Select(
+                Db.From<Warehouse>()
+                  .Skip(skip)
+                  .Take(take)
+                );
         }
 
         public Warehouse Save(Warehouse warehouse)

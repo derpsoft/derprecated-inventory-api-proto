@@ -10,9 +10,13 @@
         public object Any(UserTypeahead request)
         {
             var resp = new UsersResponse();
-            var handler = new SearchHandler(Db, CurrentSession);
+            var userHandler = new UserHandler(Db, UserAuthRepository, CurrentSession);
+            var searchHandler = new SearchHandler(Db, CurrentSession);
 
-            resp.Users = handler.UserTypeahead(request.Query).Map(User.From);
+            if (request.Query.IsNullOrEmpty())
+                resp.Users = userHandler.List(0, int.MaxValue).Map(User.From);
+            else
+                resp.Users = searchHandler.UserTypeahead(request.Query).Map(User.From);
 
             return resp;
         }
@@ -20,9 +24,13 @@
         public object Any(ProductTypeahead request)
         {
             var resp = new ProductsResponse();
-            var handler = new SearchHandler(Db, CurrentSession);
+            var productHandler = new ProductHandler(Db, CurrentSession);
+            var searchHandler = new SearchHandler(Db, CurrentSession);
 
-            resp.Products = handler.ProductTypeahead(request.Query).Map(Product.From);
+            if (request.Query.IsNullOrEmpty())
+                resp.Products = productHandler.List(0, int.MaxValue).Map(Product.From);
+            else
+                resp.Products = searchHandler.ProductTypeahead(request.Query).Map(Product.From);
 
             return resp;
         }
@@ -30,9 +38,13 @@
         public object Any(VendorTypeahead request)
         {
             var resp = new VendorsResponse();
-            var handler = new SearchHandler(Db, CurrentSession);
+            var vendorHandler = new VendorHandler(Db, CurrentSession);
+            var searchHandler = new SearchHandler(Db, CurrentSession);
 
-            resp.Vendors = handler.VendorTypeahead(request.Query).Map(Vendor.From);
+            if (request.Query.IsNullOrEmpty())
+                resp.Vendors = vendorHandler.List(0, int.MaxValue).Map(Vendor.From);
+            else
+                resp.Vendors = searchHandler.VendorTypeahead(request.Query).Map(Vendor.From);
 
             return resp;
         }
@@ -40,9 +52,14 @@
         public object Any(WarehouseTypeahead request)
         {
             var resp = new WarehousesResponse();
-            var handler = new SearchHandler(Db, CurrentSession);
+            var warehouseHandler = new WarehouseHandler(Db, CurrentSession);
+            var searchHandler = new SearchHandler(Db, CurrentSession);
 
-            resp.Warehouses = handler.WarehouseTypeahead(request.Query).Map(Warehouse.From);
+            if (request.Query.IsNullOrEmpty())
+                resp.Warehouses = warehouseHandler.List(0, int.MaxValue).Map(Warehouse.From);
+            else
+                resp.Warehouses = searchHandler.WarehouseTypeahead(request.Query).Map(Warehouse.From);
+
             return resp;
         }
     }

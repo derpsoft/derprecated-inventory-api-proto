@@ -8,7 +8,6 @@
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanReadProducts)]
     public class ProductTypeahead : IReturn<ProductsResponse>
     {
-        [Required]
         [StringLength(20)]
         public string Query { get; set; }
     }

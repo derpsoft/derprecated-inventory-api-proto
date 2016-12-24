@@ -8,7 +8,6 @@
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageVendors, Permissions.CanReadVendors)]
     public class VendorTypeahead : IReturn<VendorsResponse>
     {
-        [Required]
         [StringLength(20)]
         public string Query { get; set; }
     }

@@ -1,8 +1,9 @@
 ﻿namespace Derprecated.Api.Handlers
 {
     using System;
+    using System.Collections.Generic;
     using System.Data;
-    using Api.Models;
+    using Models;
     using ServiceStack;
     using ServiceStack.OrmLite;
 
@@ -24,13 +25,27 @@
             return Db.SingleById<Vendor>(id);
         }
 
+        public long Count()
+        {
+            return Db.Count<Vendor>();
+        }
+
+        public List<Vendor> List(int skip = 0, int take = 25)
+        {
+            return Db.Select(
+                Db.From<Vendor>()
+                  .Skip(skip)
+                  .Take(take)
+                );
+        }
+
         public Vendor Save(Vendor vendor)
         {
             vendor.ThrowIfNull();
             if (vendor.Id >= 1)
             {
                 var existing = GetVendor(vendor.Id);
-                if(default(Vendor) == existing)
+                if (default(Vendor) == existing)
                     throw new ArgumentException("invalid Id for existing vendor", nameof(vendor));
 
                 vendor = existing.PopulateWith(vendor);

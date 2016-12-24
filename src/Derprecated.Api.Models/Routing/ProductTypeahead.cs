@@ -3,14 +3,12 @@
     using ServiceStack;
     using ServiceStack.DataAnnotations;
 
-    [Route("/api/v1/products/typeahead/", "POST")]
-    [Route("/api/v1/products/typeahead/{Query}", "GET")]
+    [Route("/api/v1/products/typeahead", "GET")]
     [Authenticate]
-    public class ProductTypeahead : QueryDb<Product>, IJoin<Product, ProductImage>
+    [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanReadProducts)]
+    public class ProductTypeahead : IReturn<ProductsResponse>
     {
-        [Required]
-        [QueryDbField(Template = "{Field} LIKE {Value}", Field = "Title",
-            ValueFormat = "%{0}%")]
+        [StringLength(20)]
         public string Query { get; set; }
     }
 }

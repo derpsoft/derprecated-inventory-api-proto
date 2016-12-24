@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using Api.Models;
+    using Models;
     using ServiceStack;
     using ServiceStack.OrmLite;
 
@@ -33,9 +33,13 @@
         /// <remarks>
         ///     Might be slow, use with caution.
         /// </remarks>
-        public List<Product> GetProducts(int? skip, int? take)
+        public List<Product> List(int skip = 0, int take = 25)
         {
-            return Db.LoadSelect(Db.From<Product>().Skip(skip).Take(take));
+            return Db.LoadSelect(
+                Db.From<Product>()
+                  .Skip(skip)
+                  .Take(take)
+                );
         }
 
         public Product Save(Product product)

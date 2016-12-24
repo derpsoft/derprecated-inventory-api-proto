@@ -9,6 +9,7 @@
     using Models;
     using Models.Configuration;
     using ServiceStack;
+    using ServiceStack.Api.Swagger;
     using ServiceStack.Auth;
     using ServiceStack.Caching;
     using ServiceStack.Configuration;
@@ -175,6 +176,7 @@
                         });
             Plugins.Add(new ValidationFeature());
             Plugins.Add(new AutoQueryFeature {MaxLimit = 100});
+            Plugins.Add(new SwaggerFeature());
 
             // Misc
             container.Register(new ShopifyServiceClient($"https://{configuration.Shopify.Domain}")

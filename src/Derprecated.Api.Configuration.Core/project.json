@@ -16,7 +16,8 @@
     "System.Linq": "4.3.*",
     "MimeKit": "1.10.*",
     "NETStandard.Library": "1.6.1",
-    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.*"
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.*",
+    "ServiceStack.Api.Swagger.Core": "1.0.*"
   },
 
   "frameworks": {

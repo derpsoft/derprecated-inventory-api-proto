@@ -3,10 +3,10 @@
     using ServiceStack;
     using ServiceStack.DataAnnotations;
 
-    [Route("/api/v1/products/typeahead", "GET")]
+    [Route("/api/v1/vendors/typeahead", "GET")]
     [Authenticate]
-    [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanReadProducts)]
-    public class ProductTypeahead : IReturn<ProductsResponse>
+    [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageVendors, Permissions.CanReadVendors)]
+    public class VendorTypeahead : IReturn<VendorsResponse>
     {
         [Required]
         [StringLength(20)]

@@ -118,6 +118,7 @@
                 ctx.CreateTableIfNotExists<Vendor>();
                 ctx.CreateTableIfNotExists<InventoryTransaction>();
                 ctx.CreateTableIfNotExists<Sale>();
+                ctx.CreateTableIfNotExists<Warehouse>();
             }
 #if DEBUG
             var testUser = new UserAuth

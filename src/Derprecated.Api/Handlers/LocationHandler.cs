@@ -38,5 +38,10 @@
 
             return location;
         }
+
+        public long Count()
+        {
+            return Db.Count<Location>();
+        }
     }
 }

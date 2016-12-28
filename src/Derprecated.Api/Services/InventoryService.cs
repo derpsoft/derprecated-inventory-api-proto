@@ -1,13 +1,23 @@
 ﻿namespace Derprecated.Api.Services
 {
     using System;
-    using Api.Models.Routing;
     using Handlers;
+    using Models.Routing;
     using ServiceStack.Logging;
 
     public class InventoryService : BaseService
     {
         protected static ILog Log = LogManager.GetLogger(typeof (InventoryService));
+
+        public object Any(CountInventoryTransactions request)
+        {
+            var resp = new CountResponse();
+            var handler = new InventoryHandler(Db, CurrentSession);
+
+            resp.Count = handler.CountInventoryTransactions();
+
+            return resp;
+        }
 
         public object Any(CreateInventoryTransaction request)
         {

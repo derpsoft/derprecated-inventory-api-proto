@@ -13,6 +13,16 @@ namespace Derprecated.Api.Services
     {
         protected static ILog Log = LogManager.GetLogger(typeof (UserService));
 
+        public object Any(CountUsers request)
+        {
+            var resp = new CountResponse();
+            var handler = new UserHandler(Db, UserAuthRepository, CurrentSession);
+
+            resp.Count = handler.Count();
+
+            return resp;
+        }
+
         public object Any(GetProfile request)
         {
             var res = new ProfileResponse();

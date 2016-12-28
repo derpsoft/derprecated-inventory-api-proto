@@ -5,8 +5,9 @@
     /// <summary>
     ///     Used for all inventory operations, including receiving, moving, selling, quantity changes, etc.
     /// </summary>
-    [Route("/api/v1/inventory-transaction", "POST")]
+    [Route("/api/v1/inventory-transactions", "POST")]
     [Authenticate]
+    [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageInventory, Permissions.CanUpsertInventory)]
     public class CreateInventoryTransaction : IReturn<CreateInventoryTransactionResponse>
     {
         public int ProductId { get; set; }

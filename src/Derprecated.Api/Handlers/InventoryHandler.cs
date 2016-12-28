@@ -148,5 +148,10 @@
                   .Take(take)
                 );
         }
+
+        public long CountInventoryTransactions()
+        {
+            return Db.Count<InventoryTransaction>();
+        }
     }
 }

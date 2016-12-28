@@ -94,6 +94,9 @@
                                              {
                                                  var auditRow = row as IAuditable;
                                                  auditRow.ModifyDate = DateTime.UtcNow;
+
+                                                 if (auditRow.CreateDate == DateTime.MinValue)
+                                                     auditRow.CreateDate = auditRow.ModifyDate;
                                              }
 
                                              if (row is Product)

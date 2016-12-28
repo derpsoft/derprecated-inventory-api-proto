@@ -57,11 +57,11 @@
             var client = new JsonServiceClient(TestAppHost.BaseUri);
             var xact = new CreateInventoryTransaction
                        {
-                           ItemId = productId,
+                           ProductId = productId,
                            LocationId = locationId,
                            Quantity = quant
                        };
-            var count = new GetProductQuantityOnHand {Id = xact.ItemId};
+            var count = new GetProductQuantityOnHand {Id = xact.ProductId};
 
             var login = client.Post(new Authenticate
             {

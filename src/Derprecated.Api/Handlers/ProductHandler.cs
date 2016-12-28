@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Data;
     using Models;
+    using Models.Attributes;
     using ServiceStack;
     using ServiceStack.OrmLite;
 
@@ -53,7 +54,7 @@
                 if (default(Product) == existing)
                     throw new ArgumentException("invalid Id for existing product", nameof(product));
 
-                product = existing.PopulateWith(product);
+                product = existing.PopulateFromPropertiesWithAttribute(product, typeof(WhitelistAttribute));
             }
             Db.Save(product);
 

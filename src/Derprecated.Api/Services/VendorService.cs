@@ -10,6 +10,16 @@
     {
         protected static ILog Log = LogManager.GetLogger(typeof (VendorService));
 
+        public object Any(CountVendors request)
+        {
+            var resp = new CountResponse();
+            var handler = new VendorHandler(Db, CurrentSession);
+
+            resp.Count = handler.Count();
+
+            return resp;
+        }
+
         public object Any(GetVendor request)
         {
             var resp = new VendorResponse();

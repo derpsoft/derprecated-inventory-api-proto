@@ -3,6 +3,11 @@
     public static class Permissions
     {
         /// <summary>
+        ///     Upsert Inventory.
+        /// </summary>
+        public const string CanUpsertInventory = "upsertInventory";
+
+        /// <summary>
         ///     All Location permissions.
         /// </summary>
         public const string CanManageLocations = "manageLocations";

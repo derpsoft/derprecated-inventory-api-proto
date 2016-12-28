@@ -10,6 +10,16 @@
     {
         protected static ILog Log = LogManager.GetLogger(typeof (LocationService));
 
+        public object Any(CountLocations request)
+        {
+            var resp = new CountResponse();
+            var handler = new LocationHandler(Db, CurrentSession);
+
+            resp.Count = handler.Count();
+
+            return resp;
+        }
+
         public object Any(GetLocation request)
         {
             var resp = new LocationResponse();

@@ -9,6 +9,8 @@
     using Models.Shopify;
     using ServiceStack;
     using ServiceStack.Logging;
+    using CountProducts = Models.Routing.CountProducts;
+    using CountResponse = Models.Routing.CountResponse;
     using GetProduct = Models.Routing.GetProduct;
     using GetProducts = Models.Routing.GetProducts;
     using Product = Models.Dto.Product;
@@ -18,6 +20,16 @@
     {
         protected static ILog Log = LogManager.GetLogger(typeof (ProductService));
         public ShopifyServiceClient ShopifyServiceClient { get; set; }
+
+        public object Any(CountProducts request)
+        {
+            var resp = new CountResponse();
+            var handler = new ProductHandler(Db, CurrentSession);
+
+            resp.Count = handler.Count();
+
+            return resp;
+        }
 
         public object Any(GetProduct request)
         {

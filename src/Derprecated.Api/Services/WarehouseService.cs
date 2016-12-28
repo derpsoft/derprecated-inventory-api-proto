@@ -10,6 +10,16 @@
     {
         protected static ILog Log = LogManager.GetLogger(typeof (WarehouseService));
 
+        public object Any(CountWarehouses request)
+        {
+            var resp = new CountResponse();
+            var handler = new WarehouseHandler(Db, CurrentSession);
+
+            resp.Count = handler.Count();
+
+            return resp;
+        }
+
         public object Any(GetWarehouse request)
         {
             var resp = new WarehouseResponse();

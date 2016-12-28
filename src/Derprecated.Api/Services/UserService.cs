@@ -1,9 +1,9 @@
 namespace Derprecated.Api.Services
 {
-    using Api.Models;
-    using Api.Models.Dto;
-    using Api.Models.Routing;
     using Handlers;
+    using Models;
+    using Models.Dto;
+    using Models.Routing;
     using ServiceStack;
     using ServiceStack.Auth;
     using ServiceStack.Logging;
@@ -38,8 +38,12 @@ namespace Derprecated.Api.Services
             var resp = new GetUserResponse();
             var handler = new UserHandler(Db, UserAuthRepository, CurrentSession);
 
-            resp.User = User.From(handler.Update(request.Id, new UserAuth().PopulateWithNonDefaultValues(request)));
-            resp.User.Permissions = handler.GetPermissions(resp.User.Id);
+            var update = handler.Update(request.Id, new UserAuth().PopulateWithNonDefaultValues(request));
+            update.Permissions = request.Permissions.IsNullOrEmpty()
+                ? handler.GetPermissions(request.Id)
+                : handler.SetPermissions(request.Id, request.Permissions);
+
+            resp.User = User.From(update);
 
             return resp;
         }

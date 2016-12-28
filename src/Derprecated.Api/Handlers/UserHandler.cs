@@ -87,5 +87,23 @@
             var user = GetUser(id);
             return UserAuthRepository.GetPermissions(user).ToList();
         }
+
+        /// <summary>
+        ///     Sets the given user's permissions to the given <paramref name="permissions" />
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="permissions"></param>
+        /// <returns></returns>
+        public List<string> SetPermissions(int userId, ICollection<string> permissions)
+        {
+            var user = GetUser(userId);
+            var current = GetPermissions(userId);
+            var remove = current.Except(permissions);
+
+            UserAuthRepository.UnAssignRoles(user, permissions: remove.ToArray());
+            UserAuthRepository.AssignRoles(user, permissions: permissions.ToArray());
+
+            return permissions.ToList();
+        }
     }
 }

@@ -20,6 +20,16 @@
             return resp;
         }
 
+        public object Any(GetVendors request)
+        {
+            var resp = new VendorsResponse();
+            var handler = new VendorHandler(Db, CurrentSession);
+
+            resp.Vendors = handler.List(request.Skip, request.Take).Map(Vendor.From);
+
+            return resp;
+        }
+
         public object Any(CreateVendor request)
         {
             var resp = new VendorResponse();

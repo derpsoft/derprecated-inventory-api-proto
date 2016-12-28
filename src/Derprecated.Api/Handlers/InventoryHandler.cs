@@ -1,9 +1,10 @@
 ﻿namespace Derprecated.Api.Handlers
 {
     using System;
+    using System.Collections.Generic;
     using System.Data;
-    using Api.Models;
-    using Api.Models.Routing;
+    using Models;
+    using Models.Routing;
     using ServiceStack;
     using ServiceStack.OrmLite;
 
@@ -137,6 +138,15 @@
                   .Where(it => it.ProductId == productId)
                   .Select(it => Sql.Sum(it.Quantity))
                 ));
+        }
+
+        public List<InventoryTransaction> List(int skip = 0, int take = 25)
+        {
+            return Db.Select(
+                Db.From<InventoryTransaction>()
+                  .Skip(skip)
+                  .Take(take)
+                );
         }
     }
 }

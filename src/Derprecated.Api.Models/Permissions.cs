@@ -127,5 +127,10 @@
         ///     Can read all reports.
         /// </summary>
         public const string CanReadReports = "readReports";
+
+        /// <summary>
+        ///     Can read Inventory.
+        /// </summary>
+        public const string CanReadInventory = "readInventory";
     }
 }

@@ -1,9 +1,10 @@
 ﻿namespace Derprecated.Api.Handlers
 {
     using System;
+    using System.Collections.Generic;
     using System.Data;
-    using Api.Models;
-    using Api.Models.Routing;
+    using Models;
+    using Models.Routing;
     using ServiceStack;
     using ServiceStack.OrmLite;
 
@@ -40,7 +41,7 @@
         /// <exception cref="ArgumentOutOfRangeException">if the requested Quantity is negative.</exception>
         public void Receive(CreateInventoryTransaction request)
         {
-            Receive(request.ItemId, request.LocationId, request.Quantity);
+            Receive(request.ProductId, request.LocationId, request.Quantity);
         }
 
         public void Receive(int productId, int locationId, decimal quantity)
@@ -68,7 +69,7 @@
         ///     Move a quantity of inventory from one warehouse to another. Full or partial quantity acceptable.
         ///     Internally this is the same as calling Release(1) followed by Receive(1)
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="product"></param>
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <param name="quantity"></param>
@@ -84,11 +85,11 @@
         ///     - with the quantity being moved as an increment
         ///     - with the target Location
         /// </remarks>
-        public void Move(Product item, Location from, Location to, decimal quantity)
+        public void Move(Product product, Location from, Location to, decimal quantity)
         {
             var q = Math.Abs(quantity);
-            Release(item.Id, from.Id, -q);
-            Receive(item.Id, to.Id, q);
+            Release(product.Id, from.Id, -q);
+            Receive(product.Id, to.Id, q);
         }
 
         /// <summary>
@@ -99,7 +100,7 @@
         /// </remarks>
         public void Release(CreateInventoryTransaction request)
         {
-            Release(request.ItemId, request.LocationId, request.Quantity);
+            Release(request.ProductId, request.LocationId, request.Quantity);
         }
 
         public void Release(int productId, int locationId, decimal quantity)
@@ -137,6 +138,15 @@
                   .Where(it => it.ProductId == productId)
                   .Select(it => Sql.Sum(it.Quantity))
                 ));
+        }
+
+        public List<InventoryTransaction> List(int skip = 0, int take = 25)
+        {
+            return Db.Select(
+                Db.From<InventoryTransaction>()
+                  .Skip(skip)
+                  .Take(take)
+                );
         }
     }
 }

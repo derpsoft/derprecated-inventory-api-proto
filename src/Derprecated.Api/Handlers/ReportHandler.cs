@@ -20,7 +20,7 @@
         private IDbConnection Db { get; }
         private UserSession User { get; }
 
-        public Dictionary<DateTime, int> GetSalesByVendor(DateTime startDate, DateTime endDate, string groupBy,
+        public Dictionary<DateTime, decimal> GetSalesByVendor(DateTime startDate, DateTime endDate, string groupBy,
                                                           int vendorId)
         {
             if (startDate >= endDate)
@@ -32,11 +32,11 @@
                     $"must be one of {string.Join(", ", AcceptableGroupBy)}");
 
             return
-                Db.Dictionary<DateTime, int>(
+                Db.Dictionary<DateTime, decimal>(
                     $@"
                 SELECT 
                     CAST(MIN([Timestamp]) AS DATE)
-                    , SUM([Quantity])
+                    , SUM([Total])
                 FROM 
                     [Sale]
                 WHERE
@@ -54,7 +54,7 @@
         }
 
 
-        public Dictionary<DateTime, int> GetSalesByProduct(DateTime startDate, DateTime endDate, string groupBy,
+        public Dictionary<DateTime, decimal> GetSalesByProduct(DateTime startDate, DateTime endDate, string groupBy,
                                                            int productId)
         {
             if (startDate >= endDate)
@@ -66,11 +66,11 @@
                     $"must be one of {string.Join(", ", AcceptableGroupBy)}");
 
             return
-                Db.Dictionary<DateTime, int>(
+                Db.Dictionary<DateTime, decimal>(
                     $@"
                 SELECT 
                     CAST(MIN([Timestamp]) AS DATE)
-                    , SUM([Quantity])
+                    , SUM([Total])
                 FROM 
                     [Sale]
                 WHERE
@@ -87,7 +87,7 @@
                     });
         }
 
-        public Dictionary<DateTime, int> GetSalesByTotal(DateTime startDate, DateTime endDate, string groupBy)
+        public Dictionary<DateTime, decimal> GetSalesByTotal(DateTime startDate, DateTime endDate, string groupBy)
         {
             if (startDate >= endDate)
                 throw new ArgumentOutOfRangeException(nameof(startDate),
@@ -98,11 +98,11 @@
                     $"must be one of {string.Join(", ", AcceptableGroupBy)}");
 
             return
-                Db.Dictionary<DateTime, int>(
+                Db.Dictionary<DateTime, decimal>(
                     $@"
                 SELECT 
                     CAST(MIN([Timestamp]) AS DATE)
-                    , SUM([Quantity])
+                    , SUM([Total])
                 FROM 
                     [Sale]
                 WHERE

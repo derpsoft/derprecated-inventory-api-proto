@@ -11,7 +11,7 @@
     {
         public object Any(GetSalesByTotalReport request)
         {
-            var result = new ReportResponse<Dictionary<DateTime, int>>();
+            var result = new ReportResponse<Dictionary<DateTime, decimal>>();
             var handler = new ReportHandler(Db, CurrentSession);
 
             result.Report = handler.GetSalesByTotal(request.StartDate, request.EndDate, request.GroupBy);
@@ -21,7 +21,7 @@
 
         public object Any(GetSalesByProductReport request)
         {
-            var result = new ReportResponse<Dictionary<DateTime, int>>();
+            var result = new ReportResponse<Dictionary<DateTime, decimal>>();
             var handler = new ReportHandler(Db, CurrentSession);
 
             result.Report = handler.GetSalesByProduct(request.StartDate, request.EndDate, request.GroupBy,
@@ -32,7 +32,7 @@
 
         public object Any(GetSalesByVendorReport request)
         {
-            var result = new ReportResponse<Dictionary<DateTime, int>>();
+            var result = new ReportResponse<Dictionary<DateTime, decimal>>();
             var handler = new ReportHandler(Db, CurrentSession);
 
             result.Report = handler.GetSalesByVendor(request.StartDate, request.EndDate, request.GroupBy,

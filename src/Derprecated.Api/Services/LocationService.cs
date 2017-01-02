@@ -30,6 +30,16 @@
             return resp;
         }
 
+        public object Any(GetLocations request)
+        {
+            var resp = new LocationsResponse();
+            var handler = new LocationHandler(Db, CurrentSession);
+
+            resp.Locations = handler.List(request.Skip, request.Take).Map(Location.From);
+
+            return resp;
+        }
+
         public object Any(CreateLocation request)
         {
             var resp = new LocationResponse();

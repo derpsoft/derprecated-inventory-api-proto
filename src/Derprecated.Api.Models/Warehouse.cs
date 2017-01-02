@@ -12,6 +12,9 @@
         }
 
         public DateTime CreateDate { get; set; }
+
+        [PrimaryKey]
+        [AutoIncrement]
         public int Id { get; set; }
 
         [Reference]

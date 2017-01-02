@@ -99,12 +99,12 @@
         /// <param name="request"></param>
         /// <remarks>
         /// </remarks>
-        public void Release(CreateInventoryTransaction request)
+        public InventoryTransaction Release(CreateInventoryTransaction request)
         {
-            Release(request.ProductId, request.LocationId, request.Quantity);
+            return Release(request.ProductId, request.LocationId, request.Quantity);
         }
 
-        public void Release(int productId, int locationId, decimal quantity)
+        public InventoryTransaction Release(int productId, int locationId, decimal quantity)
         {
             productId.ThrowIfLessThan(1);
             locationId.ThrowIfLessThan(1);
@@ -123,7 +123,9 @@
             transaction.UserId = User.UserAuthId.ToInt();
             transaction.UnitOfMeasureId = 1;
 
-            Db.Insert(transaction);
+            Db.Save(transaction);
+
+            return transaction;
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 {
     using System;
     using Handlers;
+    using Models.Dto;
     using Models.Routing;
     using ServiceStack.Logging;
 
@@ -24,13 +25,13 @@
             if (request.Quantity == 0)
                 throw new ArgumentOutOfRangeException(nameof(request.Quantity));
 
-            var resp = new CreateInventoryTransactionResponse();
+            var resp = new InventoryTransactionResponse();
             var handler = new InventoryHandler(Db, CurrentSession);
 
             if (request.Quantity > 0)
                 handler.Receive(request);
             else
-                handler.Release(request);
+                resp.InventoryTransaction = InventoryTransaction.From(handler.Release(request));
 
             return resp;
         }

@@ -52,10 +52,10 @@
 
             var transaction = new InventoryTransaction();
             var product = new ProductHandler(Db, User).GetProduct(productId);
-            var location = new LocationHandler(Db, User).Get(locationId);
+            //var location = new LocationHandler(Db, User).Get(locationId);
 
             product.ThrowIfNull(nameof(product));
-            location.ThrowIfNull(nameof(location));
+            //location.ThrowIfNull(nameof(location));
 
             transaction.ProductId = product.Id;
             transaction.Quantity = quantity;
@@ -111,7 +111,10 @@
 
             var transaction = new InventoryTransaction();
             var product = new ProductHandler(Db, User).GetProduct(productId);
-            var location = new LocationHandler(Db, User).Get(locationId);
+            //var location = new LocationHandler(Db, User).Get(locationId);
+
+            product.ThrowIfNull(nameof(product));
+            //location.ThrowIfNull(nameof(location));
 
             transaction.ProductId = product.Id;
             transaction.Quantity = quantity;

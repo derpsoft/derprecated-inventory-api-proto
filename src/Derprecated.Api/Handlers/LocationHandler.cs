@@ -1,6 +1,7 @@
 ﻿namespace Derprecated.Api.Handlers
 {
     using System;
+    using System.Collections.Generic;
     using System.Data;
     using Models;
     using ServiceStack;
@@ -21,6 +22,15 @@
         {
             id.ThrowIfLessThan(1);
             return Db.SingleById<Location>(id);
+        }
+
+        public List<Location> List(int skip = 0, int take = 25)
+        {
+            return Db.Select(
+                Db.From<Location>()
+                  .Skip(skip)
+                  .Take(take)
+                );
         }
 
         public Location Save(Location location)

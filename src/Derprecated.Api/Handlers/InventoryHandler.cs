@@ -61,6 +61,7 @@
             transaction.Quantity = quantity;
             transaction.TransactionType = InventoryTransactionTypes.In;
             transaction.UserId = User.UserAuthId.ToInt();
+            transaction.UnitOfMeasureId = 1;
 
             Db.Save(transaction);
         }

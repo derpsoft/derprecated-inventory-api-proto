@@ -43,6 +43,7 @@
             var appSettings = container.Resolve<MultiAppSettings>();
             var configuration =
                 container.Resolve<Microsoft.Extensions.Options.IOptions<ApplicationConfiguration>>().Value;
+            container.Register(configuration);
 
             // DB
             container.Register<IDbConnectionFactory>(c =>

@@ -24,7 +24,7 @@
                 return res;
             }
 
-            var secret = Redis.Get<string>($"password:secret:{user.Email}");
+            var secret = Cache.Get<string>($"password:secret:{user.Email}");
             if (secret.IsNullOrEmpty() || !secret.Equals(request.Token))
             {
                 res.Success = false;
@@ -33,7 +33,7 @@
             }
 
             UserAuthRepository.UpdateUserAuth(user, user, request.Password);
-            Redis.Delete($"password:secret:{user.Email}");
+            Cache.Remove($"password:secret:{user.Email}");
 
             using (var service = ResolveService<AuthenticateService>())
             {
@@ -60,8 +60,7 @@
 
             var secret = Regex.Replace(SessionExtensions.CreateRandomBase62Id(32), @"[^\w\d]", "",
                 RegexOptions.IgnoreCase);
-            var link = new ResetPassword {Email = user.Email, Token = secret};
-
+            var link = $"{Configuration.Web.Domain}{Configuration.Web.PasswordResetLinkFormat.Fmt(user.Email, secret)}";
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress(Configuration.Mail.From));
             message.To.Add(new MailboxAddress(user.Email));
@@ -76,9 +75,7 @@
                         <p>
                             Click on the following link to reset your password:
                             <br/><br/>
-                            <a href=""{
-                                   link}"">{link
-                                   }</a>
+                            <a href=""{link}"">{link}</a>
                             <br/><br/>
                             This link will expire in 4 hours.
                         </p>
@@ -87,7 +84,7 @@
                 "
                            };
 
-            Redis.Set($"password:secret:{user.Email}", secret, Expiration);
+            Cache.Set($"password:secret:{user.Email}", secret, Expiration);
             SmtpClient.Send(message);
 
             res.Success = true;

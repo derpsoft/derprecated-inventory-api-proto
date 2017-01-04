@@ -7,5 +7,6 @@
         public Mail Mail { get; set; }
         public Storage Storage { get; set; }
         public Shopify Shopify { get; set; }
+        public Web Web { get; set; }
     }
 }

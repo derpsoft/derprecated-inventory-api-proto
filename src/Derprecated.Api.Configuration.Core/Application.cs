@@ -15,7 +15,6 @@
     using ServiceStack.Configuration;
     using ServiceStack.Data;
     using ServiceStack.OrmLite;
-    using ServiceStack.Redis;
     using ServiceStack.Text;
     using ServiceStack.Validation;
 
@@ -44,6 +43,7 @@
             var appSettings = container.Resolve<MultiAppSettings>();
             var configuration =
                 container.Resolve<Microsoft.Extensions.Options.IOptions<ApplicationConfiguration>>().Value;
+            container.Register(configuration);
 
             // DB
             container.Register<IDbConnectionFactory>(c =>
@@ -139,7 +139,7 @@
 #endif
 
             // Mail
-            container.Register(c =>
+            container.Register<MailKit.Net.Smtp.SmtpClient>(c =>
                                {
                                    var host = configuration.Mail.Host;
                                    var port = configuration.Mail.Port;
@@ -168,7 +168,7 @@
                         "http://inventory.derprecated.com",
                         "https://inventory.derprecated.com",
                         "http://inventory-web-pro.herokuapp.com",
-                        "https://inventory-web-pro.herokuapp.com",
+                        "https://inventory-web-pro.herokuapp.com"
                     },
                 maxAge: 3600));
             Plugins.Add(new RegistrationFeature());

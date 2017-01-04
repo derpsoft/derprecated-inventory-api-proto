@@ -4,6 +4,7 @@
     "CoreCompat.System.Drawing": "1.0.0-*",
     "Derprecated.Api.Models": "1.0.*",
     "MailKit": "1.10.*",
+    "MimeKit": "1.10.*",
     "NETStandard.Library": "1.6.1",
     "ServiceStack.Client.Core": "1.0.*",
     "ServiceStack.Common.Core": "1.0.*",

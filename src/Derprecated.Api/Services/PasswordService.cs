@@ -2,9 +2,9 @@
 {
     using System;
     using System.Text.RegularExpressions;
-    using Api.Models.Routing;
     using MailKit.Net.Smtp;
     using MimeKit;
+    using Models.Routing;
     using ServiceStack;
     using ServiceStack.Auth;
 
@@ -76,13 +76,16 @@
                         <p>
                             Click on the following link to reset your password:
                             <br/><br/>
-                            <a href=""{link}"">{link}</a>
+                            <a href=""{
+                                   link}"">{link
+                                   }</a>
                             <br/><br/>
                             This link will expire in 4 hours.
                         </p>
                     </body>
                 </html>
-                "};
+                "
+                           };
 
             Redis.Set($"password:secret:{user.Email}", secret, Expiration);
             SmtpClient.Send(message);

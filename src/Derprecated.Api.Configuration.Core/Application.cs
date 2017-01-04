@@ -164,7 +164,11 @@
                         "http://0.0.0.0:8080",
                         "http://0.0.0.0:3000",
                         "http://inventory-web-dev-wb45gu.herokuapp.com",
-                        "https://inventory-web-dev-wb45gu.herokuapp.com"
+                        "https://inventory-web-dev-wb45gu.herokuapp.com",
+                        "http://inventory.derprecated.com",
+                        "https://inventory.derprecated.com",
+                        "http://inventory-web-pro.herokuapp.com",
+                        "https://inventory-web-pro.herokuapp.com",
                     },
                 maxAge: 3600));
             Plugins.Add(new RegistrationFeature());

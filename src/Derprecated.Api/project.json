@@ -1,6 +1,5 @@
 {
   "version": "1.0.0-*",
-
   "dependencies": {
     "CoreCompat.System.Drawing": "1.0.0-*",
     "Derprecated.Api.Models": "1.0.*",
@@ -16,7 +15,6 @@
     "System.Linq.Parallel": "4.3.0",
     "WindowsAzure.Storage": "7.2.*"
   },
-
   "frameworks": {
     "netcoreapp1.0": {
       "imports": [
@@ -24,5 +22,8 @@
         "portable-net451+win8"
       ]
     }
+  },
+  "configurations": {
+    "Production": {}
   }
 }

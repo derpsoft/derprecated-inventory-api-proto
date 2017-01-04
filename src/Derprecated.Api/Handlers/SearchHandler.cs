@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Data;
     using Models;
-    using ServiceStack;
     using ServiceStack.Auth;
     using ServiceStack.OrmLite;
 
@@ -33,9 +32,8 @@
 
         public List<Product> ProductTypeahead(string q)
         {
-            return Db.Select(
+            return Db.LoadSelect(
                 Db.From<Product>()
-                  .Join<ProductImage>()
                   .Where(x => x.Title.Contains(q))
                   .Or(x => x.Sku.Contains(q))
                   .SelectDistinct()

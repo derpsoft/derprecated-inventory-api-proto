@@ -1,9 +1,8 @@
-﻿{
+{
   "version": "1.0.0-*",
   "buildOptions": {
     "emitEntryPoint": true
   },
-
   "dependencies": {
     "Microsoft.Extensions.Configuration": "1.1.*",
     "Microsoft.Extensions.Configuration.FileExtensions": "1.1.*",
@@ -21,10 +20,12 @@
     "ServiceStack.OrmLite.SqlServer.Core": "1.0.*",
     "Derprecated.Api.Models": "1.0.*",
   },
-
   "frameworks": {
     "netcoreapp1.0": {
       "imports": "dnxcore50"
     }
+  },
+  "configurations": {
+    "Production": {}
   }
 }

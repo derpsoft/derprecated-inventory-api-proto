@@ -1,6 +1,5 @@
 {
   "version": "1.1.0-*",
-
   "dependencies": {
     "NUnit": "3.5.*",
     "dotnet-test-nunit": "3.4.0-beta-*",
@@ -14,13 +13,10 @@
       "type": "platform"
     },
   },
-
   "testRunner": "nunit",
-
   "runtimes": {
     "win7-x64": {}
   },
-
   "frameworks": {
     "netcoreapp1.0": {
       "imports": [
@@ -30,5 +26,8 @@
       "dependencies": {
       }
     }
+  },
+  "configurations": {
+    "Production": {}
   }
 }

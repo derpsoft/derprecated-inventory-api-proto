@@ -1,6 +1,5 @@
 {
   "version": "1.0.0-*",
-
   "dependencies": {
     "ServiceStack.Core": "1.0.*",
     "ServiceStack.Redis.Core": "1.0.*",
@@ -19,7 +18,6 @@
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.*",
     "ServiceStack.Api.Swagger.Core": "1.0.*"
   },
-
   "frameworks": {
     "netcoreapp1.0": {
       "imports": [
@@ -27,5 +25,8 @@
         "portable-net451+win8"
       ]
     }
+  },
+  "configurations": {
+    "Production": {}
   }
 }

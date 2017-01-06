@@ -54,7 +54,7 @@
                 if (default(Product) == existing)
                     throw new ArgumentException("invalid Id for existing product", nameof(product));
 
-                product = existing.PopulateFromPropertiesWithAttribute(product, typeof(WhitelistAttribute));
+                product = existing.PopulateFromPropertiesWithAttribute(product, typeof (WhitelistAttribute));
             }
             Db.Save(product);
 

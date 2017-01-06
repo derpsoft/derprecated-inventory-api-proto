@@ -17,27 +17,27 @@ namespace Derprecated.Api.Models.Dto
 
         public List<Image> Images { get; set; }
         public decimal Price { get; set; }
+
+        public decimal QuantityOnHand { get; set; }
+
+        public long? ShopifyId { get; set; }
         public string Sku { get; set; }
         public string Tags { get; set; }
 
         public string Title { get; set; }
+        public string UnitOfMeasure { get; set; } = "each";
         public ulong Version { get; set; }
         public decimal Weight { get; set; }
         public string WeightUnit { get; set; }
 
-        public decimal QuantityOnHand { get; set; }
-        public string UnitOfMeasure { get; set; } = "each";
-
-        public long? ShopifyId { get; set; }
-
         public static Product From(Models.Product source)
         {
             var product = new Product
-                          {
-                              Id = source.Id,
-                              Version = source.RowVersion,
-                              Images = source.Images.Map(Image.From)
-                          }.PopulateFromPropertiesWithAttribute(source, typeof (WhitelistAttribute));
+            {
+                Id = source.Id,
+                Version = source.RowVersion,
+                Images = source.Images.Map(Image.From)
+            }.PopulateFromPropertiesWithAttribute(source, typeof (WhitelistAttribute));
 
             return product;
         }

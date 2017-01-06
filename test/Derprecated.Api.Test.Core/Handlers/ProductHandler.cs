@@ -119,10 +119,10 @@
             var handler = Host.Resolve<Api.Handlers.ProductHandler>();
             Models.Product result = null;
             var newProduct = new Models.Product
-                             {
-                                 Title = "New product from test",
-                                 Description = "New product from test description"
-                             };
+            {
+                Title = "New product from test",
+                Description = "New product from test description"
+            };
 
             Assert.DoesNotThrow(() => newProduct = handler.Save(newProduct));
             Assert.GreaterOrEqual(newProduct.Id, 1);

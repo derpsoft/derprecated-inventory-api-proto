@@ -21,7 +21,7 @@
         private UserSession User { get; }
 
         public Dictionary<DateTime, decimal> GetSalesByVendor(DateTime startDate, DateTime endDate, string groupBy,
-                                                          int vendorId)
+                                                              int vendorId)
         {
             if (startDate >= endDate)
                 throw new ArgumentOutOfRangeException(nameof(startDate),
@@ -55,7 +55,7 @@
 
 
         public Dictionary<DateTime, decimal> GetSalesByProduct(DateTime startDate, DateTime endDate, string groupBy,
-                                                           int productId)
+                                                               int productId)
         {
             if (startDate >= endDate)
                 throw new ArgumentOutOfRangeException(nameof(startDate),

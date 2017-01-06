@@ -1,6 +1,6 @@
 ﻿namespace Derprecated.Api.Services
 {
-    using Api.Models.Routing;
+    using Models.Routing;
     using ServiceStack.Logging;
 
     public class StatusService : BaseService

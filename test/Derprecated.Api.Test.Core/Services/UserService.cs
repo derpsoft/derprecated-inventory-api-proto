@@ -6,7 +6,6 @@
     using Models.Test;
     using NUnit.Framework;
     using ServiceStack;
-    using Assert = NUnit.Framework.Assert;
 
     [TestFixture(
         Description =

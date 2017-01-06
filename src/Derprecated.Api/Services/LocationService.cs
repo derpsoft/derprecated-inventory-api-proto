@@ -56,9 +56,9 @@
             var resp = new LocationResponse();
             var handler = new LocationHandler(Db, CurrentSession);
             var update = handler.Save(new Models.Location
-                                      {
-                                          Id = request.Id
-                                      }.PopulateWith(request.Location));
+            {
+                Id = request.Id
+            }.PopulateWith(request.Location));
 
             resp.Location = Location.From(update);
 

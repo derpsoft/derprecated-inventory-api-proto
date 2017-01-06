@@ -117,11 +117,11 @@ namespace Derprecated.Api.Services
             {
                 Request.RemoveSession();
                 return service.Authenticate(new Authenticate
-                                            {
-                                                provider = AuthenticateService.CredentialsProvider,
-                                                UserName = request.Email,
-                                                Password = request.Password
-                                            });
+                {
+                    provider = AuthenticateService.CredentialsProvider,
+                    UserName = request.Email,
+                    Password = request.Password
+                });
             }
         }
 

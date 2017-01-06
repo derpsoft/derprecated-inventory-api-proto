@@ -20,7 +20,7 @@
 
         public Vendor GetVendor(int id)
         {
-            id.ThrowIfGreaterThan(1);
+            id.ThrowIfLessThan(1);
 
             return Db.SingleById<Vendor>(id);
         }

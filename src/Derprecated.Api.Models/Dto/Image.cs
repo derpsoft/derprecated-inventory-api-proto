@@ -15,11 +15,11 @@
         public static Image From(ProductImage source)
         {
             return new Image
-                   {
-                       Id = source.Id,
-                       Version = source.RowVersion,
-                       Source = source.SourceUrl
-                   };
+            {
+                Id = source.Id,
+                Version = source.RowVersion,
+                Source = source.SourceUrl
+            };
         }
     }
 }

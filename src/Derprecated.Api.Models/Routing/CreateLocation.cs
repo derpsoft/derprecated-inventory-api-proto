@@ -1,5 +1,6 @@
 ﻿namespace Derprecated.Api.Models.Routing
 {
+    using Dto;
     using ServiceStack;
 
     [Route("/api/v1/locations", "POST")]
@@ -7,6 +8,6 @@
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageLocations, Permissions.CanUpsertLocations)]
     public class CreateLocation : IReturn<LocationResponse>
     {
-        public Dto.Location Location { get; set; }
+        public Location Location { get; set; }
     }
 }

@@ -82,8 +82,9 @@
             Uri result;
             var container = Client.GetContainerReference(Container);
 
-            container.CreateIfNotExistsAsync(BlobContainerPublicAccessType.Container, new BlobRequestOptions(), new OperationContext())
-                .Wait();
+            container.CreateIfNotExistsAsync(BlobContainerPublicAccessType.Container, new BlobRequestOptions(),
+                new OperationContext())
+                     .Wait();
             result = Upload(container, source.InputStream).Uri;
 
             return result;

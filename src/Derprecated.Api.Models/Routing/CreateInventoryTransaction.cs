@@ -10,8 +10,8 @@
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageInventory, Permissions.CanUpsertInventory)]
     public class CreateInventoryTransaction : IReturn<CreateInventoryTransactionResponse>
     {
-        public int ProductId { get; set; }
         public int LocationId { get; set; }
+        public int ProductId { get; set; }
         public decimal Quantity { get; set; }
     }
 }

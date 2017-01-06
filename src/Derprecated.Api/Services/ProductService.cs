@@ -81,17 +81,17 @@
             else
             {
                 shopifyProduct.Variants = new List<Variant>
-                                          {
-                                              new Variant
-                                              {
-                                                  Option1 = product.Color,
-                                                  Barcode = product.Barcode,
-                                                  Sku = product.Sku,
-                                                  Price = product.Price.ToString(CultureInfo.InvariantCulture),
-                                                  Weight = product.Weight,
-                                                  WeightUnit = product.WeightUnit
-                                              }
-                                          };
+                {
+                    new Variant
+                    {
+                        Option1 = product.Color,
+                        Barcode = product.Barcode,
+                        Sku = product.Sku,
+                        Price = product.Price.ToString(CultureInfo.InvariantCulture),
+                        Weight = product.Weight,
+                        WeightUnit = product.WeightUnit
+                    }
+                };
                 shopifyProduct = shopifyHandler.Create(shopifyProduct);
                 // ReSharper disable once PossibleInvalidOperationException
                 productHandler.SetShopifyId(product.Id, shopifyProduct.Id.Value);
@@ -131,11 +131,11 @@
 
             var products = productHandler.List(request.Skip, request.Take);
             resp.Products = products.Map(product =>
-                                         {
-                                             var p = Product.From(product);
-                                             p.QuantityOnHand = inventoryHandler.GetQuantityOnHand(p.Id);
-                                             return p;
-                                         });
+            {
+                var p = Product.From(product);
+                p.QuantityOnHand = inventoryHandler.GetQuantityOnHand(p.Id);
+                return p;
+            });
             resp.Count = productHandler.Count();
 
             return resp;

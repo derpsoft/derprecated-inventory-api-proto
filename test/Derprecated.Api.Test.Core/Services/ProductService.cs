@@ -7,7 +7,6 @@
     using NUnit.Framework;
     using ServiceStack;
     using ServiceStack.OrmLite;
-    using Assert = NUnit.Framework.Assert;
 
     [TestFixture(
         Description =
@@ -28,25 +27,44 @@
         [TestOf(typeof (Api.Services.ProductService))]
         [Author(Constants.Authors.James)]
         [Category(Constants.Categories.Integration)]
+        public void DeleteProduct_HappyPath_Deletes()
+        {
+        }
+
+        [Test]
+        [TestOf(typeof (Api.Services.ProductService))]
+        [Author(Constants.Authors.James)]
+        [Category(Constants.Categories.Integration)]
+        public void DeleteProduct_RequiresAuth()
+        {
+            var client = new JsonServiceClient(TestAppHost.BaseUri);
+            var exception = Assert.Throws<WebServiceException>(() => client.Delete(new DeleteProduct {Id = 10000}));
+            Assert.AreEqual(401, exception.StatusCode);
+        }
+
+        [Test]
+        [TestOf(typeof (Api.Services.ProductService))]
+        [Author(Constants.Authors.James)]
+        [Category(Constants.Categories.Integration)]
         public void Product_HappyPath_CanCRUD()
         {
             SaveProductResponse resp = null;
             var client = new JsonServiceClient(TestAppHost.BaseUri);
 
             var newProduct = new Product
-                             {
-                                 Title = "Happy path test product",
-                                 Description = "Happy path test product",
-                                 Tags = "test",
-                                 Price = 1000000000000m,
-                                 Sku = "TEST",
-                                 Grams = 1,
-                                 Barcode = "TEST",
-                                 Weight = 1m,
-                                 WeightUnit = "kg",
-                                 Color = "Pink",
-                                 Vendor = Constants.Vendors.JlcConcept
-                             };
+            {
+                Title = "Happy path test product",
+                Description = "Happy path test product",
+                Tags = "test",
+                Price = 1000000000000m,
+                Sku = "TEST",
+                Grams = 1,
+                Barcode = "TEST",
+                Weight = 1m,
+                WeightUnit = "kg",
+                Color = "Pink",
+                Vendor = Constants.Vendors.JlcConcept
+            };
 
             var login = client.Post(Constants.TestAdminAuthenticate);
 
@@ -74,25 +92,6 @@
         [TestOf(typeof (Api.Services.ProductService))]
         [Author(Constants.Authors.James)]
         [Category(Constants.Categories.Integration)]
-        public void DeleteProduct_HappyPath_Deletes()
-        {
-        }
-
-        [Test]
-        [TestOf(typeof (Api.Services.ProductService))]
-        [Author(Constants.Authors.James)]
-        [Category(Constants.Categories.Integration)]
-        public void DeleteProduct_RequiresAuth()
-        {
-            var client = new JsonServiceClient(TestAppHost.BaseUri);
-            var exception = Assert.Throws<WebServiceException>(() => client.Delete(new DeleteProduct {Id = 10000}));
-            Assert.AreEqual(401, exception.StatusCode);
-        }
-
-        [Test]
-        [TestOf(typeof (Api.Services.ProductService))]
-        [Author(Constants.Authors.James)]
-        [Category(Constants.Categories.Integration)]
         public void SaveProduct_RequiresAuth()
         {
             var client = new JsonServiceClient(TestAppHost.BaseUri);
@@ -101,7 +100,7 @@
         }
 
         [Test]
-        [TestOf(typeof(Api.Services.ProductService))]
+        [TestOf(typeof (Api.Services.ProductService))]
         [Author(Constants.Authors.James)]
         [Category(Constants.Categories.Integration)]
         public void SaveProduct_RequiresRole()

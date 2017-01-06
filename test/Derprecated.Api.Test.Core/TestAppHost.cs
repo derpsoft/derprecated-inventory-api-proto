@@ -12,7 +12,6 @@
     using ServiceStack.Configuration;
     using ServiceStack.Data;
     using ServiceStack.OrmLite;
-    using ServiceStack.Testing;
     using ServiceStack.Text;
     using ServiceStack.Validation;
 
@@ -80,33 +79,33 @@
 
             // Db filters
             OrmLiteConfig.InsertFilter = (dbCmd, row) =>
-                                         {
-                                             if (row is IAuditable)
-                                             {
-                                                 var auditRow = row as IAuditable;
-                                                 auditRow.CreateDate = auditRow.ModifyDate = DateTime.UtcNow;
-                                             }
+            {
+                if (row is IAuditable)
+                {
+                    var auditRow = row as IAuditable;
+                    auditRow.CreateDate = auditRow.ModifyDate = DateTime.UtcNow;
+                }
 
-                                             if (row is Product)
-                                             {
-                                                 var product = row as Product;
-                                                 product.OnInsert();
-                                             }
-                                         };
+                if (row is Product)
+                {
+                    var product = row as Product;
+                    product.OnInsert();
+                }
+            };
             OrmLiteConfig.UpdateFilter = (dbCmd, row) =>
-                                         {
-                                             if (row is IAuditable)
-                                             {
-                                                 var auditRow = row as IAuditable;
-                                                 auditRow.ModifyDate = DateTime.UtcNow;
-                                             }
+            {
+                if (row is IAuditable)
+                {
+                    var auditRow = row as IAuditable;
+                    auditRow.ModifyDate = DateTime.UtcNow;
+                }
 
-                                             if (row is Product)
-                                             {
-                                                 var product = row as Product;
-                                                 product.OnUpdate();
-                                             }
-                                         };
+                if (row is Product)
+                {
+                    var product = row as Product;
+                    product.OnUpdate();
+                }
+            };
 
             // Schema init
             using (var ctx = container.Resolve<IDbConnectionFactory>().Open())
@@ -150,16 +149,16 @@
 
             var userRepo = container.Resolve<IUserAuthRepository>();
             var testUser = (IUserAuth) new UserAuth
-                                       {
-                                           Email = Constants.TestAuthenticate.UserName,
-                                           Roles = new List<string>(new[] {Roles.User})
-                                       };
+            {
+                Email = Constants.TestAuthenticate.UserName,
+                Roles = new List<string>(new[] {Roles.User})
+            };
             var testAdminUser = (IUserAuth) new UserAuth
-                                            {
-                                                Email = Constants.TestAdminAuthenticate.UserName,
-                                                Roles = new List<string>(new[] {Roles.Admin}),
-                                                Permissions = new List<string>(new[] {Permissions.CanDoEverything})
-                                            };
+            {
+                Email = Constants.TestAdminAuthenticate.UserName,
+                Roles = new List<string>(new[] {Roles.Admin}),
+                Permissions = new List<string>(new[] {Permissions.CanDoEverything})
+            };
 
             if (null == userRepo.GetUserAuthByUserName(testUser.Email))
                 userRepo.CreateUserAuth(testUser, Constants.TestAuthenticate.Password);
@@ -168,10 +167,10 @@
 
             // Misc
             container.Register(new ShopifyServiceClient($"https://{appSettings.Get("shopify.store.domain")}")
-                               {
-                                   UserName = appSettings.Get("shopify.api.key"),
-                                   Password = appSettings.Get("shopify.api.password")
-                               });
+            {
+                UserName = appSettings.Get("shopify.api.key"),
+                Password = appSettings.Get("shopify.api.password")
+            });
         }
     }
 }

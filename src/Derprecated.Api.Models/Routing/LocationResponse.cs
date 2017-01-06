@@ -5,7 +5,7 @@
 
     public class LocationResponse
     {
-        public ResponseStatus ResponseStatus { get; set; }
         public Location Location { get; set; }
+        public ResponseStatus ResponseStatus { get; set; }
     }
 }

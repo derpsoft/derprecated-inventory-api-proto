@@ -57,5 +57,14 @@
                   .SelectDistinct()
                 );
         }
+
+        public List<Category> CategoryTypeahead(string q)
+        {
+            return Db.Select(
+                Db.From<Category>()
+                    .Where(x => x.Name.Contains(q))
+                    .SelectDistinct()
+                );
+        }
     }
 }

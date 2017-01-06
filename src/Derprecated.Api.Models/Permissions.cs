@@ -3,6 +3,26 @@
     public static class Permissions
     {
         /// <summary>
+        ///     Delete categories.
+        /// </summary>
+        public const string CanDeleteCategories = "deleteCategories";
+
+        /// <summary>
+        ///     All category permissions.
+        /// </summary>
+        public const string CanManageCategories = "manageCategories";
+
+        /// <summary>
+        ///     Write categories.
+        /// </summary>
+        public const string CanUpsertCategories = "upsertCategories";
+
+        /// <summary>
+        ///     Read categories.
+        /// </summary>
+        public const string CanReadCategories = "readCategories";
+
+        /// <summary>
         ///     Upsert Inventory.
         /// </summary>
         public const string CanUpsertInventory = "upsertInventory";

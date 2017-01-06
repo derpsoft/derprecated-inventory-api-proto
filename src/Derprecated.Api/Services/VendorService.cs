@@ -1,5 +1,6 @@
 ﻿namespace Derprecated.Api.Services
 {
+    using System.Collections.Generic;
     using Handlers;
     using Models.Dto;
     using Models.Routing;
@@ -10,54 +11,43 @@
     {
         protected static ILog Log = LogManager.GetLogger(typeof (VendorService));
 
-        public object Any(CountVendors request)
+        public object Any(VendorCount request)
         {
-            var resp = new CountResponse();
+            var resp = new Dto<long>();
             var handler = new VendorHandler(Db, CurrentSession);
 
-            resp.Count = handler.Count();
+            resp.Result = handler.Count();
 
             return resp;
         }
 
-        public object Any(GetVendor request)
+        public object Get(Vendor request)
         {
-            var resp = new VendorResponse();
+            var resp = new Dto<Vendor>();
             var handler = new VendorHandler(Db, CurrentSession);
 
-            resp.Vendor = Vendor.From(handler.GetVendor(request.Id));
+            resp.Result = Vendor.From(handler.GetVendor(request.Id));
 
             return resp;
         }
 
-        public object Any(GetVendors request)
+        public object Any(Vendor request)
         {
-            var resp = new VendorsResponse();
-            var handler = new VendorHandler(Db, CurrentSession);
-
-            resp.Vendors = handler.List(request.Skip, request.Take).Map(Vendor.From);
-
-            return resp;
-        }
-
-        public object Any(CreateVendor request)
-        {
-            var resp = new VendorResponse();
+            var resp = new Dto<Vendor>();
             var handler = new VendorHandler(Db, CurrentSession);
             var vendor = new Models.Vendor().PopulateWith(request);
 
-            resp.Vendor = Vendor.From(handler.Save(vendor));
+            resp.Result = Vendor.From(handler.Save(vendor));
 
             return resp;
         }
 
-        public object Any(UpdateVendor request)
+        public object Get(Vendors request)
         {
-            var resp = new VendorResponse();
+            var resp = new Dto<List<Vendor>>();
             var handler = new VendorHandler(Db, CurrentSession);
-            var update = new Models.Vendor().PopulateWith(request);
 
-            resp.Vendor = Vendor.From(handler.Save(update));
+            resp.Result = handler.List(request.Skip, request.Take).Map(Vendor.From);
 
             return resp;
         }

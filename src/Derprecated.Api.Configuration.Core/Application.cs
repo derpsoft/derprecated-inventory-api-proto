@@ -123,6 +123,8 @@
                 ctx.CreateTableIfNotExists<Sale>();
                 ctx.CreateTableIfNotExists<Warehouse>();
                 ctx.CreateTableIfNotExists<Location>();
+                ctx.CreateTableIfNotExists<Category>();
+                ctx.CreateTableIfNotExists<ProductCategory>();
             }
 #if DEBUG
             var testUser = new UserAuth

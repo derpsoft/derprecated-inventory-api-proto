@@ -17,6 +17,9 @@
         [EqualityCheck]
         public string Barcode { get; set; }
 
+        [Reference]
+        public List<Category> Categories { get; set; }
+
         [Whitelist]
         [EqualityCheck]
         public string Color { get; set; }

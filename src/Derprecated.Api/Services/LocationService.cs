@@ -1,5 +1,7 @@
 ﻿namespace Derprecated.Api.Services
 {
+    using System;
+    using System.Collections.Generic;
     using Handlers;
     using Models.Dto;
     using Models.Routing;
@@ -10,7 +12,7 @@
     {
         protected static ILog Log = LogManager.GetLogger(typeof (LocationService));
 
-        public object Any(CountLocations request)
+        public object Any(LocationCount request)
         {
             var resp = new CountResponse();
             var handler = new LocationHandler(Db, CurrentSession);
@@ -20,48 +22,42 @@
             return resp;
         }
 
-        public object Any(GetLocation request)
+        public object Get(Location request)
         {
-            var resp = new LocationResponse();
+            var resp = new Dto<Location>();
             var handler = new LocationHandler(Db, CurrentSession);
 
-            resp.Location = Location.From(handler.Get(request.Id));
+            resp.Result = Location.From(handler.Get(request.Id));
 
             return resp;
         }
 
-        public object Any(GetLocations request)
+        public object Delete(Location request)
         {
-            var resp = new LocationsResponse();
+            throw new NotImplementedException();
+            var resp = new Dto<bool>();
             var handler = new LocationHandler(Db, CurrentSession);
-
-            resp.Locations = handler.List(request.Skip, request.Take).Map(Location.From);
 
             return resp;
         }
 
-        public object Any(CreateLocation request)
+        public object Any(Location request)
         {
-            var resp = new LocationResponse();
+            var resp = new Dto<Location>();
             var handler = new LocationHandler(Db, CurrentSession);
-            var newLocation = handler.Save(new Models.Location().PopulateWith(request.Location));
+            var newLocation = handler.Save(new Models.Location().PopulateWith(request));
 
-            resp.Location = Location.From(newLocation);
+            resp.Result = Location.From(newLocation);
 
             return resp;
         }
 
-        public object Any(UpdateLocation request)
+        public object Get(Locations request)
         {
-            var resp = new LocationResponse();
+            var resp = new Dto<List<Location>>();
             var handler = new LocationHandler(Db, CurrentSession);
-            var update = handler.Save(new Models.Location
-            {
-                Id = request.Id
-            }.PopulateWith(request.Location));
 
-            resp.Location = Location.From(update);
-
+            resp.Result = handler.List(request.Skip, request.Take).Map(Location.From);
 
             return resp;
         }

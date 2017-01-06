@@ -4,8 +4,8 @@
     using ServiceStack;
     using ServiceStack.DataAnnotations;
 
-    [Route("/api/v1/vendors", "PUT, POST, PATCH")]
-    [Route("/api/v1/vendors/{Id}", "GET, DELETE")]
+    [Route("/api/v1/vendors", "POST")]
+    [Route("/api/v1/vendors/{Id}", "GET, DELETE, PATCH, PUT")]
     [Authenticate]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageVendors,
         Permissions.CanReadVendors)]

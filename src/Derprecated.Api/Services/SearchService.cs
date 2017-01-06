@@ -1,5 +1,6 @@
 ﻿namespace Derprecated.Api.Services
 {
+    using System.Collections.Generic;
     using Handlers;
     using Models.Dto;
     using Models.Routing;
@@ -37,14 +38,14 @@
 
         public object Any(VendorTypeahead request)
         {
-            var resp = new VendorsResponse();
+            var resp = new Dto<List<Vendor>>();
             var vendorHandler = new VendorHandler(Db, CurrentSession);
             var searchHandler = new SearchHandler(Db, CurrentSession);
 
             if (request.Query.IsNullOrEmpty())
-                resp.Vendors = vendorHandler.List(0, int.MaxValue).Map(Vendor.From);
+                resp.Result = vendorHandler.List(0, int.MaxValue).Map(Vendor.From);
             else
-                resp.Vendors = searchHandler.VendorTypeahead(request.Query).Map(Vendor.From);
+                resp.Result = searchHandler.VendorTypeahead(request.Query).Map(Vendor.From);
 
             return resp;
         }

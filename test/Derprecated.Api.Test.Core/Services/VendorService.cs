@@ -1,12 +1,13 @@
 ﻿namespace Derprecated.Api.Test.Core.Services
 {
     using System.Data;
-    using Models;
+    using Models.Dto;
     using Models.Routing;
     using Models.Test;
     using NUnit.Framework;
     using ServiceStack;
     using ServiceStack.OrmLite;
+    using Vendor = Models.Vendor;
 
     [TestFixture(
         Description =
@@ -34,31 +35,31 @@
         [Category(Constants.Categories.Integration)]
         public void Vendor_HappyPath_CanCRUD()
         {
-            VendorResponse resp = null;
+            Dto<Models.Dto.Vendor> resp = null;
             var client = new JsonServiceClient(TestAppHost.BaseUri);
             var login = client.Post(Constants.TestAdminAuthenticate);
 
             client.SessionId = login.SessionId;
 
             Assert.DoesNotThrow(
-                () => resp = client.Post(new CreateVendor {Vendor = new Vendor {Name = Constants.Vendors.JlcConcept}}));
+                () => resp = client.Post(new Models.Dto.Vendor {Name = Constants.Vendors.JlcConcept}));
             Assert.NotNull(resp);
-            Assert.NotNull(resp.Vendor);
-            Assert.AreEqual(resp.Vendor.Name, Constants.Vendors.JlcConcept);
+            Assert.NotNull(resp.Result);
+            Assert.AreEqual(resp.Result.Name, Constants.Vendors.JlcConcept);
 
             Vendor stored = null;
             using (var db = Host.Container.Resolve<IDbConnection>())
             {
                 Assert.DoesNotThrow(() => stored = db.Single(db.From<Vendor>()
-                                                               .Where(x => x.Id == resp.Vendor.Id)));
+                                                               .Where(x => x.Id == resp.Result.Id)));
             }
 
             resp = null;
-            Assert.DoesNotThrow(() => resp = client.Get(new GetVendor {Id = 1}));
+            Assert.DoesNotThrow(() => resp = client.Get(new Models.Dto.Vendor {Id = 1}));
             Assert.NotNull(resp);
-            Assert.NotNull(resp.Vendor);
-            Assert.GreaterOrEqual(resp.Vendor.Id, 1);
-            Assert.AreEqual(resp.Vendor.Name, Constants.Vendors.JlcConcept);
+            Assert.NotNull(resp.Result);
+            Assert.GreaterOrEqual(resp.Result.Id, 1);
+            Assert.AreEqual(resp.Result.Name, Constants.Vendors.JlcConcept);
         }
     }
 }

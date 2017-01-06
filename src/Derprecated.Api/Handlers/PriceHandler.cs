@@ -2,7 +2,7 @@
 {
     using System.Data;
     using System.Linq;
-    using Api.Models;
+    using Models;
     using ServiceStack;
     using ServiceStack.OrmLite;
 

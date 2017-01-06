@@ -38,11 +38,11 @@
             using (var service = ResolveService<AuthenticateService>())
             {
                 return service.Authenticate(new Authenticate
-                                            {
-                                                provider = AuthenticateService.CredentialsProvider,
-                                                UserName = user.Email,
-                                                Password = request.Password
-                                            });
+                {
+                    provider = AuthenticateService.CredentialsProvider,
+                    UserName = user.Email,
+                    Password = request.Password
+                });
             }
         }
 
@@ -66,23 +66,25 @@
             message.To.Add(new MailboxAddress(user.Email));
             message.Subject = "[Derprecated] Password Reset";
             message.Body = new TextPart("html")
-                           {
-                               Text =
-                                   $@"
+            {
+                Text =
+                    $@"
                 <html>
                     <head></head>
                     <body>
                         <p>
                             Click on the following link to reset your password:
                             <br/><br/>
-                            <a href=""{link}"">{link}</a>
+                            <a href=""{
+                        link}"">{link
+                        }</a>
                             <br/><br/>
                             This link will expire in 4 hours.
                         </p>
                     </body>
                 </html>
                 "
-                           };
+            };
 
             Cache.Set($"password:secret:{user.Email}", secret, Expiration);
             SmtpClient.Send(message);

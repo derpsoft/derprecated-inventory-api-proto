@@ -53,13 +53,13 @@
         public static Product From(Models.Product source)
         {
             var product = new Product
-                          {
-                              Id = source.ShopifyId,
-                              Title = source.Title,
-                              BodyHtml = source.Description,
-                              Vendor = source.Vendor,
-                              Tags = source.Tags
-                          };
+            {
+                Id = source.ShopifyId,
+                Title = source.Title,
+                BodyHtml = source.Description,
+                Vendor = source.Vendor,
+                Tags = source.Tags
+            };
 
             return product;
         }

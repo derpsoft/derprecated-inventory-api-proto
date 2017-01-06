@@ -4,7 +4,7 @@
 
     public class CountResponse
     {
-        public ResponseStatus ResponseStatus { get; set; }
         public long Count { get; set; }
+        public ResponseStatus ResponseStatus { get; set; }
     }
 }

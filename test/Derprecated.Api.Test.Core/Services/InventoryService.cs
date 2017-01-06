@@ -9,7 +9,6 @@
     using ServiceStack;
     using ServiceStack.Auth;
     using ServiceStack.OrmLite;
-    using Assert = NUnit.Framework.Assert;
 
     [TestFixture(
         Description =
@@ -34,7 +33,7 @@
         }
 
         [Test]
-        [TestOf(typeof(Api.Services.InventoryService))]
+        [TestOf(typeof (Api.Services.InventoryService))]
         [Author(Constants.Authors.James)]
         [Category(Constants.Categories.Integration)]
         public void Receive_RequiresAuth()
@@ -56,11 +55,11 @@
             var quant = rng.Next(10) + 1;
             var client = new JsonServiceClient(TestAppHost.BaseUri);
             var xact = new CreateInventoryTransaction
-                       {
-                           ProductId = productId,
-                           LocationId = locationId,
-                           Quantity = quant
-                       };
+            {
+                ProductId = productId,
+                LocationId = locationId,
+                Quantity = quant
+            };
             var count = new GetProductQuantityOnHand {Id = xact.ProductId};
 
             var login = client.Post(new Authenticate

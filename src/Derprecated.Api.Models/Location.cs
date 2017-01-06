@@ -13,7 +13,7 @@
         public ulong RowVersion { get; set; }
         public string Shelf { get; set; }
 
-        [ForeignKey(typeof(Warehouse), OnDelete = "CASCADE", OnUpdate = "CASCADE")]
+        [ForeignKey(typeof (Warehouse), OnDelete = "CASCADE", OnUpdate = "CASCADE")]
         public int WarehouseId { get; set; }
     }
 }

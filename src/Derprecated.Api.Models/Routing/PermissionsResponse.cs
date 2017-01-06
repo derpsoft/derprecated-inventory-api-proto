@@ -5,7 +5,7 @@
 
     public class PermissionsResponse
     {
-        public ResponseStatus ResponseStatus { get; set; }
         public List<string> Permissions { get; set; }
+        public ResponseStatus ResponseStatus { get; set; }
     }
 }

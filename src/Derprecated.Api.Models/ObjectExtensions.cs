@@ -15,10 +15,10 @@
             return source.GetType().GetPublicProperties()
                          .Where(x => x.GetCustomAttributes<TA>().Any())
                          .ToDictionary(x =>
-                                       {
-                                           var v = x.GetProperty(source);
-                                           return new KeyValuePair<string, object>(x.Name, v);
-                                       });
+                         {
+                             var v = x.GetProperty(source);
+                             return new KeyValuePair<string, object>(x.Name, v);
+                         });
         }
 
         public static bool DeepEquals<T>(this T source, T compare)

@@ -7,7 +7,6 @@
     using NUnit.Framework;
     using ServiceStack;
     using ServiceStack.OrmLite;
-    using Assert = NUnit.Framework.Assert;
 
     [TestFixture(
         Description =

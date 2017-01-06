@@ -45,9 +45,9 @@
             var resp = new WarehouseResponse();
             var handler = new WarehouseHandler(Db, CurrentSession);
             var newWarehouse = handler.Save(new Models.Warehouse
-                                            {
-                                                Name = request.Warehouse.Name
-                                            });
+            {
+                Name = request.Warehouse.Name
+            });
 
             resp.Warehouse = Warehouse.From(newWarehouse);
 
@@ -59,9 +59,9 @@
             var resp = new WarehouseResponse();
             var handler = new WarehouseHandler(Db, CurrentSession);
             var update = handler.Save(new Models.Warehouse
-                                      {
-                                          Id = request.Id
-                                      }.PopulateWith(request.Warehouse));
+            {
+                Id = request.Id
+            }.PopulateWith(request.Warehouse));
 
             resp.Warehouse = Warehouse.From(update);
 

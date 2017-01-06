@@ -13,9 +13,9 @@
         public DateTime EndDate { get; set; } = DateTime.Now.AddDays(1);
         public string GroupBy { get; set; } = DateSegments.Day;
 
+        public DateTime StartDate { get; set; } = DateTime.Now.AddDays(-7);
+
         [Required]
         public int VendorId { get; set; }
-
-        public DateTime StartDate { get; set; } = DateTime.Now.AddDays(-7);
     }
 }

@@ -7,29 +7,29 @@
     public static class Constants
     {
         public static readonly UserSession TestUserSession = new UserSession
-                                                             {
-                                                                 Email = "test@derprecated.com",
-                                                                 CreatedAt = DateTime.Now.AddDays(-1),
-                                                                 UserName = "unitTester",
-                                                                 FullName = "Unit Test Robot",
-                                                                 Id = SessionExtensions.CreateRandomSessionId(),
-                                                                 UserAuthId = "1"
-                                                             };
+        {
+            Email = "test@derprecated.com",
+            CreatedAt = DateTime.Now.AddDays(-1),
+            UserName = "unitTester",
+            FullName = "Unit Test Robot",
+            Id = SessionExtensions.CreateRandomSessionId(),
+            UserAuthId = "1"
+        };
 
         public static readonly Authenticate TestAdminAuthenticate = new Authenticate
-                                                                    {
-                                                                        provider =
-                                                                            AuthenticateService.CredentialsProvider,
-                                                                        UserName = "admin@derprecated.com",
-                                                                        Password = "123456"
-                                                                    };
+        {
+            provider =
+                AuthenticateService.CredentialsProvider,
+            UserName = "admin@derprecated.com",
+            Password = "123456"
+        };
 
         public static readonly Authenticate TestAuthenticate = new Authenticate
-                                                               {
-                                                                   provider = AuthenticateService.CredentialsProvider,
-                                                                   UserName = "test@derprecated.com",
-                                                                   Password = "123456"
-                                                               };
+        {
+            provider = AuthenticateService.CredentialsProvider,
+            UserName = "test@derprecated.com",
+            Password = "123456"
+        };
 
         public static class Categories
         {

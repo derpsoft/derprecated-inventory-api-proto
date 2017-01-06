@@ -9,9 +9,9 @@
         public static ServiceStack From(IConfigurationSection config)
         {
             return new ServiceStack
-                   {
-                       License = config["license"]
-                   };
+            {
+                License = config["license"]
+            };
         }
     }
 }

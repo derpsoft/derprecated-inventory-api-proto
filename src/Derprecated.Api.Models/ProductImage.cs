@@ -27,10 +27,10 @@
         public static ProductImage From(Image source)
         {
             var dest = new ProductImage
-                       {
-                           ShopifyId = source.Id.GetValueOrDefault(),
-                           SourceUrl = source.Url
-                       };
+            {
+                ShopifyId = source.Id.GetValueOrDefault(),
+                SourceUrl = source.Url
+            };
 
 
             return dest;
@@ -39,10 +39,10 @@
         public static ProductImage From(ProductImage source)
         {
             var dest = new ProductImage
-                       {
-                           ShopifyId = source.Id,
-                           SourceUrl = source.SourceUrl
-                       };
+            {
+                ShopifyId = source.Id,
+                SourceUrl = source.SourceUrl
+            };
 
 
             return dest;

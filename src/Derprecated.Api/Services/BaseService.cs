@@ -1,10 +1,9 @@
 ﻿namespace Derprecated.Api.Services
 {
-    using Api.Models;
+    using Models;
     using Models.Configuration;
     using ServiceStack;
     using ServiceStack.Auth;
-    using ServiceStack.Configuration;
 
     public abstract class BaseService : Service
     {

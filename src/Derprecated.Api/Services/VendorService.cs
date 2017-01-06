@@ -44,12 +44,9 @@
         {
             var resp = new VendorResponse();
             var handler = new VendorHandler(Db, CurrentSession);
-            var newVendor = handler.Save(new Models.Vendor
-                                         {
-                                             Name = request.Vendor.Name
-                                         });
+            var vendor = new Models.Vendor().PopulateWith(request);
 
-            resp.Vendor = Vendor.From(newVendor);
+            resp.Vendor = Vendor.From(handler.Save(vendor));
 
             return resp;
         }
@@ -58,13 +55,9 @@
         {
             var resp = new VendorResponse();
             var handler = new VendorHandler(Db, CurrentSession);
-            var update = handler.Save(new Models.Vendor
-                                      {
-                                          Id = request.Id
-                                      }.PopulateWith(request.Vendor));
+            var update = new Models.Vendor().PopulateWith(request);
 
-            resp.Vendor = Vendor.From(update);
-
+            resp.Vendor = Vendor.From(handler.Save(update));
 
             return resp;
         }

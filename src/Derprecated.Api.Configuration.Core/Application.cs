@@ -47,12 +47,12 @@
 
             // DB
             container.Register<IDbConnectionFactory>(c =>
-                                                     {
-                                                         var connectionString =
-                                                             configuration.ConnectionStrings.AzureSql;
-                                                         return new OrmLiteConnectionFactory(connectionString,
-                                                             SqlServerDialect.Provider);
-                                                     });
+            {
+                var connectionString =
+                    configuration.ConnectionStrings.AzureSql;
+                return new OrmLiteConnectionFactory(connectionString,
+                    SqlServerDialect.Provider);
+            });
 
             // Redis
             //container.Register<IRedisClientsManager>(c =>
@@ -75,36 +75,36 @@
 
             // Db filters
             OrmLiteConfig.InsertFilter = (dbCmd, row) =>
-                                         {
-                                             if (row is IAuditable)
-                                             {
-                                                 var auditRow = row as IAuditable;
-                                                 auditRow.CreateDate = auditRow.ModifyDate = DateTime.UtcNow;
-                                             }
+            {
+                if (row is IAuditable)
+                {
+                    var auditRow = row as IAuditable;
+                    auditRow.CreateDate = auditRow.ModifyDate = DateTime.UtcNow;
+                }
 
-                                             if (row is Product)
-                                             {
-                                                 var product = row as Product;
-                                                 product.OnInsert();
-                                             }
-                                         };
+                if (row is Product)
+                {
+                    var product = row as Product;
+                    product.OnInsert();
+                }
+            };
             OrmLiteConfig.UpdateFilter = (dbCmd, row) =>
-                                         {
-                                             if (row is IAuditable)
-                                             {
-                                                 var auditRow = row as IAuditable;
-                                                 auditRow.ModifyDate = DateTime.UtcNow;
+            {
+                if (row is IAuditable)
+                {
+                    var auditRow = row as IAuditable;
+                    auditRow.ModifyDate = DateTime.UtcNow;
 
-                                                 if (auditRow.CreateDate == DateTime.MinValue)
-                                                     auditRow.CreateDate = auditRow.ModifyDate;
-                                             }
+                    if (auditRow.CreateDate == DateTime.MinValue)
+                        auditRow.CreateDate = auditRow.ModifyDate;
+                }
 
-                                             if (row is Product)
-                                             {
-                                                 var product = row as Product;
-                                                 product.OnUpdate();
-                                             }
-                                         };
+                if (row is Product)
+                {
+                    var product = row as Product;
+                    product.OnUpdate();
+                }
+            };
 
             // Schema init
             var userRepo = (OrmLiteAuthRepository) container.Resolve<IUserAuthRepository>();
@@ -126,9 +126,9 @@
             }
 #if DEBUG
             var testUser = new UserAuth
-                           {
-                               Email = "james@derprecated.com"
-                           };
+            {
+                Email = "james@derprecated.com"
+            };
             var existing = userRepo.GetUserAuthByUserName(testUser.Email);
             if (null == existing)
             {
@@ -139,20 +139,20 @@
 #endif
 
             // Mail
-            container.Register<MailKit.Net.Smtp.SmtpClient>(c =>
-                               {
-                                   var host = configuration.Mail.Host;
-                                   var port = configuration.Mail.Port;
-                                   var useSsl = configuration.Mail.UseSsl;
-                                   var creds = new NetworkCredential(configuration.Mail.Username,
-                                       configuration.Mail.Password);
+            container.Register(c =>
+            {
+                var host = configuration.Mail.Host;
+                var port = configuration.Mail.Port;
+                var useSsl = configuration.Mail.UseSsl;
+                var creds = new NetworkCredential(configuration.Mail.Username,
+                    configuration.Mail.Password);
 
-                                   var client = new SmtpClient();
-                                   client.Connect(host, port, useSsl);
-                                   client.Authenticate(creds);
+                var client = new SmtpClient();
+                client.Connect(host, port, useSsl);
+                client.Authenticate(creds);
 
-                                   return client;
-                               });
+                return client;
+            });
 
             // Plugins
             Plugins.Add(new CorsFeature(allowCredentials: true, allowedHeaders: "Content-Type, X-Requested-With",
@@ -179,20 +179,20 @@
                     new CredentialsAuthProvider()
                 },
                 "/login")
-                        {
-                            IncludeAssignRoleServices = true,
-                            ValidateUniqueEmails = true
-                        });
+            {
+                IncludeAssignRoleServices = true,
+                ValidateUniqueEmails = true
+            });
             Plugins.Add(new ValidationFeature());
             Plugins.Add(new AutoQueryFeature {MaxLimit = 100});
             Plugins.Add(new SwaggerFeature());
 
             // Misc
             container.Register(new ShopifyServiceClient($"https://{configuration.Shopify.Domain}")
-                               {
-                                   UserName = configuration.Shopify.ApiKey,
-                                   Password = configuration.Shopify.Password
-                               });
+            {
+                UserName = configuration.Shopify.ApiKey,
+                Password = configuration.Shopify.Password
+            });
         }
     }
 }

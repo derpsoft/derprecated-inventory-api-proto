@@ -8,9 +8,11 @@
     {
         public LocationValidator()
         {
-            RuleFor(x => x.Name)
-                .NotEmpty()
-                .Length(0, 50);
+            RuleSet(ApplyTo.Get, () =>
+            {
+                RuleFor(x => x.Id)
+                    .GreaterThanOrEqualTo(1);
+            }); 
 
             RuleSet(ApplyTo.Post, () =>
             {
@@ -35,6 +37,10 @@
 
             RuleSet(ApplyTo.Put | ApplyTo.Post | ApplyTo.Patch, () =>
             {
+                RuleFor(x => x.Name)
+                    .NotEmpty()
+                    .Length(0, 50);
+
                 RuleFor(x => x.WarehouseId)
                     .GreaterThanOrEqualTo(1);
             });

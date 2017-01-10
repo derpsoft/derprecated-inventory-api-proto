@@ -14,10 +14,10 @@
 
         public object Any(LocationCount request)
         {
-            var resp = new CountResponse();
+            var resp = new Dto<long>();
             var handler = new LocationHandler(Db, CurrentSession);
 
-            resp.Count = handler.Count();
+            resp.Result = handler.Count();
 
             return resp;
         }

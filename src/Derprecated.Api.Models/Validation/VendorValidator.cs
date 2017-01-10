@@ -8,25 +8,11 @@
     {
         public VendorValidator()
         {
-            RuleFor(x => x.Name)
-                .NotEmpty()
-                .Length(0, 50);
-
-            RuleFor(x => x.ContactAddress)
-                .NotEmpty()
-                .Length(0, 400);
-
-            RuleFor(x => x.ContactEmail)
-                .NotEmpty()
-                .Length(0, 256);
-
-            RuleFor(x => x.ContactName)
-                .NotEmpty()
-                .Length(0, 50);
-
-            RuleFor(x => x.ContactPhone)
-                .NotEmpty()
-                .Length(0, 20);
+            RuleSet(ApplyTo.Get, () =>
+            {
+                RuleFor(x => x.Id)
+                    .GreaterThanOrEqualTo(1);
+            });
 
             RuleSet(ApplyTo.Post, () =>
             {
@@ -47,6 +33,29 @@
                 RuleFor(x => x.RowVersion)
                     .NotEmpty()
                     .Must(x => x >= 1L);
+            });
+
+            RuleSet(ApplyTo.Put | ApplyTo.Post | ApplyTo.Patch, () =>
+            {
+                RuleFor(x => x.Name)
+                    .NotEmpty()
+                    .Length(0, 50);
+
+                RuleFor(x => x.ContactAddress)
+                    .NotEmpty()
+                    .Length(0, 400);
+
+                RuleFor(x => x.ContactEmail)
+                    .NotEmpty()
+                    .Length(0, 256);
+
+                RuleFor(x => x.ContactName)
+                    .NotEmpty()
+                    .Length(0, 50);
+
+                RuleFor(x => x.ContactPhone)
+                    .NotEmpty()
+                    .Length(0, 20);
             });
         }
     }

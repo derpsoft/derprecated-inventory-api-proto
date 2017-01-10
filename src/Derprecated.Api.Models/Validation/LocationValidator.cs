@@ -12,9 +12,6 @@
                 .NotEmpty()
                 .Length(0, 50);
 
-            RuleFor(x => x.WarehouseId)
-                .GreaterThanOrEqualTo(1);
-
             RuleSet(ApplyTo.Post, () =>
             {
                 RuleFor(x => x.Id)
@@ -34,6 +31,12 @@
                 RuleFor(x => x.RowVersion)
                     .NotEmpty()
                     .Must(x => x >= 1L);
+            });
+
+            RuleSet(ApplyTo.Put | ApplyTo.Post | ApplyTo.Patch, () =>
+            {
+                RuleFor(x => x.WarehouseId)
+                    .GreaterThanOrEqualTo(1);
             });
         }
     }

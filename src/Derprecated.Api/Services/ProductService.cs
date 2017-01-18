@@ -4,74 +4,58 @@
     using System.Collections.Generic;
     using System.Globalization;
     using Handlers;
-    using Models;
-    using Models.Routing;
+    using Models.Dto;
     using Models.Shopify;
     using ServiceStack;
     using ServiceStack.Logging;
-    using CountProducts = Models.Routing.CountProducts;
-    using CountResponse = Models.Routing.CountResponse;
-    using GetProduct = Models.Routing.GetProduct;
-    using GetProducts = Models.Routing.GetProducts;
     using Product = Models.Dto.Product;
-    using ProductResponse = Models.Routing.ProductResponse;
 
     public class ProductService : BaseService
     {
         protected static ILog Log = LogManager.GetLogger(typeof (ProductService));
         public ShopifyServiceClient ShopifyServiceClient { get; set; }
 
-        public object Any(CountProducts request)
+        public object Any(ProductCount request)
         {
-            var resp = new CountResponse();
+            var resp = new Dto<long>();
             var handler = new ProductHandler(Db, CurrentSession);
 
-            resp.Count = handler.Count();
+            resp.Result = handler.Count();
 
             return resp;
         }
 
-        public object Any(GetProduct request)
+        public object Get(Product request)
         {
-            var resp = new ProductResponse();
+            var resp = new Dto<Product>();
             var productHandler = new ProductHandler(Db, CurrentSession);
             var inventoryHandler = new InventoryHandler(Db, CurrentSession);
-            var product = productHandler.GetProduct(request.Id);
 
-            resp.Product = Product.From(product);
-            resp.Product.QuantityOnHand = inventoryHandler.GetQuantityOnHand(product.Id);
+            var product = Product.From(productHandler.GetProduct(request.Id));
+
+            resp.Result = product;
+            resp.Result.QuantityOnHand = inventoryHandler.GetQuantityOnHand(product.Id);
 
             return resp;
         }
 
 
-        public object Any(DeleteProduct request)
+        public object Delete(Product request)
         {
             throw new NotImplementedException();
-            var resp = new DeleteProductResponse();
+            var resp = new Dto<Product>();
             var handler = new ProductHandler(Db, CurrentSession);
 
             return resp;
         }
 
-        public object Any(GetProductQuantityOnHand request)
+        public object Any(Product request)
         {
-            var resp = new QuantityOnHandResponse();
-            //TODO(jcunningham) move to inventory service
-            var handler = new InventoryHandler(Db, CurrentSession);
-
-            resp.Quantity = handler.GetQuantityOnHand(request.Id);
-
-            return resp;
-        }
-
-        public object Any(SaveProduct request)
-        {
-            var resp = new SaveProductResponse();
+            var resp = new Dto<Product>();
             var productHandler = new ProductHandler(Db, CurrentSession);
             var shopifyHandler = new ShopifyHandler(ShopifyServiceClient);
 
-            var product = productHandler.Save(request.Product);
+            var product = productHandler.Save(new Models.Product().PopulateWith(request));
             var shopifyProduct = Models.Shopify.Product.From(product);
 
             if (shopifyProduct.Id.HasValue)
@@ -98,45 +82,24 @@
                 product.ShopifyId = shopifyProduct.Id.Value;
             }
 
-            resp.Product = Product.From(product);
+            resp.Result = Product.From(product);
 
             return resp;
         }
 
-        private object UpdateProductField<T>(IUpdatableField<T> request)
+        public object Any(Products request)
         {
-            var resp = new ProductResponse();
-
-            var handler = new ProductHandler(Db, CurrentSession);
-            handler.Update(request.Id, request);
-
-            return resp;
-        }
-
-        public object Any(UpdateProductTitle request)
-        {
-            return UpdateProductField(request);
-        }
-
-        public object Any(UpdateProductDescription request)
-        {
-            return UpdateProductField(request);
-        }
-
-        public object Any(GetProducts request)
-        {
-            var resp = new GetProductsResponse();
+            var resp = new Dto<List<Product>>();
             var productHandler = new ProductHandler(Db, CurrentSession);
             var inventoryHandler = new InventoryHandler(Db, CurrentSession);
 
-            var products = productHandler.List(request.Skip, request.Take);
-            resp.Products = products.Map(product =>
-            {
-                var p = Product.From(product);
-                p.QuantityOnHand = inventoryHandler.GetQuantityOnHand(p.Id);
-                return p;
-            });
-            resp.Count = productHandler.Count();
+            resp.Result = productHandler.List(request.Skip, request.Take)
+                                        .Map(product =>
+                                        {
+                                            var p = Product.From(product);
+                                            p.QuantityOnHand = inventoryHandler.GetQuantityOnHand(p.Id);
+                                            return p;
+                                        });
 
             return resp;
         }

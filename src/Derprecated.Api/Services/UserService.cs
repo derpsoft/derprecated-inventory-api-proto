@@ -35,7 +35,7 @@ namespace Derprecated.Api.Services
 
         private object UpdateUserField<T>(IUpdatableField<T> request)
         {
-            var resp = new ProductResponse();
+            var resp = new GetUserResponse();
 
             var handler = new UserHandler(Db, UserAuthRepository, CurrentSession);
             handler.Update(request.Id, request);

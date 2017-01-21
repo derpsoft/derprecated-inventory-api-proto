@@ -49,7 +49,7 @@
         public int Take { get; set; } = 25;
     }
 
-    [Route("/api/v1/vendors", "SEARCH")]
+    [Route("/api/v1/vendors", "GET, SEARCH")]
     [Authenticate]
     [RequiresAnyPermission(ApplyTo.Search, Permissions.CanDoEverything, Permissions.CanManageVendors,
         Permissions.CanReadVendors)]
@@ -63,7 +63,7 @@
         public string Name { get; set; }
     }
 
-    [Route("/api/v1/vendors/typeahead", "SEARCH")]
+    [Route("/api/v1/vendors/typeahead", "GET, SEARCH")]
     [Authenticate]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageVendors, Permissions.CanReadVendors)]
     public sealed class VendorTypeahead : IReturn<Dto<Vendor>>

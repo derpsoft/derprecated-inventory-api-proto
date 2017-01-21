@@ -38,6 +38,7 @@ namespace Derprecated.Api.Models.Dto
         public string Title { get; set; }
         public string UnitOfMeasure { get; set; } = "each";
         public ulong Version { get; set; }
+        public int VendorId { get; set; }
         public decimal Weight { get; set; }
         public string WeightUnit { get; set; }
 
@@ -68,7 +69,7 @@ namespace Derprecated.Api.Models.Dto
     {
     }
 
-    [Route("/api/v1/products/typeahead", "GET")]
+    [Route("/api/v1/products/typeahead", "GET, SEARCH")]
     [Authenticate]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanReadProducts)]
     public class ProductTypeahead : IReturn<Dto<Product>>

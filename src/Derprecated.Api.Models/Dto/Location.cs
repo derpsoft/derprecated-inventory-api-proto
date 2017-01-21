@@ -47,7 +47,7 @@
     {
     }
 
-    [Route("/api/v1/locations", "SEARCH")]
+    [Route("/api/v1/locations", "GET, SEARCH")]
     [Authenticate]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageLocations, Permissions.CanReadLocations)]
     public sealed class LocationSearch : QueryDb<Models.Location, Location>

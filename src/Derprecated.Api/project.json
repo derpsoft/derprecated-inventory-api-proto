@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0-*",
+  "dependencies": {
+    "CoreCompat.System.Drawing": "1.0.0-*",
+    "Derprecated.Api.Models": "1.0.*",
+    "MailKit": "1.10.*",
+    "MimeKit": "1.10.*",
+    "NETStandard.Library": "1.6.1",
+    "ServiceStack.Client.Core": "1.0.*",
+    "ServiceStack.Common.Core": "1.0.*",
+    "ServiceStack.Core": "1.0.*",
+    "ServiceStack.Interfaces.Core": "1.0.*",
+    "ServiceStack.OrmLite.Core": "1.0.*",
+    "ServiceStack.Text.Core": "1.0.*",
+    "System.Linq": "4.3.*",
+    "System.Linq.Parallel": "4.3.0",
+    "WindowsAzure.Storage": "7.2.*"
+  },
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": [
+        "dnxcore50",
+        "portable-net451+win8"
+      ]
+    }
+  },
+  "configurations": {
+    "Production": {}
+  }
+}

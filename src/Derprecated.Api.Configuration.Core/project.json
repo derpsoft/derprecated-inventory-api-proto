@@ -1,0 +1,33 @@
+{
+  "version": "1.0.0-*",
+  "dependencies": {
+    "ServiceStack.Core": "1.0.*",
+    "ServiceStack.Redis.Core": "1.0.*",
+    "ServiceStack.Common.Core": "1.0.*",
+    "ServiceStack.Client.Core": "1.0.*",
+    "ServiceStack.Interfaces.Core": "1.0.*",
+    "ServiceStack.Text.Core": "1.0.*",
+    "ServiceStack.OrmLite.Core": "1.0.*",
+    "ServiceStack.OrmLite.SqlServer.Core": "1.0.*",
+    "ServiceStack.Server.Core": "1.0.*",
+    "Derprecated.Api.Models": "1.0.*",
+    "Derprecated.Api": "1.0.*",
+    "System.Linq": "4.3.*",
+    "MimeKit": "1.10.*",
+    "MailKit": "1.10.*",
+    "NETStandard.Library": "1.6.1",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.*",
+    "ServiceStack.Api.Swagger.Core": "1.0.*"
+  },
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": [
+        "dnxcore50",
+        "portable-net451+win8"
+      ]
+    }
+  },
+  "configurations": {
+    "Production": {}
+  }
+}

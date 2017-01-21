@@ -1,0 +1,6 @@
+﻿
+--CREATE FULLTEXT CATALOG derp_ft AS DEFAULT;
+
+CREATE FULLTEXT INDEX ON dbo.Product(Title, Description, Tags)
+	KEY INDEX PK_Product
+	WITH STOPLIST = SYSTEM;

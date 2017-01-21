@@ -7,15 +7,15 @@
     using System.IO;
     using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Blob;
+    using Models.Configuration;
     using ServiceStack;
-    using ServiceStack.Configuration;
     using ServiceStack.Web;
 
     public class ImageHandler
     {
-        public ImageHandler(AppSettings appSettings, CloudBlobClient blobClient)
+        public ImageHandler(ApplicationConfiguration appSettings, CloudBlobClient blobClient)
         {
-            Container = appSettings.Get("app.storage.container", "dev");
+            Container = appSettings.Storage.Container;
             Client = blobClient;
         }
 
@@ -38,32 +38,17 @@
             {
                 var w = raw.Width;
                 var h = raw.Height;
-                var d = Math.Min(Math.Min(w, h), 600);
-                var r = d/2;
-                var cx = raw.Width/2;
-                var cy = raw.Height/2;
 
                 //using (var source = new Bitmap(raw, d, d))
-                using (var avatar = new Bitmap(d, d, PixelFormat.Format32bppArgb))
+                using (var avatar = new Bitmap(w, h, PixelFormat.Format32bppArgb))
                 using (var g = Graphics.FromImage(avatar))
                 {
                     g.CompositingQuality = CompositingQuality.HighSpeed;
                     g.InterpolationMode = InterpolationMode.Bicubic;
                     g.SmoothingMode = SmoothingMode.AntiAlias;
 
-                    var bg = Color.Transparent;
-                    var path = new GraphicsPath();
-
-                    using (var br = new SolidBrush(bg))
-                    {
-                        g.FillRectangle(br, 0, 0, avatar.Width, avatar.Height);
-                    }
-
-                    //avatar.MakeTransparent();
-                    path.AddEllipse(0, 0, d, d);
-                    g.SetClip(path);
-                    g.DrawImage(raw, new Rectangle(0, 0, d, d),
-                        new Rectangle(cx - r, cy - r, d, d), GraphicsUnit.Pixel);
+                    g.DrawImage(raw, new Rectangle(0, 0, w, h),
+                        new Rectangle(0, 0, w, h), GraphicsUnit.Pixel);
 
                     avatar.Save(dest, ImageFormat.Png);
                 }
@@ -77,7 +62,7 @@
             return blob;
         }
 
-        public Uri SaveAvatarImage(IHttpFile source)
+        public Uri SaveImage(IHttpFile source)
         {
             Uri result;
             var container = Client.GetContainerReference(Container);

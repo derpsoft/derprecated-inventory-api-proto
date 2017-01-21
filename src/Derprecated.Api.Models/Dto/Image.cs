@@ -10,14 +10,11 @@
         [Whitelist]
         public string Source { get; set; }
 
-        public ulong Version { get; set; }
-
-        public static Image From(ProductImage source)
+        public static Image From(Models.ProductImage source)
         {
             return new Image
             {
                 Id = source.Id,
-                Version = source.RowVersion,
                 Source = source.SourceUrl
             };
         }

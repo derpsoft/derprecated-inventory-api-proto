@@ -27,6 +27,12 @@
             return product;
         }
 
+        public ProductImage GetProductImage(int id)
+        {
+            id.ThrowIfLessThan(1);
+            return Db.SingleById<ProductImage>(id);
+        }
+
         /// <summary>
         ///     Get all products.
         /// </summary>
@@ -64,27 +70,6 @@
             return product;
         }
 
-        //        /// <summary>
-        //        ///     Update an existing Product.
-        //        /// </summary>
-        //        /// <param name="id">The ID of the Product to update.</param>
-        //        /// <param name="updatedProduct">The values to update the existing Product with.</param>
-        //        /// <returns></returns>
-        //        public Product Update(int id, UpdateProduct updatedProduct)
-        //        {
-        //            updatedProduct.ThrowIfNull();
-        //
-        //            var product = Get(id);
-        //            product.ThrowIfNull();
-        //
-        //            product = product
-        //                .PopulateFromPropertiesWithAttribute(updatedProduct, typeof (WhitelistAttribute));
-        //
-        //            Db.Save(product, true);
-        //
-        //            return product;
-        //        }
-
         public Product Update<T>(int id, IUpdatableField<T> update)
         {
             update.ThrowIfNull();
@@ -113,6 +98,23 @@
             if (default(Product) == existing)
                 throw new ArgumentException("unable to locate product with id");
             return Db.SoftDelete(existing);
+        }
+
+        public ProductImage SaveImage(int id, ProductImage image)
+        {
+            image.ThrowIfNull(nameof(image));
+            image.ProductId = id;
+            if (image.Id > 0)
+            {
+                var existing = GetProductImage(image.Id);
+                if (default(ProductImage) == existing)
+                    throw new ArgumentException("invalid Id for existing product image", nameof(image));
+
+                image = existing.PopulateFromPropertiesWithAttribute(image, typeof (WhitelistAttribute));
+            }
+            Db.Save(image);
+
+            return image;
         }
     }
 }

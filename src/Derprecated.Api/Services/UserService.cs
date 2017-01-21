@@ -95,7 +95,7 @@ namespace Derprecated.Api.Services
                 //    .Where(x => x.UserAuthId == userId)
                 //    .Limit(1)) ?? new Avatar { UserAuthId = userId };
 
-                //var avatarUrl = ImageHandler.SaveAvatarImage(Request.Files.First());
+                //var avatarUrl = ImageHandler.SaveImage(Request.Files.First());
 
                 //avatar.Url = avatarUrl.ToString();
                 //Db.Save(avatar);

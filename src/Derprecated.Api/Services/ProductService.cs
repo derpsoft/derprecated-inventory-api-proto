@@ -128,7 +128,7 @@
             if (Request.Files.Length > 0)
             {
                 var productHandler = new ProductHandler(Db, CurrentSession);
-                var product = productHandler.GetProduct(request.ProductId);
+                var product = productHandler.Get(request.ProductId);
 
                 if (null != product)
                 {

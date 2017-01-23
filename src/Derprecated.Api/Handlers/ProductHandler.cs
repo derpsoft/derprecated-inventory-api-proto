@@ -19,10 +19,12 @@
         private IDbConnection Db { get; }
         private UserSession User { get; }
 
-        public Product GetProduct(int id)
+        public Product Get(int id)
         {
             id.ThrowIfLessThan(1);
-            return Db.LoadSingleById<Product>(id);
+            var product = Db.Single<Product>(new {Id = id, IsDeleted = false});
+            Db.LoadReferences(product);
+            return product;
         }
 
         /// <summary>
@@ -38,6 +40,7 @@
         {
             return Db.LoadSelect(
                 Db.From<Product>()
+                  .Where(x => !x.IsDeleted)
                   .Skip(skip)
                   .Take(take)
                 );
@@ -49,7 +52,7 @@
 
             if (product.Id >= 1)
             {
-                var existing = GetProduct(product.Id);
+                var existing = Get(product.Id);
                 // ReSharper disable once PossibleUnintendedReferenceComparison
                 if (default(Product) == existing)
                     throw new ArgumentException("invalid Id for existing product", nameof(product));
@@ -71,7 +74,7 @@
         //        {
         //            updatedProduct.ThrowIfNull();
         //
-        //            var product = GetProduct(id);
+        //            var product = Get(id);
         //            product.ThrowIfNull();
         //
         //            product = product
@@ -85,7 +88,7 @@
         public Product Update<T>(int id, IUpdatableField<T> update)
         {
             update.ThrowIfNull();
-            var product = GetProduct(id);
+            var product = Get(id);
             product.SetProperty(update.FieldName, update.Value);
             Db.UpdateOnly(product, new[] {update.FieldName}, p => p.Id == product.Id);
             return product;
@@ -102,6 +105,14 @@
 
             Db.UpdateOnly(new Product {ShopifyId = shopifyId},
                 q.Update(x => x.ShopifyId).Where(x => x.Id == productId));
+        }
+
+        public Product Delete(int id)
+        {
+            var existing = Get(id);
+            if (default(Product) == existing)
+                throw new ArgumentException("unable to locate product with id");
+            return Db.SoftDelete(existing);
         }
     }
 }

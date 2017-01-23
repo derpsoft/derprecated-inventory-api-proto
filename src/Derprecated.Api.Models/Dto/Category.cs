@@ -21,6 +21,7 @@
         public int Id { get; set; }
         public string Name { get; set; }
         public ulong RowVersion { get; set; }
+        public int ParentId { get; set; }
 
         public static Category From(Models.Category source)
         {

@@ -5,6 +5,6 @@
     public interface ISoftDeletable
     {
         bool IsDeleted { get; set; }
-        DateTime DeleteDate { get; set; }
+        DateTime? DeleteDate { get; set; }
     }
 }

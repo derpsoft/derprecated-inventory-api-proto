@@ -9,7 +9,7 @@
         public string Bin { get; set; }
 
         public DateTime CreateDate { get; set; }
-        public DateTime DeleteDate { get; set; }
+        public DateTime? DeleteDate { get; set; }
 
         [PrimaryKey]
         [AutoIncrement]

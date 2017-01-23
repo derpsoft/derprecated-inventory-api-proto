@@ -4,20 +4,24 @@
 namespace Derprecated.Api.Models.Dto
 {
     using System.Collections.Generic;
-    using Attributes;
     using ServiceStack;
     using ServiceStack.DataAnnotations;
 
     [Route("/api/v1/products", "POST")]
     [Route("/api/v1/products/{Id}", "GET, DELETE, PUT, PATCH")]
     [Authenticate]
-    [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanReadProducts)]
-    [RequiresAnyPermission(ApplyTo.Delete, Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanDeleteProducts)]
-    [RequiresAnyPermission(ApplyTo.Post | ApplyTo.Put | ApplyTo.Patch, Permissions.CanDoEverything, Permissions.CanManageProducts,
+    [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageProducts,
+        Permissions.CanReadProducts)]
+    [RequiresAnyPermission(ApplyTo.Delete, Permissions.CanDoEverything, Permissions.CanManageProducts,
+        Permissions.CanDeleteProducts)]
+    [RequiresAnyPermission(ApplyTo.Post | ApplyTo.Put | ApplyTo.Patch, Permissions.CanDoEverything,
+        Permissions.CanManageProducts,
         Permissions.CanUpsertProducts)]
     public class Product : IReturn<Dto<Product>>
     {
         public string Barcode { get; set; }
+
+        public int? CategoryId { get; set; }
         public string Color { get; set; }
         public string Description { get; set; }
         public int Grams { get; set; }
@@ -31,7 +35,6 @@ namespace Derprecated.Api.Models.Dto
         public long? ShopifyId { get; set; }
         public string Sku { get; set; }
         public string Tags { get; set; }
-
         public string Title { get; set; }
         public string UnitOfMeasure { get; set; } = "each";
         public ulong Version { get; set; }
@@ -49,13 +52,13 @@ namespace Derprecated.Api.Models.Dto
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanReadProducts)]
     public class ProductCount : IReturn<Dto<long>>
     {
-        
     }
 
     [Route("/api/v1/products", "GET")]
     [Authenticate]
-    [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanReadProducts)]
-    public class Products : IReturn<Dto<List<Product>>> 
+    [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageProducts,
+        Permissions.CanReadProducts)]
+    public class Products : IReturn<Dto<List<Product>>>
     {
         public int Skip { get; set; } = 0;
         public int Take { get; set; } = 25;
@@ -63,7 +66,6 @@ namespace Derprecated.Api.Models.Dto
 
     public class ProductSearch
     {
-        
     }
 
     [Route("/api/v1/products/typeahead", "GET")]

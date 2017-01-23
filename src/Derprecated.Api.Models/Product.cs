@@ -18,7 +18,11 @@
         public string Barcode { get; set; }
 
         [Reference]
-        public List<Category> Categories { get; set; }
+        public Category Category { get; set; }
+
+        [Whitelist]
+        [ForeignKey(typeof (Category), OnDelete = "NO ACTION", OnUpdate = "CASCADE")]
+        public int? CategoryId { get; set; }
 
         [Whitelist]
         [EqualityCheck]

@@ -8,7 +8,7 @@
     {
         public LocationValidator()
         {
-            RuleSet(ApplyTo.Get, () =>
+            RuleSet(ApplyTo.Get | ApplyTo.Delete, () =>
             {
                 RuleFor(x => x.Id)
                     .GreaterThanOrEqualTo(1);
@@ -25,7 +25,7 @@
                     .WithMessage("{0} may not be set when creating a Location");
             });
 
-            RuleSet(ApplyTo.Put | ApplyTo.Patch | ApplyTo.Delete, () =>
+            RuleSet(ApplyTo.Put | ApplyTo.Patch, () =>
             {
                 RuleFor(x => x.Id)
                     .GreaterThanOrEqualTo(1);

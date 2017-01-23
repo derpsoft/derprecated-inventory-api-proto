@@ -49,6 +49,15 @@
             return location;
         }
 
+        public Location Delete(int id)
+        {
+            var existing = Get(id);
+            if(default(Location) == existing)
+                throw new ArgumentException("unable to find a record with that id", nameof(id));
+
+            return Db.SoftDelete(existing);
+        }
+
         public long Count()
         {
             return Db.Count<Location>();

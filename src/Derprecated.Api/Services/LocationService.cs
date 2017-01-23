@@ -1,10 +1,8 @@
 ﻿namespace Derprecated.Api.Services
 {
-    using System;
     using System.Collections.Generic;
     using Handlers;
     using Models.Dto;
-    using Models.Routing;
     using ServiceStack;
     using ServiceStack.Logging;
 
@@ -34,9 +32,10 @@
 
         public object Delete(Location request)
         {
-            throw new NotImplementedException();
-            var resp = new Dto<bool>();
+            var resp = new Dto<Location>();
             var handler = new LocationHandler(Db, CurrentSession);
+
+            resp.Result = Location.From(handler.Delete(request.Id));
 
             return resp;
         }

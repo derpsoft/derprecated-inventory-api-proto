@@ -63,5 +63,19 @@
 
             return resp;
         }
+
+        public object Any(LocationTypeahead request)
+        {
+            var resp = new Dto<List<Location>>();
+            var locationHandler = new LocationHandler(Db, CurrentSession);
+            var searchHandler = new SearchHandler(Db, CurrentSession);
+
+            if (request.Query.IsNullOrEmpty())
+                resp.Result = locationHandler.List(0, int.MaxValue).Map(Location.From);
+            else
+                resp.Result = searchHandler.LocationTypeahead(request.Query).Map(Location.From);
+
+            return resp;
+        }
     }
 }

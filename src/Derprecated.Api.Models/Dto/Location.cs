@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using ServiceStack;
+    using ServiceStack.DataAnnotations;
 
     [Route("/api/v1/locations", "POST")]
     [Route("/api/v1/locations/{Id}", "PUT, PATCH, GET, DELETE")]
@@ -60,5 +61,14 @@
 
         [QueryDbField(Term = QueryTerm.Or)]
         public int WarehouseId { get; set; }
+    }
+
+    [Route("/api/v1/locations/typeahead", "SEARCH")]
+    [Authenticate]
+    [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageLocations, Permissions.CanReadLocations)]
+    public sealed class LocationTypeahead : IReturn<Dto<List<Location>>>
+    {
+        [StringLength(20)]
+        public string Query { get; set; }
     }
 }

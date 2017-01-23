@@ -2,24 +2,24 @@
 IF NOT EXISTS (
   SELECT * 
   FROM   sys.columns 
-  WHERE  object_id = OBJECT_ID(N'[dbo].[Location]') 
+  WHERE  object_id = OBJECT_ID(N'[dbo].[Product]') 
          AND name = 'IsDeleted'
 )
 BEGIN
-	ALTER TABLE [dbo].[Location]
+	ALTER TABLE [dbo].[Product]
 		ADD [IsDeleted] BIT NOT NULL
-			CONSTRAINT [DF_Location_IsDeleted]
+			CONSTRAINT [DF_Product_IsDeleted]
 			DEFAULT 0
 	;
 END
 IF NOT EXISTS (
   SELECT * 
   FROM   sys.columns 
-  WHERE  object_id = OBJECT_ID(N'[dbo].[Location]') 
+  WHERE  object_id = OBJECT_ID(N'[dbo].[Product]') 
          AND name = 'DeleteDate'
 )
 BEGIN
-	ALTER TABLE [dbo].[Location]
+	ALTER TABLE [dbo].[Product]
 		ADD [DeleteDate] DATETIME
 	;
 END
@@ -28,14 +28,14 @@ END
 IF EXISTS (
   SELECT * 
   FROM   sys.columns 
-  WHERE  object_id = OBJECT_ID(N'[dbo].[Location]') 
+  WHERE  object_id = OBJECT_ID(N'[dbo].[Product]') 
          AND name = 'IsDeleted'
 )
 BEGIN
-	ALTER TABLE [dbo].[Location]
-		DROP CONSTRAINT [DF_Location_IsDeleted]
+	ALTER TABLE [dbo].[Product]
+		DROP CONSTRAINT [DF_Product_IsDeleted]
 	;
-	ALTER TABLE [dbo].[Location]
+	ALTER TABLE [dbo].[Product]
 		DROP COLUMN [IsDeleted]
 	;
 END
@@ -43,11 +43,11 @@ END
 IF EXISTS (
   SELECT * 
   FROM   sys.columns 
-  WHERE  object_id = OBJECT_ID(N'[dbo].[Location]') 
+  WHERE  object_id = OBJECT_ID(N'[dbo].[Product]') 
          AND name = 'DeleteDate'
 )
 BEGIN
-	ALTER TABLE [dbo].[Location]
+	ALTER TABLE [dbo].[Product]
 		DROP COLUMN [DeleteDate]
 	;
 END

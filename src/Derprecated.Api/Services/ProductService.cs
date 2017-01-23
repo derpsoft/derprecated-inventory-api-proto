@@ -31,7 +31,7 @@
             var productHandler = new ProductHandler(Db, CurrentSession);
             var inventoryHandler = new InventoryHandler(Db, CurrentSession);
 
-            var product = Product.From(productHandler.GetProduct(request.Id));
+            var product = Product.From(productHandler.Get(request.Id));
 
             resp.Result = product;
             resp.Result.QuantityOnHand = inventoryHandler.GetQuantityOnHand(product.Id);
@@ -42,9 +42,10 @@
 
         public object Delete(Product request)
         {
-            throw new NotImplementedException();
             var resp = new Dto<Product>();
             var handler = new ProductHandler(Db, CurrentSession);
+
+            resp.Result = Product.From(handler.Delete(request.Id));
 
             return resp;
         }

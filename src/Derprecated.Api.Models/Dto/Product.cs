@@ -38,12 +38,15 @@ namespace Derprecated.Api.Models.Dto
         public string Title { get; set; }
         public string UnitOfMeasure { get; set; } = "each";
         public ulong Version { get; set; }
+        public int VendorId { get; set; }
         public decimal Weight { get; set; }
         public string WeightUnit { get; set; }
 
         public static Product From(Models.Product source)
         {
-            return new Product().PopulateWith(source);
+            var p = new Product().PopulateWith(source);
+            p.Images = source.Images.Map(Image.From);
+            return p;
         }
     }
 
@@ -68,7 +71,7 @@ namespace Derprecated.Api.Models.Dto
     {
     }
 
-    [Route("/api/v1/products/typeahead", "GET")]
+    [Route("/api/v1/products/typeahead", "GET, SEARCH")]
     [Authenticate]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanReadProducts)]
     public class ProductTypeahead : IReturn<Dto<Product>>
@@ -76,4 +79,19 @@ namespace Derprecated.Api.Models.Dto
         [StringLength(20)]
         public string Query { get; set; }
     }
+
+    [Route("/api/v1/products/{ProductId}/images/{Id}", "GET, DELETE")]
+    [Route("/api/v1/products/{ProductId}/images", "POST")]
+    public class ProductImage : IReturn<Dto<Image>>
+    {
+        public int ProductId { get; set; }
+        public int Id { get; set; }
+    }
+
+    [Route("/api/v1/products/{Id}/images", "GET")]
+    public class ProductImages : IReturn<Dto<List<Image>>>
+    {
+        public int Id { get; set; }
+    }
+
 }

@@ -23,14 +23,16 @@
 
         private string Container { get; }
 
-        public static string GetRandomFilename()
+        public static string GetRandomFilename(string folder = "")
         {
-            return $"{SessionExtensions.CreateRandomBase62Id(24)}.png";
+            if (!folder.IsNullOrEmpty() && !folder.EndsWith("/"))
+                folder = folder + '/';
+
+            return $"{folder}{SessionExtensions.CreateRandomBase62Id(24)}.png";
         }
 
-        public static CloudBlockBlob Upload(CloudBlobContainer container, Stream file)
+        public static CloudBlockBlob Upload(CloudBlobContainer container, Stream file, string filename)
         {
-            var filename = GetRandomFilename();
             var blob = container.GetBlockBlobReference(filename);
 
             using (var dest = new MemoryStream())
@@ -62,15 +64,18 @@
             return blob;
         }
 
-        public Uri SaveImage(IHttpFile source)
+        public Uri SaveImage(IHttpFile source, string folder)
         {
+            folder.ThrowIfNullOrEmpty(nameof(folder));
+
             Uri result;
             var container = Client.GetContainerReference(Container);
+            var filename = GetRandomFilename(folder);
 
             container.CreateIfNotExistsAsync(BlobContainerPublicAccessType.Container, new BlobRequestOptions(),
                 new OperationContext())
                      .Wait();
-            result = Upload(container, source.InputStream).Uri;
+            result = Upload(container, source.InputStream, filename).Uri;
 
             return result;
         }

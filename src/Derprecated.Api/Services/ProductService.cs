@@ -133,13 +133,13 @@
                 if (null != product)
                 {
                     var imageHandler = ResolveService<ImageHandler>();
-                    var uri = imageHandler.SaveImage(Request.Files.First());
+                    var uri = imageHandler.SaveImage(Request.Files.First(), "products");
 
-                    product.Images.Add(new Models.ProductImage()
+                    resp.Result = Image.From(productHandler.SaveImage(product.Id, new Models.ProductImage
                     {
                         ProductId = product.Id,
-                        SourceUrl = uri.ToString(),
-                    });
+                        SourceUrl = uri.ToString()
+                    }));
                 }
             }
             return resp;

@@ -1,6 +1,7 @@
 ﻿namespace Derprecated.Api.Models.Dto
 {
     using Attributes;
+    using ServiceStack;
 
     public class Image
     {
@@ -8,15 +9,11 @@
         public int Id { get; set; }
 
         [Whitelist]
-        public string Source { get; set; }
+        public string SourceUrl { get; set; }
 
         public static Image From(Models.ProductImage source)
         {
-            return new Image
-            {
-                Id = source.Id,
-                Source = source.SourceUrl
-            };
+            return new Image().PopulateWith(source);
         }
     }
 }

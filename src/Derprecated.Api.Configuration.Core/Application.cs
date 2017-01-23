@@ -163,7 +163,7 @@
             Plugins.Add(new CorsFeature(
                 allowCredentials: true,
                 allowedMethods: "OPTIONS, GET, PUT, POST, PATCH, DELETE, SEARCH",
-                allowedHeaders: "Content-Type, X-Requested-With",
+                allowedHeaders: "Content-Type, X-Requested-With, Cache-Control",
                 allowOriginWhitelist:
                     new List<string>
                     {

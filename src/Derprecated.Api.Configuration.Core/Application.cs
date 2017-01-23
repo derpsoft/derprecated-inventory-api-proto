@@ -157,7 +157,10 @@
             });
 
             // Plugins
-            Plugins.Add(new CorsFeature(allowCredentials: true, allowedHeaders: "Content-Type, X-Requested-With",
+            Plugins.Add(new CorsFeature(
+                allowCredentials: true,
+                allowedMethods: "OPTIONS, GET, PUT, POST, PATCH, DELETE, SEARCH",
+                allowedHeaders: "Content-Type, X-Requested-With",
                 allowOriginWhitelist:
                     new List<string>
                     {

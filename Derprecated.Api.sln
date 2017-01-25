@@ -33,12 +33,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "indexes", "indexes", "{ABCD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", "{9D03EE15-5C31-404F-8048-5E7E342F7B2A}"
 	ProjectSection(SolutionItems) = preProject
+		v1.1.0-add-audit-columns-to-sales.sql = v1.1.0-add-audit-columns-to-sales.sql
 		v1.1.0-add-category-id-to-products.sql = v1.1.0-add-category-id-to-products.sql
 		v1.1.0-add-name-to-location.sql = v1.1.0-add-name-to-location.sql
 		v1.1.0-add-parent-fk-to-categories.sql = v1.1.0-add-parent-fk-to-categories.sql
 		v1.1.0-add-soft-deletes-to-locations.sql = v1.1.0-add-soft-deletes-to-locations.sql
 		v1.1.0-add-soft-deletes-to-products.sql = v1.1.0-add-soft-deletes-to-products.sql
 		v1.1.0-alter-location-column-lengths.sql = v1.1.0-alter-location-column-lengths.sql
+		v1.1.0-drop-inventory-transaction-id-from-sales.sql = v1.1.0-drop-inventory-transaction-id-from-sales.sql
 	EndProjectSection
 EndProject
 Global

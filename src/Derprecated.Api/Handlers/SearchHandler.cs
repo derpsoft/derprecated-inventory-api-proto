@@ -76,5 +76,12 @@
                     .Or(x => x.Shelf.Contains(q))
                 );
         }
+
+        public List<Sale> SaleTypeahead(string q)
+        {
+            return Db.Select(
+                Db.From<Sale>()
+                );
+        }
     }
 }

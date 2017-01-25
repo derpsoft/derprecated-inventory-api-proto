@@ -12,7 +12,7 @@
     [RequiresAnyPermission(ApplyTo.Delete, Permissions.CanDoEverything, Permissions.CanManageVendors,
         Permissions.CanDeleteVendors)]
     [RequiresAnyPermission(ApplyTo.Put | ApplyTo.Post | ApplyTo.Patch, Permissions.CanDoEverything,
-        Permissions.CanManageVendors, Permissions.CanReadVendors)]
+        Permissions.CanManageVendors, Permissions.CanUpsertVendors)]
     public sealed class Vendor : IReturn<Dto<Vendor>>
     {
         public string ContactAddress { get; set; }

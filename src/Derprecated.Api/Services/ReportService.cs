@@ -40,17 +40,5 @@
 
             return result;
         }
-
-        public object Any(LogSale request)
-        {
-            var result = new SaleResponse();
-            var handler = new SaleHandler(Db, CurrentSession);
-            var sale = new Sale().PopulateWith(request);
-
-            handler.Create(sale);
-            result.Sale = Models.Dto.Sale.From(sale);
-
-            return result;
-        }
     }
 }

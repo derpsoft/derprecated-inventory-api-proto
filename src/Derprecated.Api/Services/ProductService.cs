@@ -22,7 +22,7 @@
             var resp = new Dto<long>();
             var handler = new ProductHandler(Db, CurrentSession);
 
-            resp.Result = handler.Count();
+            resp.Result = handler.Count(request.IncludeDeleted);
 
             return resp;
         }
@@ -33,7 +33,7 @@
             var productHandler = new ProductHandler(Db, CurrentSession);
             var inventoryHandler = new InventoryHandler(Db, CurrentSession);
 
-            var product = Product.From(productHandler.Get(request.Id));
+            var product = Product.From(productHandler.Get(request.Id, request.IncludeDeleted));
 
             resp.Result = product;
             resp.Result.QuantityOnHand = inventoryHandler.GetQuantityOnHand(product.Id);
@@ -96,7 +96,7 @@
             var productHandler = new ProductHandler(Db, CurrentSession);
             var inventoryHandler = new InventoryHandler(Db, CurrentSession);
 
-            resp.Result = productHandler.List(request.Skip, request.Take)
+            resp.Result = productHandler.List(request.Skip, request.Take, request.IncludeDeleted)
                                         .Map(product =>
                                         {
                                             var p = Product.From(product);

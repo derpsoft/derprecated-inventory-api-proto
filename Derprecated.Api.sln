@@ -41,6 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", 
 		v1.1.0-add-soft-deletes-to-products.sql = v1.1.0-add-soft-deletes-to-products.sql
 		v1.1.0-alter-location-column-lengths.sql = v1.1.0-alter-location-column-lengths.sql
 		v1.1.0-drop-inventory-transaction-id-from-sales.sql = v1.1.0-drop-inventory-transaction-id-from-sales.sql
+		v1.1.0-drop-vendor-id-from-sales.sql = v1.1.0-drop-vendor-id-from-sales.sql
 	EndProjectSection
 EndProject
 Global

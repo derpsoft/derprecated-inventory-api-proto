@@ -24,9 +24,6 @@
 
                 RuleFor(x => x.Total)
                     .GreaterThanOrEqualTo(1);
-
-                RuleFor(x => x.VendorId)
-                    .GreaterThanOrEqualTo(1);
             });
         }
     }

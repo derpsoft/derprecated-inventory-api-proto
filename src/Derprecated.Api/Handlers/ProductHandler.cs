@@ -74,20 +74,13 @@ namespace Derprecated.Api.Handlers
                 // ReSharper disable once PossibleUnintendedReferenceComparison
                 if (default(Product) == existing)
                     throw new ArgumentException("invalid Id for existing product", nameof(product));
+                if(existing.IsDeleted)
+                    throw new Exception("deleted products must be undeleted before updates can be made");
 
                 product = existing.PopulateFromPropertiesWithAttribute(product, typeof(WhitelistAttribute));
             }
             Db.Save(product);
 
-            return product;
-        }
-
-        public Product Update<T>(int id, IUpdatableField<T> update)
-        {
-            update.ThrowIfNull();
-            var product = Get(id);
-            product.SetProperty(update.FieldName, update.Value);
-            Db.UpdateOnly(product, new[] {update.FieldName}, p => p.Id == product.Id);
             return product;
         }
 
@@ -112,6 +105,18 @@ namespace Derprecated.Api.Handlers
             var existing = Get(id);
             if (default(Product) == existing)
                 throw new ArgumentException("unable to locate product with id");
+            if(existing.IsDeleted)
+                throw new Exception("that product was already deleted");
+            return Db.SoftDelete(existing);
+        }
+
+        public Product Restore(int id)
+        {
+            var existing = Get(id);
+            if (default(Product) == existing)
+                throw new ArgumentException("unable to locate product with id");
+            if (existing.IsDeleted)
+                throw new Exception("that product was already deleted");
             return Db.SoftDelete(existing);
         }
 

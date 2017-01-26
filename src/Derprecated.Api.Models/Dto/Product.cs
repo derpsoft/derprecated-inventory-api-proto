@@ -1,12 +1,12 @@
 ﻿// ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
 
+using System.Collections.Generic;
+using ServiceStack;
+using ServiceStack.DataAnnotations;
+
 namespace Derprecated.Api.Models.Dto
 {
-    using System.Collections.Generic;
-    using ServiceStack;
-    using ServiceStack.DataAnnotations;
-
     [Route("/api/v1/products", "POST")]
     [Route("/api/v1/products/{Id}", "GET, DELETE, PUT, PATCH")]
     [Authenticate]
@@ -28,6 +28,8 @@ namespace Derprecated.Api.Models.Dto
         public int Id { get; set; }
 
         public List<Image> Images { get; set; }
+
+        public bool IncludeDeleted { get; set; } = false;
         public decimal Price { get; set; }
 
         public decimal QuantityOnHand { get; set; }
@@ -37,8 +39,8 @@ namespace Derprecated.Api.Models.Dto
         public string Tags { get; set; }
         public string Title { get; set; }
         public string UnitOfMeasure { get; set; } = "each";
-        public ulong Version { get; set; }
         public int VendorId { get; set; }
+        public ulong Version { get; set; }
         public decimal Weight { get; set; }
         public string WeightUnit { get; set; }
 
@@ -55,6 +57,7 @@ namespace Derprecated.Api.Models.Dto
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanReadProducts)]
     public class ProductCount : IReturn<Dto<long>>
     {
+        public bool IncludeDeleted { get; set; } = false;
     }
 
     [Route("/api/v1/products", "GET")]
@@ -63,6 +66,7 @@ namespace Derprecated.Api.Models.Dto
         Permissions.CanReadProducts)]
     public class Products : IReturn<Dto<List<Product>>>
     {
+        public bool IncludeDeleted { get; set; } = false;
         public int Skip { get; set; } = 0;
         public int Take { get; set; } = 25;
     }
@@ -76,6 +80,8 @@ namespace Derprecated.Api.Models.Dto
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanReadProducts)]
     public class ProductTypeahead : IReturn<Dto<Product>>
     {
+        public bool IncludeDeleted { get; set; } = false;
+
         [StringLength(20)]
         public string Query { get; set; }
     }
@@ -84,8 +90,8 @@ namespace Derprecated.Api.Models.Dto
     [Route("/api/v1/products/{ProductId}/images", "POST")]
     public class ProductImage : IReturn<Dto<Image>>
     {
-        public int ProductId { get; set; }
         public int Id { get; set; }
+        public int ProductId { get; set; }
     }
 
     [Route("/api/v1/products/{Id}/images", "GET")]
@@ -93,5 +99,4 @@ namespace Derprecated.Api.Models.Dto
     {
         public int Id { get; set; }
     }
-
 }

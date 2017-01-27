@@ -71,9 +71,11 @@
         {
             return Db.Select(
                 Db.From<Location>()
-                    .Where(x => x.Bin.Contains(q))
+                    .Where(x => x.Name.Contains(q))
+                    .Or(x => x.Bin.Contains(q))
                     .Or(x => x.Rack.Contains(q))
                     .Or(x => x.Shelf.Contains(q))
+                    .SelectDistinct()
                 );
         }
 

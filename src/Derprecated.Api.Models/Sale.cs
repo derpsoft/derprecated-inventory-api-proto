@@ -19,6 +19,5 @@
         public decimal Total { get; set; }
 
         public int UserAuthId { get; set; }
-        public int VendorId { get; set; }
     }
 }

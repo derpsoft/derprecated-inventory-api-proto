@@ -19,7 +19,7 @@
         public decimal Quantity { get; set; }
         public DateTime Timestamp { get; set; }
         public decimal Total { get; set; }
-        public int VendorId { get; set; }
+        public int UserAuthId { get; set; }
 
         public static Sale From(Models.Sale source)
         {

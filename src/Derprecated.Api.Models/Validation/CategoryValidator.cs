@@ -8,9 +8,11 @@
     {
         public CategoryValidator()
         {
-            RuleFor(x => x.Name)
-                .NotEmpty()
-                .Length(0, 50);
+            RuleSet(ApplyTo.Get | ApplyTo.Patch | ApplyTo.Put | ApplyTo.Delete, () =>
+            {
+                RuleFor(x => x.Id)
+                    .GreaterThanOrEqualTo(1);
+            });
 
             RuleSet(ApplyTo.Post, () =>
             {
@@ -25,12 +27,16 @@
 
             RuleSet(ApplyTo.Put | ApplyTo.Patch | ApplyTo.Delete, () =>
             {
-                RuleFor(x => x.Id)
-                    .GreaterThanOrEqualTo(1);
-
                 RuleFor(x => x.RowVersion)
                     .NotEmpty()
                     .Must(x => x >= 1L);
+            });
+
+            RuleSet(ApplyTo.Post | ApplyTo.Put | ApplyTo.Patch, () =>
+            {
+                RuleFor(x => x.Name)
+                    .NotEmpty()
+                    .Length(0, 50);
             });
         }
     }

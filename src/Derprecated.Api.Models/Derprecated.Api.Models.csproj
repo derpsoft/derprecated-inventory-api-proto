@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.0</TargetFramework>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
     <AssemblyName>Derprecated.Api.Models</AssemblyName>
     <PackageId>Derprecated.Api.Models</PackageId>
     <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
@@ -9,7 +8,6 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="ServiceStack.Core" Version="1.0.*" />
     <PackageReference Include="ServiceStack.Text.Core" Version="1.0.*" />
@@ -17,5 +15,4 @@
     <PackageReference Include="ServiceStack.Server.Core" Version="1.0.*" />
     <PackageReference Include="NETStandard.Library" Version="1.6.1" />
   </ItemGroup>
-
 </Project>

@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.0</TargetFramework>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
     <AssemblyName>Derprecated.Api.Configuration.Core</AssemblyName>
     <PackageId>Derprecated.Api.Configuration.Core</PackageId>
     <PackageTargetFallback>$(PackageTargetFallback);dnxcore50;portable-net451+win8</PackageTargetFallback>
@@ -9,12 +8,6 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Derprecated.Api.Models\Derprecated.Api.Models.csproj" />
-    <ProjectReference Include="..\Derprecated.Api\Derprecated.Api.csproj" />
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="ServiceStack.Core" Version="1.0.*" />
     <PackageReference Include="ServiceStack.Redis.Core" Version="1.0.*" />
@@ -32,5 +25,8 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.*" />
     <PackageReference Include="ServiceStack.Api.Swagger.Core" Version="1.0.*" />
   </ItemGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="..\Derprecated.Api.Models\Derprecated.Api.Models.csproj" />
+    <ProjectReference Include="..\Derprecated.Api\Derprecated.Api.csproj" />
+  </ItemGroup>
 </Project>

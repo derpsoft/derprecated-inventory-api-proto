@@ -50,20 +50,6 @@
             return resp;
         }
 
-        public object Any(WarehouseTypeahead request)
-        {
-            var resp = new WarehousesResponse();
-            var warehouseHandler = new WarehouseHandler(Db, CurrentSession);
-            var searchHandler = new SearchHandler(Db, CurrentSession);
-
-            if (request.Query.IsNullOrEmpty())
-                resp.Warehouses = warehouseHandler.List(0, int.MaxValue).Map(Warehouse.From);
-            else
-                resp.Warehouses = searchHandler.WarehouseTypeahead(request.Query).Map(Warehouse.From);
-
-            return resp;
-        }
-
         public object Any(LocationTypeahead request)
         {
             var resp = new Dto<List<Location>>();

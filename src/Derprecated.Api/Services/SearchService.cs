@@ -8,20 +8,6 @@
 
     public class SearchService : BaseService
     {
-        public object Any(UserTypeahead request)
-        {
-            var resp = new UsersResponse();
-            var userHandler = new UserHandler(Db, UserAuthRepository, CurrentSession);
-            var searchHandler = new SearchHandler(Db, CurrentSession);
-
-            if (request.Query.IsNullOrEmpty())
-                resp.Users = userHandler.List(0, int.MaxValue).Map(User.From);
-            else
-                resp.Users = searchHandler.UserTypeahead(request.Query).Map(User.From);
-
-            return resp;
-        }
-
         public object Any(ProductTypeahead request)
         {
             var resp = new Dto<List<Product>>();

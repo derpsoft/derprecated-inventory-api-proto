@@ -31,6 +31,34 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "indexes", "indexes", "{ABCD
 		create-product-fulltext-index.sql = create-product-fulltext-index.sql
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", "{9D03EE15-5C31-404F-8048-5E7E342F7B2A}"
+	ProjectSection(SolutionItems) = preProject
+		v1.1.0-add-audit-columns-to-sales.sql = v1.1.0-add-audit-columns-to-sales.sql
+		v1.1.0-add-category-id-to-products.sql = v1.1.0-add-category-id-to-products.sql
+		v1.1.0-add-name-to-location.sql = v1.1.0-add-name-to-location.sql
+		v1.1.0-add-parent-fk-to-categories.sql = v1.1.0-add-parent-fk-to-categories.sql
+		v1.1.0-add-soft-deletes-to-locations.sql = v1.1.0-add-soft-deletes-to-locations.sql
+		v1.1.0-add-soft-deletes-to-products.sql = v1.1.0-add-soft-deletes-to-products.sql
+		v1.1.0-alter-location-column-lengths.sql = v1.1.0-alter-location-column-lengths.sql
+		v1.1.0-drop-inventory-transaction-id-from-sales.sql = v1.1.0-drop-inventory-transaction-id-from-sales.sql
+		v1.1.0-drop-vendor-id-from-sales.sql = v1.1.0-drop-vendor-id-from-sales.sql
+		v1.1.0.sql = v1.1.0.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "v1.1.0", "v1.1.0", "{8EEB1179-B9CF-47EF-AA30-3BDA8D746CC6}"
+	ProjectSection(SolutionItems) = preProject
+		v1.1.0-add-audit-columns-to-sales.sql = v1.1.0-add-audit-columns-to-sales.sql
+		v1.1.0-add-category-id-to-products.sql = v1.1.0-add-category-id-to-products.sql
+		v1.1.0-add-name-to-location.sql = v1.1.0-add-name-to-location.sql
+		v1.1.0-add-parent-fk-to-categories.sql = v1.1.0-add-parent-fk-to-categories.sql
+		v1.1.0-add-soft-deletes-to-locations.sql = v1.1.0-add-soft-deletes-to-locations.sql
+		v1.1.0-add-soft-deletes-to-products.sql = v1.1.0-add-soft-deletes-to-products.sql
+		v1.1.0-alter-location-column-lengths.sql = v1.1.0-alter-location-column-lengths.sql
+		v1.1.0-drop-inventory-transaction-id-from-sales.sql = v1.1.0-drop-inventory-transaction-id-from-sales.sql
+		v1.1.0-drop-vendor-id-from-sales.sql = v1.1.0-drop-vendor-id-from-sales.sql
+		v1.1.0.sql = v1.1.0.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,5 +101,7 @@ Global
 		{AF7B4CB8-3A93-4348-95C8-FAA711134C76} = {1C8AD0AD-BF52-4A31-B125-5050C2311764}
 		{B03CACA7-C605-4066-A944-5DC7493658B5} = {1C8AD0AD-BF52-4A31-B125-5050C2311764}
 		{ABCD4735-8D67-4701-92C9-2FDB7F4889CA} = {0D8A9D6F-75AF-4D8D-9DA7-CC4948153B81}
+		{9D03EE15-5C31-404F-8048-5E7E342F7B2A} = {0D8A9D6F-75AF-4D8D-9DA7-CC4948153B81}
+		{8EEB1179-B9CF-47EF-AA30-3BDA8D746CC6} = {9D03EE15-5C31-404F-8048-5E7E342F7B2A}
 	EndGlobalSection
 EndGlobal

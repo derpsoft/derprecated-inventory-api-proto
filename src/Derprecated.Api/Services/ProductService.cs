@@ -3,11 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
     using Handlers;
     using Models.Dto;
     using Models.Shopify;
     using ServiceStack;
     using ServiceStack.Logging;
+    using Image = Models.Dto.Image;
     using Product = Models.Dto.Product;
 
     public class ProductService : BaseService
@@ -20,7 +22,7 @@
             var resp = new Dto<long>();
             var handler = new ProductHandler(Db, CurrentSession);
 
-            resp.Result = handler.Count();
+            resp.Result = handler.Count(request.IncludeDeleted);
 
             return resp;
         }
@@ -31,7 +33,7 @@
             var productHandler = new ProductHandler(Db, CurrentSession);
             var inventoryHandler = new InventoryHandler(Db, CurrentSession);
 
-            var product = Product.From(productHandler.GetProduct(request.Id));
+            var product = Product.From(productHandler.Get(request.Id, request.IncludeDeleted));
 
             resp.Result = product;
             resp.Result.QuantityOnHand = inventoryHandler.GetQuantityOnHand(product.Id);
@@ -42,9 +44,10 @@
 
         public object Delete(Product request)
         {
-            throw new NotImplementedException();
             var resp = new Dto<Product>();
             var handler = new ProductHandler(Db, CurrentSession);
+
+            resp.Result = Product.From(handler.Delete(request.Id));
 
             return resp;
         }
@@ -93,7 +96,7 @@
             var productHandler = new ProductHandler(Db, CurrentSession);
             var inventoryHandler = new InventoryHandler(Db, CurrentSession);
 
-            resp.Result = productHandler.List(request.Skip, request.Take)
+            resp.Result = productHandler.List(request.Skip, request.Take, request.IncludeDeleted)
                                         .Map(product =>
                                         {
                                             var p = Product.From(product);
@@ -101,6 +104,44 @@
                                             return p;
                                         });
 
+            return resp;
+        }
+
+        public object Get(ProductImage request)
+        {
+            var resp = new Dto<Image>();
+
+            return resp;
+        }
+
+        public object Delete(ProductImage request)
+        {
+            throw new NotImplementedException();
+            var resp = new Dto<Image>();
+
+            return resp;
+        }
+
+        public object Any(ProductImage request)
+        {
+            var resp = new Dto<Image>();
+            if (Request.Files.Length > 0)
+            {
+                var productHandler = new ProductHandler(Db, CurrentSession);
+                var product = productHandler.Get(request.ProductId);
+
+                if (null != product)
+                {
+                    var imageHandler = ResolveService<ImageHandler>();
+                    var uri = imageHandler.SaveImage(Request.Files.First(), "products");
+
+                    resp.Result = Image.From(productHandler.SaveImage(product.Id, new Models.ProductImage
+                    {
+                        ProductId = product.Id,
+                        SourceUrl = uri.ToString()
+                    }));
+                }
+            }
             return resp;
         }
     }

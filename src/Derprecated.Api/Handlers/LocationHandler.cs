@@ -21,13 +21,14 @@
         public Location Get(int id)
         {
             id.ThrowIfLessThan(1);
-            return Db.SingleById<Location>(id);
+            return Db.Single<Location>(new {Id = id, IsDeleted = false});
         }
 
         public List<Location> List(int skip = 0, int take = 25)
         {
             return Db.Select(
                 Db.From<Location>()
+                  .Where(x => !x.IsDeleted)
                   .Skip(skip)
                   .Take(take)
                 );
@@ -47,6 +48,15 @@
             Db.Save(location);
 
             return location;
+        }
+
+        public Location Delete(int id)
+        {
+            var existing = Get(id);
+            if (default(Location) == existing)
+                throw new ArgumentException("unable to find a record with that id", nameof(id));
+
+            return Db.SoftDelete(existing);
         }
 
         public long Count()

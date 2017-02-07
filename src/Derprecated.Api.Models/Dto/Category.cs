@@ -21,6 +21,7 @@
         public int Id { get; set; }
         public string Name { get; set; }
         public ulong RowVersion { get; set; }
+        public int ParentId { get; set; }
 
         public static Category From(Models.Category source)
         {
@@ -46,7 +47,7 @@
         public int Take { get; set; } = 25;
     }
 
-    [Route("/api/v1/categories", "SEARCH")]
+    [Route("/api/v1/categories", "GET, SEARCH")]
     [Authenticate]
     [RequiresAnyPermission(ApplyTo.Search, Permissions.CanDoEverything, Permissions.CanManageVendors,
         Permissions.CanReadVendors)]
@@ -60,7 +61,7 @@
         public string Name { get; set; }
     }
 
-    [Route("/api/v1/categories/typeahead", "SEARCH")]
+    [Route("/api/v1/categories/typeahead", "GET, SEARCH")]
     [Authenticate]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageCategories, Permissions.CanReadCategories)]
     public sealed class CategoryTypeahead : IReturn<Dto<List<Category>>>

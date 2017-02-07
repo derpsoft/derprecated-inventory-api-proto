@@ -5,7 +5,10 @@
     using System.Net;
     using System.Reflection;
     using Funq;
+    using Handlers;
     using MailKit.Net.Smtp;
+    using Microsoft.WindowsAzure.Storage;
+    using Microsoft.WindowsAzure.Storage.Blob;
     using Models;
     using Models.Configuration;
     using ServiceStack;
@@ -157,7 +160,10 @@
             });
 
             // Plugins
-            Plugins.Add(new CorsFeature(allowCredentials: true, allowedHeaders: "Content-Type, X-Requested-With",
+            Plugins.Add(new CorsFeature(
+                allowCredentials: true,
+                allowedMethods: "OPTIONS, GET, PUT, POST, PATCH, DELETE, SEARCH",
+                allowedHeaders: "Content-Type, X-Requested-With, Cache-Control",
                 allowOriginWhitelist:
                     new List<string>
                     {
@@ -189,12 +195,21 @@
             Plugins.Add(new AutoQueryFeature {MaxLimit = 100});
             Plugins.Add(new SwaggerFeature());
 
+            // Handlers
+            container.RegisterAutoWired<ImageHandler>();
+
             // Misc
             container.Register(new ShopifyServiceClient($"https://{configuration.Shopify.Domain}")
             {
                 UserName = configuration.Shopify.ApiKey,
                 Password = configuration.Shopify.Password
             });
+            container.Register(c =>
+            {
+                var connectionString = configuration.ConnectionStrings.AzureStorage;
+                return CloudStorageAccount.Parse(connectionString);
+            });
+            container.Register(c => c.Resolve<CloudStorageAccount>().CreateCloudBlobClient());
         }
     }
 }

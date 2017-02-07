@@ -52,7 +52,7 @@
             var expected = Product.EmptyProduct;
             var testId = expected.Id;
 
-            var product = handler.GetProduct(testId);
+            var product = handler.Get(testId);
 
             Assert.AreEqual(expected.Id, product.Id);
         }
@@ -67,7 +67,7 @@
         {
             var handler = Host.Resolve<Api.Handlers.ProductHandler>();
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => handler.GetProduct(testId));
+            Assert.Throws<ArgumentOutOfRangeException>(() => handler.Get(testId));
         }
 
         [Test]
@@ -80,7 +80,7 @@
         {
             var handler = Host.Resolve<Api.Handlers.ProductHandler>();
 
-            Assert.DoesNotThrow(() => handler.GetProduct(testId));
+            Assert.DoesNotThrow(() => handler.Get(testId));
         }
 
         [Test]
@@ -92,7 +92,7 @@
             Models.Product result = null;
 
             Assert.DoesNotThrow(() => handler.Save(Product.EmptyProduct));
-            Assert.DoesNotThrow(() => result = handler.GetProduct(Product.EmptyProduct.Id));
+            Assert.DoesNotThrow(() => result = handler.Get(Product.EmptyProduct.Id));
             Assert.DoesNotThrow(
                 () =>
                     Product.EmptyProduct
@@ -126,7 +126,7 @@
 
             Assert.DoesNotThrow(() => newProduct = handler.Save(newProduct));
             Assert.GreaterOrEqual(newProduct.Id, 1);
-            Assert.DoesNotThrow(() => result = handler.GetProduct(newProduct.Id));
+            Assert.DoesNotThrow(() => result = handler.Get(newProduct.Id));
             Assert.DoesNotThrow(
                 () =>
                     newProduct.ThrowIfInequivalentWithAttribute<Models.Product, EqualityCheckAttribute>(

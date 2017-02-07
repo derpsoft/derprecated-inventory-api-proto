@@ -14,7 +14,12 @@
 
         public DateTime ModifyDate { get; set; }
         public string Name { get; set; }
-        public int ParentId { get; set; }
+
+        [Reference]
+        public Category Parent { get; set; }
+
+        [ForeignKey(typeof(Category), OnDelete = "SET DEFAULT", OnUpdate = "CASCADE")]
+        public int? ParentId { get; set; }
 
         [Reference]
         public List<Product> Products { get; set; }

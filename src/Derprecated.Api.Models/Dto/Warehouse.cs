@@ -1,5 +1,6 @@
 ﻿namespace Derprecated.Api.Models.Dto
 {
+    using System;
     using System.Collections.Generic;
     using ServiceStack;
     using ServiceStack.DataAnnotations;
@@ -15,9 +16,11 @@
          Permissions.CanDeleteWarehouses)]
     public class Warehouse : IReturn<Dto<Warehouse>>
     {
+        public DateTime CreateDate { get; set; }
         public int Id { get; set; }
-
+        public DateTime ModifyDate { get; set; }
         public string Name { get; set; }
+        public ulong RowVersion { get; set; }
 
         public static Warehouse From(Models.Warehouse source)
         {
@@ -30,7 +33,6 @@
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageWarehouses, Permissions.CanReadWarehouses)]
     public class WarehouseCount : IReturn<Dto<long>>
     {
-        
     }
 
     [Route("/api/v1/warehouses", "GET")]

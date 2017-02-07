@@ -3,7 +3,11 @@
     using System.Collections.Generic;
     using ServiceStack;
 
-    public class Profile
+    [Route("/api/v1/me", "GET, PUT, POST, PATCH")]
+    [Route("/api/v1/profile", "GET, PUT, POST, PATCH")]
+    [EnsureHttps(SkipIfDebugMode = true, SkipIfXForwardedFor = true)]
+    [Authenticate]
+    public class Profile : IReturn<Dto<Profile>>
     {
         public string DisplayName { get; set; }
         public string FirstName { get; set; }
@@ -16,9 +20,7 @@
 
         public static Profile From(Models.UserSession source)
         {
-            var userAuth = new Profile().PopulateWith(source);
-
-            return userAuth;
+            return new Profile().PopulateWith(source);
         }
     }
 }

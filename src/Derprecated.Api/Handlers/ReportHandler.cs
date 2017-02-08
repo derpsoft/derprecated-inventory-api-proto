@@ -42,8 +42,7 @@
                 WHERE
                     [Timestamp] BETWEEN @startDate AND @endDate
                     AND [VendorId] = @vendorId
-                GROUP BY DATEPART({
-                        groupBy}, [Timestamp])
+                GROUP BY DATEPART({groupBy}, [Timestamp])
                  ",
                     new
                     {
@@ -76,9 +75,7 @@
                 WHERE
                     [Timestamp] BETWEEN @startDate AND @endDate
                     AND [ProductId] = @productId
-                GROUP BY DATEPART({
-                        groupBy}, [Timestamp])
-                 ",
+                GROUP BY DATEPART({groupBy}, [Timestamp])",
                     new
                     {
                         startDate,
@@ -87,79 +84,68 @@
                     });
         }
 
-        public int GetDispatchedTotal(DateTime startDate, DateTime endDate)
+        public Dictionary<DateTime, int> GetDispatchedInventory(DateTime startDate, DateTime endDate, string groupBy)
         {
             if (startDate >= endDate)
                 throw new ArgumentOutOfRangeException(nameof(startDate),
                     $"{nameof(startDate)} should come before {nameof(endDate)}");
 
+            if (!AcceptableGroupBy.Contains(groupBy))
+                throw new ArgumentOutOfRangeException(nameof(groupBy), groupBy,
+                    $"must be one of {string.Join(", ", AcceptableGroupBy)}");
+
             return
-                Db.Scalar<int>(
-                    @"
+                Db.Dictionary<DateTime, int>(
+                   $@"
                 SELECT 
-                    SUM([Quantity])
+                    CAST(MIN([CreateDate]) AS DATE)
+                    , SUM([Quantity])
                 FROM 
                     [InventoryTransaction]
                 WHERE
                     [CreateDate] BETWEEN @startDate AND @endDate
                     AND [TransactionType] = @transactionType
-                 ",
+                GROUP BY DATEPART({groupBy}, [CreateDate])",
                     new
                     {
                         startDate,
                         endDate,
-                        InventoryTransactionTypes.Out
+                        groupBy,
+                        transactionType = InventoryTransactionTypes.Out
                     });
         }
 
-        public int GetReceivedTotal(DateTime startDate, DateTime endDate)
+        public Dictionary<DateTime, int> GetReceivedInventory(DateTime startDate, DateTime endDate, string groupBy)
         {
             if (startDate >= endDate)
                 throw new ArgumentOutOfRangeException(nameof(startDate),
                     $"{nameof(startDate)} should come before {nameof(endDate)}");
 
+            if (!AcceptableGroupBy.Contains(groupBy))
+                throw new ArgumentOutOfRangeException(nameof(groupBy), groupBy,
+                    $"must be one of {string.Join(", ", AcceptableGroupBy)}");
+
             return
-                Db.Scalar<int>(
-                    @"
+                Db.Dictionary<DateTime, int>(
+                    $@"
                 SELECT 
-                    SUM([Quantity])
+                    CAST(MIN([CreateDate]) AS DATE)
+                    , SUM([Quantity])
                 FROM 
                     [InventoryTransaction]
                 WHERE
                     [CreateDate] BETWEEN @startDate AND @endDate
                     AND [TransactionType] = @transactionType
-                 ",
+                GROUP BY DATEPART({groupBy}, [CreateDate])",
                     new
                     {
                         startDate,
                         endDate,
-                        InventoryTransactionTypes.In
+                        groupBy,
+                        transactionType = InventoryTransactionTypes.In
                     });
         }
-
-        public decimal GetSalesByTotal(DateTime startDate, DateTime endDate)
-        {
-            if (startDate >= endDate)
-                throw new ArgumentOutOfRangeException(nameof(startDate),
-                    $"{nameof(startDate)} should come before {nameof(endDate)}");
-
-            return
-                Db.Scalar<decimal>(
-                    @"
-                SELECT 
-                    SUM([Total])
-                FROM 
-                    [Sale]
-                WHERE
-                    [Timestamp] BETWEEN @startDate AND @endDate
-                 ",
-                    new
-                    {
-                        startDate,
-                        endDate
-                    });
-        }
-
+        
         public Dictionary<DateTime, decimal> GetSalesByTotal(DateTime startDate, DateTime endDate, string groupBy)
         {
             if (startDate >= endDate)
@@ -180,8 +166,7 @@
                     [Sale]
                 WHERE
                     [Timestamp] BETWEEN @startDate AND @endDate
-                GROUP BY DATEPART({
-                        groupBy}, [Timestamp])
+                GROUP BY DATEPART({groupBy}, [Timestamp])
                  ",
                     new
                     {

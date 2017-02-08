@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Handlers;
     using Models;
     using Models.Dto;
@@ -48,9 +49,9 @@
             var handler = new ReportHandler(Db, CurrentSession);
 
             result.Result = request;
-            result.Result.Dispatched = Math.Abs(handler.GetDispatchedTotal(request.StartDate, request.EndDate));
-            result.Result.Received = Math.Abs(handler.GetReceivedTotal(request.StartDate, request.EndDate));
-            result.Result.TotalSales = handler.GetSalesByTotal(request.StartDate, request.EndDate);
+            result.Result.Dispatched = handler.GetDispatchedInventory(request.StartDate, request.EndDate, request.GroupBy);
+            result.Result.Received = handler.GetReceivedInventory(request.StartDate, request.EndDate, request.GroupBy);
+            result.Result.Sales = handler.GetSalesByTotal(request.StartDate, request.EndDate, request.GroupBy);
 
             return result;
         }

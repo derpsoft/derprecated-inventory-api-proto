@@ -47,7 +47,7 @@
         public void Receive(int productId, int locationId, decimal quantity)
         {
             productId.ThrowIfLessThan(1);
-            locationId.ThrowIfLessThan(1);
+            //locationId.ThrowIfLessThan(1);
             quantity.ThrowIfLessThan(1);
 
             var transaction = new InventoryTransaction();

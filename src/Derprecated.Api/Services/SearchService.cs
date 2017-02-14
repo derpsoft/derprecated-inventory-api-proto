@@ -22,20 +22,6 @@
             return resp;
         }
 
-        public object Any(VendorTypeahead request)
-        {
-            var resp = new Dto<List<Vendor>>();
-            var vendorHandler = new VendorHandler(Db, CurrentSession);
-            var searchHandler = new SearchHandler(Db, CurrentSession);
-
-            if (request.Query.IsNullOrEmpty())
-                resp.Result = vendorHandler.List(0, int.MaxValue).Map(Vendor.From);
-            else
-                resp.Result = searchHandler.VendorTypeahead(request.Query).Map(Vendor.From);
-
-            return resp;
-        }
-
         public object Any(LocationTypeahead request)
         {
             var resp = new Dto<List<Location>>();

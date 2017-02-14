@@ -6,6 +6,7 @@
     using Models;
     using ServiceStack;
     using ServiceStack.OrmLite;
+    using System.Linq;
 
     public class WarehouseHandler
     {
@@ -18,25 +19,53 @@
         private IDbConnection Db { get; }
         private UserSession User { get; }
 
-        public Warehouse Get(int id)
+        public Warehouse Get(int id, bool includeDeleted = false)
         {
             id.ThrowIfLessThan(1);
 
-            return Db.SingleById<Warehouse>(id);
+            var query = Db.From<Warehouse>()
+                .Where(x => x.Id == id);
+
+            if (!includeDeleted)
+                query = query.Where(x => !x.IsDeleted);
+
+            return Db.LoadSelect(query)
+                .First();
         }
 
-        public long Count()
+        public long Count(bool includeDeleted = false)
         {
-            return Db.Count<Warehouse>();
+            if (includeDeleted)
+                return Db.Count<Warehouse>();
+
+            return Db.Count<Warehouse>(x => !x.IsDeleted);
         }
 
-        public List<Warehouse> List(int skip = 0, int take = 25)
+        public List<Warehouse> List(int skip = 0, int take = 25, bool includeDeleted = false)
         {
-            return Db.Select(
-                Db.From<Warehouse>()
-                  .Skip(skip)
-                  .Take(take)
-                );
+            skip.ThrowIfLessThan(0);
+            take.ThrowIfLessThan(1);
+
+            var query = Db.From<Warehouse>()
+                .Skip(skip)
+                .Take(take);
+
+            if (!includeDeleted)
+                query = query.Where(x => !x.IsDeleted);
+
+            return Db.LoadSelect(query);
+
+        }
+
+        public List<Warehouse> Typeahead(string q, bool includeDeleted = false)
+        {
+            var query = Db.From<Warehouse>()
+                .Where(x => x.Name.Contains(q));
+
+            if (!includeDeleted)
+                query = query.And(x => !x.IsDeleted);
+
+            return Db.Select(query.SelectDistinct());
         }
 
         public Warehouse Save(Warehouse warehouse)
@@ -53,6 +82,16 @@
             Db.Save(warehouse);
 
             return warehouse;
+        }
+
+        public Warehouse Delete(int id)
+        {
+            var existing = Get(id);
+            if (default(Warehouse) == existing)
+                throw new ArgumentException("unable to locate warehouse with id");
+            if (existing.IsDeleted)
+                throw new Exception("that warehouse was already deleted");
+            return Db.SoftDelete(existing);
         }
     }
 }

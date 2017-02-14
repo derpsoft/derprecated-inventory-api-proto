@@ -8,11 +8,11 @@
     [Route("/api/v1/vendors/{Id}", "GET, DELETE, PATCH, PUT")]
     [Authenticate]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageVendors,
-        Permissions.CanReadVendors)]
+         Permissions.CanReadVendors)]
     [RequiresAnyPermission(ApplyTo.Delete, Permissions.CanDoEverything, Permissions.CanManageVendors,
-        Permissions.CanDeleteVendors)]
+         Permissions.CanDeleteVendors)]
     [RequiresAnyPermission(ApplyTo.Put | ApplyTo.Post | ApplyTo.Patch, Permissions.CanDoEverything,
-        Permissions.CanManageVendors, Permissions.CanUpsertVendors)]
+         Permissions.CanManageVendors, Permissions.CanUpsertVendors)]
     public sealed class Vendor : IReturn<Dto<Vendor>>
     {
         public string ContactAddress { get; set; }
@@ -20,6 +20,7 @@
         public string ContactName { get; set; }
         public string ContactPhone { get; set; }
         public int Id { get; set; }
+        public bool IncludeDeleted { get; set; } = false;
         public string Name { get; set; }
         public ulong RowVersion { get; set; }
 
@@ -34,17 +35,19 @@
     [Route("/api/v1/vendors/count", "GET")]
     [Authenticate]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageVendors,
-        Permissions.CanReadVendors)]
+         Permissions.CanReadVendors)]
     public sealed class VendorCount : IReturn<Dto<long>>
     {
+        public bool IncludeDeleted { get; set; } = false;
     }
 
     [Route("/api/v1/vendors", "GET")]
     [Authenticate]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageVendors,
-        Permissions.CanReadVendors)]
+         Permissions.CanReadVendors)]
     public sealed class Vendors : IReturn<Dto<List<Vendor>>>
     {
+        public bool IncludeDeleted { get; set; } = false;
         public int Skip { get; set; } = 0;
         public int Take { get; set; } = 25;
     }
@@ -52,14 +55,14 @@
     [Route("/api/v1/vendors", "GET, SEARCH")]
     [Authenticate]
     [RequiresAnyPermission(ApplyTo.Search, Permissions.CanDoEverything, Permissions.CanManageVendors,
-        Permissions.CanReadVendors)]
+         Permissions.CanReadVendors)]
     public sealed class VendorSearch : QueryDb<Models.Vendor, Vendor>
     {
         [QueryDbField(Term = QueryTerm.Or)]
         public int Id { get; set; }
 
         [QueryDbField(Term = QueryTerm.Or, Template = "LOWER({Field}) like {Value}", Field = "Name",
-            ValueFormat = "%{0}%")]
+             ValueFormat = "%{0}%")]
         public string Name { get; set; }
     }
 
@@ -68,6 +71,8 @@
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageVendors, Permissions.CanReadVendors)]
     public sealed class VendorTypeahead : IReturn<Dto<Vendor>>
     {
+        public bool IncludeDeleted { get; set; } = false;
+
         [StringLength(20)]
         public string Query { get; set; }
     }

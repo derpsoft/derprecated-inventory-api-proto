@@ -28,15 +28,16 @@
         {
             return Db.Select(
                 Db.From<Location>()
-                  .Where(x => !x.IsDeleted)
-                  .Skip(skip)
-                  .Take(take)
-                );
+                    .Where(x => !x.IsDeleted)
+                    .Skip(skip)
+                    .Take(take)
+            );
         }
 
         public Location Save(Location location)
         {
             location.ThrowIfNull();
+
             if (location.Id >= 1)
             {
                 var existing = Get(location.Id);

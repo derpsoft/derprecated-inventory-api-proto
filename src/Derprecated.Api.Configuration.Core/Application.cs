@@ -116,7 +116,9 @@
             using (var ctx = container.Resolve<IDbConnectionFactory>().Open())
             {
                 ctx.CreateTableIfNotExists<ApiKey>();
+                ctx.CreateTableIfNotExists<Category>();
                 ctx.CreateTableIfNotExists<Product>();
+                ctx.CreateTableIfNotExists<ProductCategory>();
                 ctx.CreateTableIfNotExists<ProductImage>();
                 ctx.CreateTableIfNotExists<Tag>();
                 ctx.CreateTableIfNotExists<ProductTag>();
@@ -126,8 +128,6 @@
                 ctx.CreateTableIfNotExists<Sale>();
                 ctx.CreateTableIfNotExists<Warehouse>();
                 ctx.CreateTableIfNotExists<Location>();
-                ctx.CreateTableIfNotExists<Category>();
-                ctx.CreateTableIfNotExists<ProductCategory>();
             }
 #if DEBUG
             var testUser = new UserAuth

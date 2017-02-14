@@ -21,7 +21,7 @@
         [Reference]
         public Category Parent { get; set; }
 
-        [ForeignKey(typeof(Category), OnDelete = "SET DEFAULT", OnUpdate = "CASCADE")]
+        [ForeignKey(typeof(Category), OnUpdate = "NO ACTION", OnDelete = "NO ACTION")]
         public int? ParentId { get; set; }
 
         [Reference]

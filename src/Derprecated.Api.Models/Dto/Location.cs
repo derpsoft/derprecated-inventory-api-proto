@@ -14,7 +14,7 @@
         Permissions.CanUpsertLocations)]
     [RequiresAnyPermission(ApplyTo.Delete, Permissions.CanDoEverything, Permissions.CanManageLocations,
         Permissions.CanDeleteLocations)]
-    public class Location : IReturn<Dto<Location>>
+    public class Location : IReturn<Dto<Location>>, IPrimaryKeyable
     {
         public string Bin { get; set; }
         public int Id { get; set; }
@@ -24,11 +24,6 @@
         public ulong RowVersion { get; set; }
         public string Shelf { get; set; }
         public int WarehouseId { get; set; }
-
-        public static Location From(Models.Location source)
-        {
-            return new Location().PopulateWith(source);
-        }
     }
 
     [Route("/api/v1/locations", "GET")]

@@ -56,6 +56,7 @@
                 return new OrmLiteConnectionFactory(connectionString,
                     SqlServerDialect.Provider);
             });
+            container.Register(c => c.Resolve<IDbConnectionFactory>().Open());
 
             // Redis
             //container.Register<IRedisClientsManager>(c =>
@@ -196,6 +197,7 @@
 
             // Handlers
             container.RegisterAutoWired<ImageHandler>();
+            container.RegisterAutoWired<LocationHandler>();
 
             // Misc
             container.Register(new ShopifyServiceClient($"https://{configuration.Shopify.Domain}")

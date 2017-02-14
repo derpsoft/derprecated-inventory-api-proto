@@ -3,7 +3,7 @@
     using System;
     using ServiceStack.DataAnnotations;
 
-    public class Location : IAuditable, ISoftDeletable
+    public class Location : IAuditable, ISoftDeletable, IPrimaryKeyable
     {
         [StringLength(10)]
         public string Bin { get; set; }

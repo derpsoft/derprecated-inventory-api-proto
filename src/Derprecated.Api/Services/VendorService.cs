@@ -26,7 +26,17 @@
             var resp = new Dto<Vendor>();
             var handler = new VendorHandler(Db, CurrentSession);
 
-            resp.Result = Vendor.From(handler.GetVendor(request.Id));
+            resp.Result = Vendor.From(handler.Get(request.Id));
+
+            return resp;
+        }
+
+        public object Delete(Vendor request)
+        {
+            var resp = new Dto<Vendor>();
+            var handler = new VendorHandler(Db, CurrentSession);
+
+            resp.Result = Vendor.From(handler.Delete(request.Id));
 
             return resp;
         }
@@ -48,6 +58,19 @@
             var handler = new VendorHandler(Db, CurrentSession);
 
             resp.Result = handler.List(request.Skip, request.Take).Map(Vendor.From);
+
+            return resp;
+        }
+
+        public object Any(VendorTypeahead request)
+        {
+            var resp = new Dto<List<Vendor>>();
+            var vendorHandler = new VendorHandler(Db, CurrentSession);
+
+            if (request.Query.IsNullOrEmpty())
+                resp.Result = vendorHandler.List(0, int.MaxValue).Map(Vendor.From);
+            else
+                resp.Result = vendorHandler.Typeahead(request.Query, request.IncludeDeleted).Map(Vendor.From);
 
             return resp;
         }

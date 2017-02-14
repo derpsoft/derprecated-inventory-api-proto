@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Linq;
     using Models;
     using ServiceStack;
     using ServiceStack.OrmLite;
@@ -18,25 +19,53 @@
         private IDbConnection Db { get; }
         private UserSession User { get; }
 
-        public Vendor GetVendor(int id)
+        public Vendor Get(int id, bool includeDeleted = false)
         {
             id.ThrowIfLessThan(1);
 
-            return Db.SingleById<Vendor>(id);
+            var query = Db.From<Vendor>()
+                .Where(x => x.Id == id);
+
+            if (!includeDeleted)
+                query = query.Where(x => !x.IsDeleted);
+
+            return Db.LoadSelect(query)
+                .First();
         }
 
-        public long Count()
+        public long Count(bool includeDeleted = false)
         {
-            return Db.Count<Vendor>();
+            if (includeDeleted)
+                return Db.Count<Vendor>();
+
+            return Db.Count<Vendor>(x => !x.IsDeleted);
+
         }
 
-        public List<Vendor> List(int skip = 0, int take = 25)
+        public List<Vendor> List(int skip = 0, int take = 25, bool includeDeleted = false)
         {
-            return Db.Select(
-                Db.From<Vendor>()
-                  .Skip(skip)
-                  .Take(take)
-                );
+            skip.ThrowIfLessThan(0);
+            take.ThrowIfLessThan(1);
+
+            var query = Db.From<Vendor>()
+                .Skip(skip)
+                .Take(take);
+
+            if (!includeDeleted)
+                query = query.Where(x => !x.IsDeleted);
+
+            return Db.LoadSelect(query);
+        }
+
+        public List<Vendor> Typeahead(string q, bool includeDeleted = false)
+        {
+            var query = Db.From<Vendor>()
+                .Where(x => x.Name.Contains(q));
+
+            if (!includeDeleted)
+                query = query.And(x => !x.IsDeleted);
+
+            return Db.Select(query.SelectDistinct());
         }
 
         public Vendor Save(Vendor vendor)
@@ -44,7 +73,7 @@
             vendor.ThrowIfNull();
             if (vendor.Id >= 1)
             {
-                var existing = GetVendor(vendor.Id);
+                var existing = Get(vendor.Id);
                 if (default(Vendor) == existing)
                     throw new ArgumentException("invalid Id for existing vendor", nameof(vendor));
 
@@ -53,6 +82,16 @@
             Db.Save(vendor);
 
             return vendor;
+        }
+
+        public Vendor Delete(int id)
+        {
+            var existing = Get(id);
+            if (default(Vendor) == existing)
+                throw new ArgumentException("unable to locate vendor with id");
+            if (existing.IsDeleted)
+                throw new Exception("that vendor was already deleted");
+            return Db.SoftDelete(existing);
         }
     }
 }

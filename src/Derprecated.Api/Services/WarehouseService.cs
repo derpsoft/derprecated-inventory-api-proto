@@ -33,7 +33,12 @@
 
         public object Delete(Warehouse request)
         {
-            throw new NotImplementedException();
+            var resp = new Dto<Warehouse>();
+            var handler = new WarehouseHandler(Db, CurrentSession);
+
+            resp.Result = Warehouse.From(handler.Delete(request.Id));
+
+            return resp;
         }
 
         public object Any(Warehouse request)
@@ -61,12 +66,11 @@
         {
             var resp = new Dto<List<Warehouse>>();
             var warehouseHandler = new WarehouseHandler(Db, CurrentSession);
-            var searchHandler = new SearchHandler(Db, CurrentSession);
 
             if (request.Query.IsNullOrEmpty())
                 resp.Result = warehouseHandler.List(0, int.MaxValue).Map(Warehouse.From);
             else
-                resp.Result = searchHandler.WarehouseTypeahead(request.Query).Map(Warehouse.From);
+                resp.Result = warehouseHandler.Typeahead(request.Query, request.IncludeDeleted).Map(Warehouse.From);
 
             return resp;
         }

@@ -4,13 +4,16 @@
     using System.Collections.Generic;
     using ServiceStack.DataAnnotations;
 
-    public class Category : IAuditable
+    public class Category : IAuditable, ISoftDeletable
     {
         public DateTime CreateDate { get; set; }
+        public DateTime? DeleteDate { get; set; }
 
         [PrimaryKey]
         [AutoIncrement]
         public int Id { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         public DateTime ModifyDate { get; set; }
         public string Name { get; set; }

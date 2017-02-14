@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using ServiceStack.DataAnnotations;
 
-    public class Warehouse : IAuditable
+    public class Warehouse : IAuditable, ISoftDeletable
     {
         public Warehouse()
         {
@@ -12,10 +12,13 @@
         }
 
         public DateTime CreateDate { get; set; }
+        public DateTime? DeleteDate { get; set; }
 
         [PrimaryKey]
         [AutoIncrement]
         public int Id { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         [Reference]
         public List<Location> Locations { get; set; }

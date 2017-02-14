@@ -18,6 +18,7 @@
     {
         public DateTime CreateDate { get; set; }
         public int Id { get; set; }
+        public bool IncludeDeleted { get; set; } = false;
         public DateTime ModifyDate { get; set; }
         public string Name { get; set; }
         public ulong RowVersion { get; set; }
@@ -33,6 +34,7 @@
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageWarehouses, Permissions.CanReadWarehouses)]
     public class WarehouseCount : IReturn<Dto<long>>
     {
+        public bool IncludeDeleted { get; set; } = false;
     }
 
     [Route("/api/v1/warehouses", "GET")]
@@ -40,6 +42,7 @@
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageWarehouses, Permissions.CanReadWarehouses)]
     public class Warehouses : IReturn<Dto<List<Warehouse>>>
     {
+        public bool IncludeDeleted { get; set; } = false;
         public int Skip { get; set; } = 0;
         public int Take { get; set; } = 25;
     }
@@ -62,6 +65,8 @@
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageWarehouses, Permissions.CanReadWarehouses)]
     public class WarehouseTypeahead : IReturn<Dto<List<Warehouse>>>
     {
+        public bool IncludeDeleted { get; set; } = false;
+
         [StringLength(20)]
         public string Query { get; set; }
     }

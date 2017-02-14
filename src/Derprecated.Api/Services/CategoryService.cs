@@ -1,6 +1,5 @@
 ﻿namespace Derprecated.Api.Services
 {
-    using System;
     using System.Collections.Generic;
     using Handlers;
     using Models.Dto;
@@ -13,14 +12,19 @@
             var resp = new Dto<Category>();
             var handler = new CategoryHandler(Db, CurrentSession);
 
-            resp.Result = Category.From(handler.Get(request.Id));
+            resp.Result = Category.From(handler.Get(request.Id, request.IncludeDeleted));
 
             return resp;
         }
 
         public object Delete(Category request)
         {
-            throw new NotImplementedException();
+            var resp = new Dto<Category>();
+            var handler = new CategoryHandler(Db, CurrentSession);
+
+            resp.Result = Category.From(handler.Delete(request.Id));
+
+            return resp;
         }
 
         public object Any(Category request)
@@ -38,7 +42,7 @@
             var resp = new Dto<long>();
             var handler = new CategoryHandler(Db, CurrentSession);
 
-            resp.Result = handler.Count();
+            resp.Result = handler.Count(request.IncludeDeleted);
 
             return resp;
         }
@@ -48,7 +52,7 @@
             var resp = new Dto<List<Category>>();
             var handler = new CategoryHandler(Db, CurrentSession);
 
-            resp.Result = handler.List(request.Skip, request.Take).Map(Category.From);
+            resp.Result = handler.List(request.Skip, request.Take, request.IncludeDeleted).Map(Category.From);
 
             return resp;
         }
@@ -57,12 +61,11 @@
         {
             var resp = new Dto<List<Category>>();
             var categoryHandler = new CategoryHandler(Db, CurrentSession);
-            var searchHandler = new SearchHandler(Db, CurrentSession);
 
             if (request.Query.IsNullOrEmpty())
-                resp.Result = categoryHandler.List(0, int.MaxValue).Map(Category.From);
+                resp.Result = categoryHandler.List(0, int.MaxValue, request.IncludeDeleted).Map(Category.From);
             else
-                resp.Result = searchHandler.CategoryTypeahead(request.Query).Map(Category.From);
+                resp.Result = categoryHandler.Typeahead(request.Query, request.IncludeDeleted).Map(Category.From);
 
             return resp;
         }

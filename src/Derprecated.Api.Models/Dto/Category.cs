@@ -21,7 +21,7 @@
         public int Id { get; set; }
         public bool IncludeDeleted { get; set; } = false;
         public string Name { get; set; }
-        public int ParentId { get; set; }
+        public int? ParentId { get; set; }
         public ulong RowVersion { get; set; }
 
         public static Category From(Models.Category source)

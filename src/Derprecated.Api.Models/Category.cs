@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using ServiceStack.DataAnnotations;
 
-    public class Category : IAuditable, ISoftDeletable
+    public class Category : IAuditable, ISoftDeletable, IPrimaryKeyable
     {
         public DateTime CreateDate { get; set; }
         public DateTime? DeleteDate { get; set; }

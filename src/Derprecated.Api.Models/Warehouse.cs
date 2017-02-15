@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using ServiceStack.DataAnnotations;
 
-    public class Warehouse : IAuditable, ISoftDeletable
+    public class Warehouse : IAuditable, ISoftDeletable, IPrimaryKeyable
     {
         public Warehouse()
         {

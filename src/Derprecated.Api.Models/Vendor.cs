@@ -3,7 +3,7 @@
     using System;
     using ServiceStack.DataAnnotations;
 
-    public class Vendor : IAuditable, ISoftDeletable
+    public class Vendor : IAuditable, ISoftDeletable, IPrimaryKeyable
     {
         [StringLength(400)]
         public string ContactAddress { get; set; }

@@ -5,7 +5,9 @@
     using System.Net;
     using System.Reflection;
     using Funq;
+    using Handlers;
     using MailKit.Net.Smtp;
+    using Microsoft.WindowsAzure.Storage;
     using Models;
     using Models.Configuration;
     using ServiceStack;
@@ -53,6 +55,8 @@
                 return new OrmLiteConnectionFactory(connectionString,
                     SqlServerDialect.Provider);
             });
+            container.Register(c => c.Resolve<IDbConnectionFactory>().Open())
+                     .ReusedWithin(ReuseScope.None);
 
             // Redis
             //container.Register<IRedisClientsManager>(c =>
@@ -67,7 +71,7 @@
             container.Register<ICacheClient>(new MemoryCacheClient {FlushOnDispose = false});
 
             // Validators
-            container.RegisterValidators(typeof (IAuditable).GetAssembly());
+            container.RegisterValidators(typeof(IAuditable).GetAssembly());
 
             // Auth
             container.Register<IUserAuthRepository>(
@@ -113,7 +117,9 @@
             using (var ctx = container.Resolve<IDbConnectionFactory>().Open())
             {
                 ctx.CreateTableIfNotExists<ApiKey>();
+                ctx.CreateTableIfNotExists<Category>();
                 ctx.CreateTableIfNotExists<Product>();
+                ctx.CreateTableIfNotExists<ProductCategory>();
                 ctx.CreateTableIfNotExists<ProductImage>();
                 ctx.CreateTableIfNotExists<Tag>();
                 ctx.CreateTableIfNotExists<ProductTag>();
@@ -123,8 +129,6 @@
                 ctx.CreateTableIfNotExists<Sale>();
                 ctx.CreateTableIfNotExists<Warehouse>();
                 ctx.CreateTableIfNotExists<Location>();
-                ctx.CreateTableIfNotExists<Category>();
-                ctx.CreateTableIfNotExists<ProductCategory>();
             }
 #if DEBUG
             var testUser = new UserAuth
@@ -157,21 +161,23 @@
             });
 
             // Plugins
-            Plugins.Add(new CorsFeature(allowCredentials: true, allowedHeaders: "Content-Type, X-Requested-With",
+            Plugins.Add(new CorsFeature(
+                allowCredentials: true,
+                allowedMethods: "OPTIONS, GET, PUT, POST, PATCH, DELETE, SEARCH",
+                allowedHeaders: "Content-Type, X-Requested-With, Cache-Control",
                 allowOriginWhitelist:
-                    new List<string>
-                    {
-                        "http://localhost:6307",
-                        "http://localhost:8080",
-                        "http://0.0.0.0:8080",
-                        "http://0.0.0.0:3000",
-                        "http://inventory-web-dev-wb45gu.herokuapp.com",
-                        "https://inventory-web-dev-wb45gu.herokuapp.com",
-                        "http://inventory.derprecated.com",
-                        "https://inventory.derprecated.com",
-                        "http://inventory-web-pro.herokuapp.com",
-                        "https://inventory-web-pro.herokuapp.com"
-                    },
+                new List<string>
+                {
+                    "http://localhost:6307",
+                    "http://localhost:8080",
+                    "http://0.0.0.0:8080",
+                    "http://0.0.0.0:3000",
+                    "http://inventory-web-dev-wb45gu.herokuapp.com",
+                    "https://inventory-web-dev-wb45gu.herokuapp.com",
+                    "https://inventory-web-sta-d8w373.herokuapp.com",
+                    "https://inventory.derprecated.com",
+                    "https://inventory-web-pro.herokuapp.com"
+                },
                 maxAge: 3600));
             Plugins.Add(new RegistrationFeature());
             Plugins.Add(new AuthFeature(
@@ -189,12 +195,29 @@
             Plugins.Add(new AutoQueryFeature {MaxLimit = 100});
             Plugins.Add(new SwaggerFeature());
 
+            // Handlers
+            container.RegisterAutoWired<ImageHandler>();
+            container.RegisterAutoWired<LocationHandler>()
+                .ReusedWithin(ReuseScope.Request);
+            container.RegisterAutoWired<CategoryHandler>()
+                .ReusedWithin(ReuseScope.Request);
+            container.RegisterAutoWired<VendorHandler>()
+                .ReusedWithin(ReuseScope.Request);
+            container.RegisterAutoWired<WarehouseHandler>()
+                .ReusedWithin(ReuseScope.Request);
+
             // Misc
             container.Register(new ShopifyServiceClient($"https://{configuration.Shopify.Domain}")
             {
                 UserName = configuration.Shopify.ApiKey,
                 Password = configuration.Shopify.Password
             });
+            container.Register(c =>
+            {
+                var connectionString = configuration.ConnectionStrings.AzureStorage;
+                return CloudStorageAccount.Parse(connectionString);
+            });
+            container.Register(c => c.Resolve<CloudStorageAccount>().CreateCloudBlobClient());
         }
     }
 }

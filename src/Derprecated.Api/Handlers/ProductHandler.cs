@@ -1,13 +1,14 @@
-﻿namespace Derprecated.Api.Handlers
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using Models;
-    using Models.Attributes;
-    using ServiceStack;
-    using ServiceStack.OrmLite;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using Derprecated.Api.Models;
+using Derprecated.Api.Models.Attributes;
+using ServiceStack;
+using ServiceStack.OrmLite;
 
+namespace Derprecated.Api.Handlers
+{
     public class ProductHandler
     {
         public ProductHandler(IDbConnection db, UserSession user)
@@ -19,10 +20,24 @@
         private IDbConnection Db { get; }
         private UserSession User { get; }
 
-        public Product GetProduct(int id)
+        public Product Get(int id, bool includeDeleted = false)
         {
             id.ThrowIfLessThan(1);
-            return Db.LoadSingleById<Product>(id);
+
+            var query = Db.From<Product>()
+                .Where(x => x.Id == id);
+
+            if (!includeDeleted)
+                query = query.Where(x => !x.IsDeleted);
+
+            return Db.LoadSelect(query)
+                .First();
+        }
+
+        public ProductImage GetProductImage(int id)
+        {
+            id.ThrowIfLessThan(1);
+            return Db.SingleById<ProductImage>(id);
         }
 
         /// <summary>
@@ -34,13 +49,19 @@
         /// <remarks>
         ///     Might be slow, use with caution.
         /// </remarks>
-        public List<Product> List(int skip = 0, int take = 25)
+        public List<Product> List(int skip = 0, int take = 25, bool includeDeleted = false)
         {
-            return Db.LoadSelect(
-                Db.From<Product>()
-                  .Skip(skip)
-                  .Take(take)
-                );
+            skip.ThrowIfLessThan(0);
+            take.ThrowIfLessThan(1);
+
+            var query = Db.From<Product>()
+                .Skip(skip)
+                .Take(take);
+
+            if (!includeDeleted)
+                query = query.Where(x => !x.IsDeleted);
+
+            return Db.LoadSelect(query);
         }
 
         public Product Save(Product product)
@@ -49,51 +70,26 @@
 
             if (product.Id >= 1)
             {
-                var existing = GetProduct(product.Id);
+                var existing = Get(product.Id);
                 // ReSharper disable once PossibleUnintendedReferenceComparison
                 if (default(Product) == existing)
                     throw new ArgumentException("invalid Id for existing product", nameof(product));
+                if(existing.IsDeleted)
+                    throw new Exception("deleted products must be undeleted before updates can be made");
 
-                product = existing.PopulateFromPropertiesWithAttribute(product, typeof (WhitelistAttribute));
+                product = existing.PopulateFromPropertiesWithAttribute(product, typeof(WhitelistAttribute));
             }
             Db.Save(product);
 
             return product;
         }
 
-        //        /// <summary>
-        //        ///     Update an existing Product.
-        //        /// </summary>
-        //        /// <param name="id">The ID of the Product to update.</param>
-        //        /// <param name="updatedProduct">The values to update the existing Product with.</param>
-        //        /// <returns></returns>
-        //        public Product Update(int id, UpdateProduct updatedProduct)
-        //        {
-        //            updatedProduct.ThrowIfNull();
-        //
-        //            var product = GetProduct(id);
-        //            product.ThrowIfNull();
-        //
-        //            product = product
-        //                .PopulateFromPropertiesWithAttribute(updatedProduct, typeof (WhitelistAttribute));
-        //
-        //            Db.Save(product, true);
-        //
-        //            return product;
-        //        }
-
-        public Product Update<T>(int id, IUpdatableField<T> update)
+        public long Count(bool includeDeleted = false)
         {
-            update.ThrowIfNull();
-            var product = GetProduct(id);
-            product.SetProperty(update.FieldName, update.Value);
-            Db.UpdateOnly(product, new[] {update.FieldName}, p => p.Id == product.Id);
-            return product;
-        }
+            if (includeDeleted)
+                return Db.Count<Product>();
 
-        public long Count()
-        {
-            return Db.Count<Product>();
+            return Db.Count<Product>(x => !x.IsDeleted);
         }
 
         public void SetShopifyId(int productId, long shopifyId)
@@ -102,6 +98,43 @@
 
             Db.UpdateOnly(new Product {ShopifyId = shopifyId},
                 q.Update(x => x.ShopifyId).Where(x => x.Id == productId));
+        }
+
+        public Product Delete(int id)
+        {
+            var existing = Get(id);
+            if (default(Product) == existing)
+                throw new ArgumentException("unable to locate product with id");
+            if(existing.IsDeleted)
+                throw new Exception("that product was already deleted");
+            return Db.SoftDelete(existing);
+        }
+
+        public Product Restore(int id)
+        {
+            var existing = Get(id);
+            if (default(Product) == existing)
+                throw new ArgumentException("unable to locate product with id");
+            if (existing.IsDeleted)
+                throw new Exception("that product was already deleted");
+            return Db.SoftDelete(existing);
+        }
+
+        public ProductImage SaveImage(int id, ProductImage image)
+        {
+            image.ThrowIfNull(nameof(image));
+            image.ProductId = id;
+            if (image.Id > 0)
+            {
+                var existing = GetProductImage(image.Id);
+                if (default(ProductImage) == existing)
+                    throw new ArgumentException("invalid Id for existing product image", nameof(image));
+
+                image = existing.PopulateFromPropertiesWithAttribute(image, typeof(WhitelistAttribute));
+            }
+            Db.Save(image);
+
+            return image;
         }
     }
 }

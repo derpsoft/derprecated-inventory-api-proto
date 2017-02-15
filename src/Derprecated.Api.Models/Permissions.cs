@@ -3,6 +3,21 @@
     public static class Permissions
     {
         /// <summary>
+        ///     Upsert Sales.
+        /// </summary>
+        public const string CanUpsertSales = "upsertSales";
+
+        /// <summary>
+        ///     Read Sales
+        /// </summary>
+        public const string CanReadSales = "readSales";
+
+        /// <summary>
+        ///     All Sales permissions
+        /// </summary>
+        public const string CanManageSales = "manageSales";
+
+        /// <summary>
         ///     Delete categories.
         /// </summary>
         public const string CanDeleteCategories = "deleteCategories";

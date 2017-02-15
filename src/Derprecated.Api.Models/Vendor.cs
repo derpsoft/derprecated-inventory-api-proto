@@ -3,7 +3,7 @@
     using System;
     using ServiceStack.DataAnnotations;
 
-    public class Vendor : IAuditable
+    public class Vendor : IAuditable, ISoftDeletable, IPrimaryKeyable
     {
         [StringLength(400)]
         public string ContactAddress { get; set; }
@@ -18,10 +18,13 @@
         public string ContactPhone { get; set; }
 
         public DateTime CreateDate { get; set; }
+        public DateTime? DeleteDate { get; set; }
 
         [PrimaryKey]
         [AutoIncrement]
         public int Id { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         public DateTime ModifyDate { get; set; }
 

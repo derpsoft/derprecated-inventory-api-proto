@@ -42,8 +42,7 @@
                 WHERE
                     [Timestamp] BETWEEN @startDate AND @endDate
                     AND [VendorId] = @vendorId
-                GROUP BY DATEPART({
-                        groupBy}, [Timestamp])
+                GROUP BY DATEPART({groupBy}, [Timestamp])
                  ",
                     new
                     {
@@ -76,9 +75,7 @@
                 WHERE
                     [Timestamp] BETWEEN @startDate AND @endDate
                     AND [ProductId] = @productId
-                GROUP BY DATEPART({
-                        groupBy}, [Timestamp])
-                 ",
+                GROUP BY DATEPART({groupBy}, [Timestamp])",
                     new
                     {
                         startDate,
@@ -87,6 +84,68 @@
                     });
         }
 
+        public Dictionary<DateTime, int> GetDispatchedInventory(DateTime startDate, DateTime endDate, string groupBy)
+        {
+            if (startDate >= endDate)
+                throw new ArgumentOutOfRangeException(nameof(startDate),
+                    $"{nameof(startDate)} should come before {nameof(endDate)}");
+
+            if (!AcceptableGroupBy.Contains(groupBy))
+                throw new ArgumentOutOfRangeException(nameof(groupBy), groupBy,
+                    $"must be one of {string.Join(", ", AcceptableGroupBy)}");
+
+            return
+                Db.Dictionary<DateTime, int>(
+                   $@"
+                SELECT 
+                    CAST(MIN([CreateDate]) AS DATE)
+                    , SUM([Quantity])
+                FROM 
+                    [InventoryTransaction]
+                WHERE
+                    [CreateDate] BETWEEN @startDate AND @endDate
+                    AND [TransactionType] = @transactionType
+                GROUP BY DATEPART({groupBy}, [CreateDate])",
+                    new
+                    {
+                        startDate,
+                        endDate,
+                        groupBy,
+                        transactionType = InventoryTransactionTypes.Out
+                    });
+        }
+
+        public Dictionary<DateTime, int> GetReceivedInventory(DateTime startDate, DateTime endDate, string groupBy)
+        {
+            if (startDate >= endDate)
+                throw new ArgumentOutOfRangeException(nameof(startDate),
+                    $"{nameof(startDate)} should come before {nameof(endDate)}");
+
+            if (!AcceptableGroupBy.Contains(groupBy))
+                throw new ArgumentOutOfRangeException(nameof(groupBy), groupBy,
+                    $"must be one of {string.Join(", ", AcceptableGroupBy)}");
+
+            return
+                Db.Dictionary<DateTime, int>(
+                    $@"
+                SELECT 
+                    CAST(MIN([CreateDate]) AS DATE)
+                    , SUM([Quantity])
+                FROM 
+                    [InventoryTransaction]
+                WHERE
+                    [CreateDate] BETWEEN @startDate AND @endDate
+                    AND [TransactionType] = @transactionType
+                GROUP BY DATEPART({groupBy}, [CreateDate])",
+                    new
+                    {
+                        startDate,
+                        endDate,
+                        groupBy,
+                        transactionType = InventoryTransactionTypes.In
+                    });
+        }
+        
         public Dictionary<DateTime, decimal> GetSalesByTotal(DateTime startDate, DateTime endDate, string groupBy)
         {
             if (startDate >= endDate)
@@ -107,8 +166,7 @@
                     [Sale]
                 WHERE
                     [Timestamp] BETWEEN @startDate AND @endDate
-                GROUP BY DATEPART({
-                        groupBy}, [Timestamp])
+                GROUP BY DATEPART({groupBy}, [Timestamp])
                  ",
                     new
                     {

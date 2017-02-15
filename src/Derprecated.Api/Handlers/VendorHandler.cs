@@ -1,58 +1,26 @@
 ﻿namespace Derprecated.Api.Handlers
 {
-    using System;
     using System.Collections.Generic;
-    using System.Data;
     using Models;
-    using ServiceStack;
+    using ServiceStack.Data;
     using ServiceStack.OrmLite;
 
-    public class VendorHandler
+    public class VendorHandler : CrudHandler<Vendor>
     {
-        public VendorHandler(IDbConnection db, UserSession user)
+        public VendorHandler(IDbConnectionFactory db)
+            : base(db)
         {
-            Db = db;
-            User = user;
         }
 
-        private IDbConnection Db { get; }
-        private UserSession User { get; }
-
-        public Vendor GetVendor(int id)
+        public List<Vendor> Typeahead(string q, bool includeDeleted = false)
         {
-            id.ThrowIfLessThan(1);
+            var query = Db.From<Vendor>()
+                .Where(x => x.Name.Contains(q));
 
-            return Db.SingleById<Vendor>(id);
-        }
+            if (!includeDeleted)
+                query = query.And(x => !x.IsDeleted);
 
-        public long Count()
-        {
-            return Db.Count<Vendor>();
-        }
-
-        public List<Vendor> List(int skip = 0, int take = 25)
-        {
-            return Db.Select(
-                Db.From<Vendor>()
-                  .Skip(skip)
-                  .Take(take)
-                );
-        }
-
-        public Vendor Save(Vendor vendor)
-        {
-            vendor.ThrowIfNull();
-            if (vendor.Id >= 1)
-            {
-                var existing = GetVendor(vendor.Id);
-                if (default(Vendor) == existing)
-                    throw new ArgumentException("invalid Id for existing vendor", nameof(vendor));
-
-                vendor = existing.PopulateWith(vendor);
-            }
-            Db.Save(vendor);
-
-            return vendor;
+            return Db.Select(query.SelectDistinct());
         }
     }
 }

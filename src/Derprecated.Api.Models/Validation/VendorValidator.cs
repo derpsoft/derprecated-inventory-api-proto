@@ -8,7 +8,7 @@
     {
         public VendorValidator()
         {
-            RuleSet(ApplyTo.Get, () =>
+            RuleSet(ApplyTo.Get | ApplyTo.Put | ApplyTo.Patch | ApplyTo.Delete, () =>
             {
                 RuleFor(x => x.Id)
                     .GreaterThanOrEqualTo(1);
@@ -27,9 +27,6 @@
 
             RuleSet(ApplyTo.Put | ApplyTo.Patch | ApplyTo.Delete, () =>
             {
-                RuleFor(x => x.Id)
-                    .GreaterThanOrEqualTo(1);
-
                 RuleFor(x => x.RowVersion)
                     .NotEmpty()
                     .Must(x => x >= 1L);

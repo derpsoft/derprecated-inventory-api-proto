@@ -6,7 +6,7 @@
     using Attributes;
     using ServiceStack.DataAnnotations;
 
-    public class Product : IAuditable
+    public class Product : IAuditable, ISoftDeletable
     {
         public Product()
         {
@@ -18,13 +18,18 @@
         public string Barcode { get; set; }
 
         [Reference]
-        public List<Category> Categories { get; set; }
+        public Category Category { get; set; }
+
+        [Whitelist]
+        [ForeignKey(typeof (Category), OnDelete = "NO ACTION", OnUpdate = "CASCADE")]
+        public int? CategoryId { get; set; }
 
         [Whitelist]
         [EqualityCheck]
         public string Color { get; set; }
 
         public DateTime CreateDate { get; set; }
+        public DateTime? DeleteDate { get; set; }
 
         [Whitelist]
         [EqualityCheck]
@@ -41,6 +46,8 @@
 
         [Reference]
         public List<ProductImage> Images { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         public DateTime ModifyDate { get; set; }
 

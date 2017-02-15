@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using ServiceStack;
+    using ServiceStack.DataAnnotations;
 
     [Route("/api/v1/locations", "POST")]
     [Route("/api/v1/locations/{Id}", "PUT, PATCH, GET, DELETE")]
@@ -13,7 +14,7 @@
         Permissions.CanUpsertLocations)]
     [RequiresAnyPermission(ApplyTo.Delete, Permissions.CanDoEverything, Permissions.CanManageLocations,
         Permissions.CanDeleteLocations)]
-    public class Location : IReturn<Dto<Location>>
+    public class Location : IReturn<Dto<Location>>, IPrimaryKeyable
     {
         public string Bin { get; set; }
         public int Id { get; set; }
@@ -23,11 +24,6 @@
         public ulong RowVersion { get; set; }
         public string Shelf { get; set; }
         public int WarehouseId { get; set; }
-
-        public static Location From(Models.Location source)
-        {
-            return new Location().PopulateWith(source);
-        }
     }
 
     [Route("/api/v1/locations", "GET")]
@@ -46,7 +42,7 @@
     {
     }
 
-    [Route("/api/v1/locations", "SEARCH")]
+    [Route("/api/v1/locations", "GET, SEARCH")]
     [Authenticate]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageLocations, Permissions.CanReadLocations)]
     public sealed class LocationSearch : QueryDb<Models.Location, Location>
@@ -60,5 +56,14 @@
 
         [QueryDbField(Term = QueryTerm.Or)]
         public int WarehouseId { get; set; }
+    }
+
+    [Route("/api/v1/locations/typeahead", "SEARCH")]
+    [Authenticate]
+    [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageLocations, Permissions.CanReadLocations)]
+    public sealed class LocationTypeahead : IReturn<Dto<List<Location>>>
+    {
+        [StringLength(20)]
+        public string Query { get; set; }
     }
 }

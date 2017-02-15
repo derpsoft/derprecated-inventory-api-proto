@@ -1,7 +1,7 @@
 namespace Derprecated.Api.Services
 {
+    using System.Collections.Generic;
     using Handlers;
-    using Models;
     using Models.Dto;
     using Models.Routing;
     using ServiceStack;
@@ -11,41 +11,36 @@ namespace Derprecated.Api.Services
 
     public class UserService : BaseService
     {
-        protected static ILog Log = LogManager.GetLogger(typeof (UserService));
+        protected static ILog Log = LogManager.GetLogger(typeof(UserService));
 
-        public object Any(CountUsers request)
+        public object Any(UserCount request)
         {
-            var resp = new CountResponse();
+            var resp = new Dto<long>();
             var handler = new UserHandler(Db, UserAuthRepository, CurrentSession);
 
-            resp.Count = handler.Count();
+            resp.Result = handler.Count();
 
             return resp;
         }
 
-        public object Any(GetProfile request)
+        public object Get(User request)
         {
-            var res = new ProfileResponse();
+            var response = new Dto<User>();
             var handler = new UserHandler(Db, UserAuthRepository, CurrentSession);
+            var user = handler.GetUser(request.Id);
 
-            res.Profile = Profile.From(CurrentSession);
+            if (null != user)
+            {
+                response.Result = User.From(user);
+                response.Result.Permissions = handler.GetPermissions(user.Id);
+            }
 
-            return new HttpResult(res);
+            return response;
         }
 
-        private object UpdateUserField<T>(IUpdatableField<T> request)
+        public object Any(User request)
         {
-            var resp = new GetUserResponse();
-
-            var handler = new UserHandler(Db, UserAuthRepository, CurrentSession);
-            handler.Update(request.Id, request);
-
-            return resp;
-        }
-
-        public object Any(UpdateUser request)
-        {
-            var resp = new GetUserResponse();
+            var resp = new Dto<User>();
             var handler = new UserHandler(Db, UserAuthRepository, CurrentSession);
 
             var update = handler.Update(request.Id, new UserAuth().PopulateWithNonDefaultValues(request));
@@ -53,60 +48,9 @@ namespace Derprecated.Api.Services
                 ? handler.GetPermissions(request.Id)
                 : handler.SetPermissions(request.Id, request.Permissions);
 
-            resp.User = User.From(update);
+            resp.Result = User.From(update);
 
             return resp;
-        }
-
-        public object Any(UpdateUserFirstName request)
-        {
-            return UpdateUserField(request);
-        }
-
-        public object Any(UpdateUserLastName request)
-        {
-            return UpdateUserField(request);
-        }
-
-        public object Any(UpdateProfile request)
-        {
-            var res = new ProfileResponse();
-            var userId = CurrentSession.UserAuthId;
-            var user = UserAuthRepository.GetUserAuth(userId);
-
-            if (!request.DisplayName.IsNullOrEmpty() && !user.DisplayName.Equals(request.DisplayName))
-            {
-                user.DisplayName = request.DisplayName;
-                CurrentSession.DisplayName = user.DisplayName;
-            }
-
-            if (!request.PhoneNumber.IsNullOrEmpty())
-            {
-                user.PhoneNumber = request.PhoneNumber;
-                CurrentSession.PhoneNumber = user.PhoneNumber;
-            }
-
-            UserAuthRepository.UpdateUserAuth(user, user);
-            //Redis.Set($"user:displayName:{user.Id}", user.DisplayName);
-
-            if (Request.Files.Length > 0)
-            {
-                //var avatar = Db.Single(Db.From<Avatar>()
-                //    .Where(x => x.UserAuthId == userId)
-                //    .Limit(1)) ?? new Avatar { UserAuthId = userId };
-
-                //var avatarUrl = ImageHandler.SaveAvatarImage(Request.Files.First());
-
-                //avatar.Url = avatarUrl.ToString();
-                //Db.Save(avatar);
-                //CurrentSession.Avatar = avatar;
-                //Redis.Set($"user:avatar:{user.Id}", avatar);
-            }
-
-            Request.SaveSession(CurrentSession);
-
-            res.Profile = Profile.From(CurrentSession);
-            return res;
         }
 
         public object Any(Register request)
@@ -125,30 +69,14 @@ namespace Derprecated.Api.Services
             }
         }
 
-        public object Any(GetUsers request)
+        public object Any(Users request)
         {
-            var response = new GetUsersResponse();
+            var response = new Dto<List<User>>();
 
-            response.Users = Db.Select(Db.From<UserAuth>()
-                                         .Skip(request.Skip.GetValueOrDefault(0))
-                                         .Take(request.Take.GetValueOrDefault(25))
-                ).Map(User.From);
-            response.Count = Db.Count<UserAuth>();
-
-            return response;
-        }
-
-        public object Any(GetUser request)
-        {
-            var response = new GetUserResponse();
-            var handler = new UserHandler(Db, UserAuthRepository, CurrentSession);
-            var user = handler.GetUser(request.Id);
-
-            if (null != user)
-            {
-                response.User = User.From(user);
-                response.User.Permissions = handler.GetPermissions(user.Id);
-            }
+            response.Result = Db.Select(Db.From<UserAuth>()
+                                          .Skip(request.Skip.GetValueOrDefault(0))
+                                          .Take(request.Take.GetValueOrDefault(25))
+                                ).Map(User.From);
 
             return response;
         }
@@ -160,6 +88,7 @@ namespace Derprecated.Api.Services
 
             resp.Roles = handler.GetRoles();
 
+
             return resp;
         }
 
@@ -169,6 +98,20 @@ namespace Derprecated.Api.Services
             var handler = new UserHandler(Db, UserAuthRepository, CurrentSession);
 
             resp.Permissions = handler.GetPermissions();
+
+            return resp;
+        }
+
+        public object Any(UserTypeahead request)
+        {
+            var resp = new Dto<List<User>>();
+            var userHandler = new UserHandler(Db, UserAuthRepository, CurrentSession);
+            var searchHandler = new SearchHandler(Db, CurrentSession);
+
+            if (request.Query.IsNullOrEmpty())
+                resp.Result = userHandler.List(0, int.MaxValue).Map(User.From);
+            else
+                resp.Result = searchHandler.UserTypeahead(request.Query).Map(User.From);
 
             return resp;
         }

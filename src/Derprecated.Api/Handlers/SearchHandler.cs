@@ -40,30 +40,22 @@
                 );
         }
 
-        public List<Vendor> VendorTypeahead(string q)
+        public List<Location> LocationTypeahead(string q)
         {
             return Db.Select(
-                Db.From<Vendor>()
-                  .Where(x => x.Name.Contains(q))
-                  .SelectDistinct()
-                );
-        }
-
-        public List<Warehouse> WarehouseTypeahead(string q)
-        {
-            return Db.Select(
-                Db.From<Warehouse>()
-                  .Where(x => x.Name.Contains(q))
-                  .SelectDistinct()
-                );
-        }
-
-        public List<Category> CategoryTypeahead(string q)
-        {
-            return Db.Select(
-                Db.From<Category>()
+                Db.From<Location>()
                     .Where(x => x.Name.Contains(q))
+                    .Or(x => x.Bin.Contains(q))
+                    .Or(x => x.Rack.Contains(q))
+                    .Or(x => x.Shelf.Contains(q))
                     .SelectDistinct()
+                );
+        }
+
+        public List<Sale> SaleTypeahead(string q)
+        {
+            return Db.Select(
+                Db.From<Sale>()
                 );
         }
     }

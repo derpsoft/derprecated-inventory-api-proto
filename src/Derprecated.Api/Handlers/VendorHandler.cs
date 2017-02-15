@@ -1,13 +1,13 @@
 ﻿namespace Derprecated.Api.Handlers
 {
     using System.Collections.Generic;
-    using System.Data;
     using Models;
+    using ServiceStack.Data;
     using ServiceStack.OrmLite;
 
     public class VendorHandler : CrudHandler<Vendor>
     {
-        public VendorHandler(IDbConnection db)
+        public VendorHandler(IDbConnectionFactory db)
             : base(db)
         {
         }

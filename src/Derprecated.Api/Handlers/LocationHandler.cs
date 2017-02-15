@@ -1,11 +1,11 @@
 ﻿namespace Derprecated.Api.Handlers
 {
-    using System.Data;
     using Models;
+    using ServiceStack.Data;
 
     public class LocationHandler : CrudHandler<Location>
     {
-        public LocationHandler(IDbConnection db)
+        public LocationHandler(IDbConnectionFactory db)
             : base(db)
         {
         }

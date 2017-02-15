@@ -1,13 +1,13 @@
 ﻿namespace Derprecated.Api.Handlers
 {
     using System.Collections.Generic;
-    using System.Data;
     using Models;
+    using ServiceStack.Data;
     using ServiceStack.OrmLite;
 
     public class CategoryHandler : CrudHandler<Category>
     {
-        public CategoryHandler(IDbConnection db)
+        public CategoryHandler(IDbConnectionFactory db)
             : base(db)
         {
         }

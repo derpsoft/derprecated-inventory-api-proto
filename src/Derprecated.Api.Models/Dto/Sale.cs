@@ -6,7 +6,7 @@
     using ServiceStack.DataAnnotations;
 
     [Route("/api/v1/sales", "POST")]
-    [Route("/api/v1/vendors/{Id}", "GET")]
+    [Route("/api/v1/sales/{Id}", "GET")]
     [Authenticate]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageSales,
         Permissions.CanReadSales)]

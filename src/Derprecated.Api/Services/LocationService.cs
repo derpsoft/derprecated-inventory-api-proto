@@ -20,9 +20,8 @@
         public object Any(LocationCount request)
         {
             var resp = new Dto<long>();
-            var handler = new LocationHandler(Db);
 
-            resp.Result = handler.Count();
+            resp.Result = Handler.Count();
 
             return resp;
         }
@@ -50,8 +49,7 @@
         public object Any(Models.Dto.Location request)
         {
             var resp = new Dto<Models.Dto.Location>();
-            var handler = new LocationHandler(Db);
-            var newLocation = handler.Save(new Location().PopulateWith(request));
+            var newLocation = Handler.Save(new Location().PopulateWith(request));
 
             resp.Result = newLocation.ConvertTo<Models.Dto.Location>();
 
@@ -61,9 +59,8 @@
         public object Get(Locations request)
         {
             var resp = new Dto<List<Models.Dto.Location>>();
-            var handler = new LocationHandler(Db);
 
-            resp.Result = handler.List(request.Skip, request.Take)
+            resp.Result = Handler.List(request.Skip, request.Take)
                 .ConvertAll(x => x.ConvertTo<Models.Dto.Location>());
 
             return resp;
@@ -72,11 +69,10 @@
         public object Any(LocationTypeahead request)
         {
             var resp = new Dto<List<Models.Dto.Location>>();
-            var locationHandler = new LocationHandler(Db);
             var searchHandler = new SearchHandler(Db, CurrentSession);
 
             if (request.Query.IsNullOrEmpty())
-                resp.Result = locationHandler.List(0, int.MaxValue)
+                resp.Result = Handler.List(0, int.MaxValue)
                     .ConvertAll(x => x.ConvertTo<Models.Dto.Location>());
             else
                 resp.Result = searchHandler.LocationTypeahead(request.Query)

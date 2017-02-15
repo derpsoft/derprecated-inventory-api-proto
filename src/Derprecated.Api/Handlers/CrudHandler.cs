@@ -6,14 +6,15 @@
     using System.Linq;
     using Models;
     using ServiceStack;
+    using ServiceStack.Data;
     using ServiceStack.OrmLite;
 
-    public abstract class CrudHandler<T> : IHandler<T>
+    public abstract class CrudHandler<T> : IHandler<T>, IDisposable
         where T : class, ISoftDeletable, IPrimaryKeyable
     {
-        protected CrudHandler(IDbConnection db)
+        protected CrudHandler(IDbConnectionFactory db)
         {
-            Db = db;
+            Db = db.Open();
         }
 
         protected IDbConnection Db { get; }
@@ -56,6 +57,11 @@
             Db.Save(record);
 
             return record;
+        }
+
+        public void Dispose()
+        {
+            Db?.Dispose();
         }
 
         public virtual T Delete(int id)

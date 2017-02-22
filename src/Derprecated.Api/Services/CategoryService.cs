@@ -1,69 +1,52 @@
 ﻿namespace Derprecated.Api.Services
 {
     using System.Collections.Generic;
-    using Handlers;
+    using Models;
     using Models.Dto;
     using ServiceStack;
+    using ServiceStack.Logging;
+    using Category = Models.Category;
 
-    public class CategoryService : BaseService
+    public static class CategoryServices
     {
-        public CategoryHandler Handler { get; set; }
+        private static ILog Log = LogManager.GetLogger(typeof(CategoryServices));
 
-        public object Get(Category request)
+        public class CategoryService : CrudService<Category, Models.Dto.Category>
         {
-            var resp = new Dto<Category>();
+            public CategoryService(IHandler<Category> handler) : base(handler)
+            {
+            }
 
-            resp.Result = Category.From(Handler.Get(request.Id, request.IncludeDeleted));
+            public object Get(CategoryCount request)
+            {
+                var resp = new Dto<long>();
 
-            return resp;
-        }
+                resp.Result = Handler.Count(request.IncludeDeleted);
 
-        public object Delete(Category request)
-        {
-            var resp = new Dto<Category>();
+                return resp;
+            }
 
-            resp.Result = Category.From(Handler.Delete(request.Id));
+            public object Get(Categories request)
+            {
+                var resp = new Dto<List<Models.Dto.Category>>();
 
-            return resp;
-        }
+                resp.Result =
+                    Handler.List(request.Skip, request.Take, request.IncludeDeleted).Map(Models.Dto.Category.From);
 
-        public object Any(Category request)
-        {
-            var resp = new Dto<Category>();
-            var category = Handler.Save(new Models.Category().PopulateWith(request));
+                return resp;
+            }
 
-            resp.Result = Category.From(category);
-            return resp;
-        }
+            public object Any(CategoryTypeahead request)
+            {
+                var resp = new Dto<List<Models.Dto.Category>>();
 
-        public object Any(CategoryCount request)
-        {
-            var resp = new Dto<long>();
+                if (request.Query.IsNullOrEmpty())
+                    resp.Result = Handler.List(0, int.MaxValue, request.IncludeDeleted).Map(Models.Dto.Category.From);
+                else
+                    resp.Result = Handler.Typeahead(request.Query, request.IncludeDeleted).Map(Models.Dto.Category.From);
 
-            resp.Result = Handler.Count(request.IncludeDeleted);
-
-            return resp;
-        }
-
-        public object Any(Categories request)
-        {
-            var resp = new Dto<List<Category>>();
-
-            resp.Result = Handler.List(request.Skip, request.Take, request.IncludeDeleted).Map(Category.From);
-
-            return resp;
-        }
-
-        public object Any(CategoryTypeahead request)
-        {
-            var resp = new Dto<List<Category>>();
-
-            if (request.Query.IsNullOrEmpty())
-                resp.Result = Handler.List(0, int.MaxValue, request.IncludeDeleted).Map(Category.From);
-            else
-                resp.Result = Handler.Typeahead(request.Query, request.IncludeDeleted).Map(Category.From);
-
-            return resp;
+                return resp;
+            }
         }
     }
 }

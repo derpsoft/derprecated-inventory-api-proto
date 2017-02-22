@@ -1,74 +1,52 @@
 ﻿namespace Derprecated.Api.Services
 {
     using System.Collections.Generic;
-    using Handlers;
+    using Models;
     using Models.Dto;
-    using Models.Routing;
     using ServiceStack;
     using ServiceStack.Logging;
+    using Vendor = Models.Vendor;
 
-    public class VendorService : BaseService
+    public static class VendorServices
     {
-        protected static ILog Log = LogManager.GetLogger(typeof (VendorService));
+        private static ILog Log = LogManager.GetLogger(typeof(LocationServices));
 
-        public VendorHandler Handler { get; set; }
-
-        public object Any(VendorCount request)
+        public class VendorService : CrudService<Vendor, Models.Dto.Vendor>
         {
-            var resp = new Dto<long>();
+            public VendorService(IHandler<Vendor> handler)
+                : base(handler)
+            {
+            }
 
-            resp.Result = Handler.Count();
+            public object Any(VendorCount request)
+            {
+                var resp = new Dto<long>();
 
-            return resp;
-        }
+                resp.Result = Handler.Count();
 
-        public object Get(Vendor request)
-        {
-            var resp = new Dto<Vendor>();
+                return resp;
+            }
 
-            resp.Result = Vendor.From(Handler.Get(request.Id));
+            public object Get(Vendors request)
+            {
+                var resp = new Dto<List<Models.Dto.Vendor>>();
 
-            return resp;
-        }
+                resp.Result = Handler.List(request.Skip, request.Take).Map(Models.Dto.Vendor.From);
 
-        public object Delete(Vendor request)
-        {
-            var resp = new Dto<Vendor>();
+                return resp;
+            }
 
-            resp.Result = Vendor.From(Handler.Delete(request.Id));
+            public object Any(VendorTypeahead request)
+            {
+                var resp = new Dto<List<Models.Dto.Vendor>>();
 
-            return resp;
-        }
+                if (request.Query.IsNullOrEmpty())
+                    resp.Result = Handler.List(0, int.MaxValue).Map(Models.Dto.Vendor.From);
+                else
+                    resp.Result = Handler.Typeahead(request.Query, request.IncludeDeleted).Map(Models.Dto.Vendor.From);
 
-        public object Any(Vendor request)
-        {
-            var resp = new Dto<Vendor>();
-            var vendor = new Models.Vendor().PopulateWith(request);
-
-            resp.Result = Vendor.From(Handler.Save(vendor));
-
-            return resp;
-        }
-
-        public object Get(Vendors request)
-        {
-            var resp = new Dto<List<Vendor>>();
-
-            resp.Result = Handler.List(request.Skip, request.Take).Map(Vendor.From);
-
-            return resp;
-        }
-
-        public object Any(VendorTypeahead request)
-        {
-            var resp = new Dto<List<Vendor>>();
-
-            if (request.Query.IsNullOrEmpty())
-                resp.Result = Handler.List(0, int.MaxValue).Map(Vendor.From);
-            else
-                resp.Result = Handler.Typeahead(request.Query, request.IncludeDeleted).Map(Vendor.From);
-
-            return resp;
+                return resp;
+            }
         }
     }
 }

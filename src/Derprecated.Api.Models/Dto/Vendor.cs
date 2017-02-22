@@ -13,7 +13,7 @@
          Permissions.CanDeleteVendors)]
     [RequiresAnyPermission(ApplyTo.Put | ApplyTo.Post | ApplyTo.Patch, Permissions.CanDoEverything,
          Permissions.CanManageVendors, Permissions.CanUpsertVendors)]
-    public sealed class Vendor : IReturn<Dto<Vendor>>
+    public sealed class Vendor : IReturn<Dto<Vendor>>, IPrimaryKeyable
     {
         public string ContactAddress { get; set; }
         public string ContactEmail { get; set; }

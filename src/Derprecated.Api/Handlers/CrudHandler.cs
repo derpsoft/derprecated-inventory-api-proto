@@ -42,6 +42,8 @@
             return Db.LoadSelect(query);
         }
 
+        public abstract List<T> Typeahead(string query, bool includeDeleted = false);
+
         public virtual T Save(T record)
         {
             record.ThrowIfNull();

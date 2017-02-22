@@ -65,5 +65,7 @@
     {
         [StringLength(20)]
         public string Query { get; set; }
+
+        public bool IncludeDeleted { get; set; }
     }
 }

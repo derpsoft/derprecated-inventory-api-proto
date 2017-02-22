@@ -5,6 +5,7 @@
     using ServiceStack.Data;
     using ServiceStack.OrmLite;
 
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class VendorHandler : CrudHandler<Vendor>
     {
         public VendorHandler(IDbConnectionFactory db)
@@ -12,10 +13,10 @@
         {
         }
 
-        public List<Vendor> Typeahead(string q, bool includeDeleted = false)
+        public override List<Vendor> Typeahead(string q, bool includeDeleted = false)
         {
             var query = Db.From<Vendor>()
-                .Where(x => x.Name.Contains(q));
+                          .Where(x => x.Name.Contains(q));
 
             if (!includeDeleted)
                 query = query.And(x => !x.IsDeleted);

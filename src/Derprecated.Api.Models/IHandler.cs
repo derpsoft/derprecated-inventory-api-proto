@@ -10,5 +10,6 @@
         long Count(bool includeDeleted = false);
         T Save(T record);
         List<T> List(int skip = 0, int take = 0, bool includeDeleted = false);
+        List<T> Typeahead(string query, bool includeDeleted = false);
     }
 }

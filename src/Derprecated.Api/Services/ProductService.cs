@@ -116,5 +116,29 @@
             }
             return resp;
         }
+
+        public object Any(ProductTypeahead request)
+        {
+            var resp = new Dto<List<Product>>();
+            var productHandler = new ProductHandler(Db, CurrentSession);
+            var searchHandler = new SearchHandler(Db, CurrentSession);
+            var inventoryHandler = new InventoryHandler(Db, CurrentSession);
+
+            List<Models.Product> intermediate;
+
+            if (request.Query.IsNullOrEmpty())
+                intermediate = productHandler.List(0, int.MaxValue);
+            else
+                intermediate = searchHandler.ProductTypeahead(request.Query);
+
+            resp.Result = intermediate.Map(product =>
+            {
+                var p = Product.From(product);
+                p.QuantityOnHand = inventoryHandler.GetQuantityOnHand(p.Id);
+                return p;
+            });
+
+            return resp;
+        }
     }
 }

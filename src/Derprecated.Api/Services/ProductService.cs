@@ -2,20 +2,15 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using Handlers;
     using Models.Dto;
-    using Models.Shopify;
     using ServiceStack;
     using ServiceStack.Logging;
-    using Image = Models.Dto.Image;
-    using Product = Models.Dto.Product;
 
     public class ProductService : BaseService
     {
-        protected static ILog Log = LogManager.GetLogger(typeof (ProductService));
-        public ShopifyServiceClient ShopifyServiceClient { get; set; }
+        protected static ILog Log = LogManager.GetLogger(typeof(ProductService));
 
         public object Any(ProductCount request)
         {
@@ -59,34 +54,8 @@
         {
             var resp = new Dto<Product>();
             var productHandler = new ProductHandler(Db, CurrentSession);
-            var shopifyHandler = new ShopifyHandler(ShopifyServiceClient);
 
             var product = productHandler.Save(new Models.Product().PopulateWith(request));
-            var shopifyProduct = Models.Shopify.Product.From(product);
-
-            if (shopifyProduct.Id.HasValue)
-            {
-                shopifyHandler.Update(shopifyProduct);
-            }
-            else
-            {
-                shopifyProduct.Variants = new List<Variant>
-                {
-                    new Variant
-                    {
-                        Option1 = product.Color,
-                        Barcode = product.Barcode,
-                        Sku = product.Sku,
-                        Price = product.Price.ToString(CultureInfo.InvariantCulture),
-                        Weight = product.Weight,
-                        WeightUnit = product.WeightUnit
-                    }
-                };
-                shopifyProduct = shopifyHandler.Create(shopifyProduct);
-                // ReSharper disable once PossibleInvalidOperationException
-                productHandler.SetShopifyId(product.Id, shopifyProduct.Id.Value);
-                product.ShopifyId = shopifyProduct.Id.Value;
-            }
 
             resp.Result = Product.From(product);
 

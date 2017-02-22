@@ -52,6 +52,16 @@ namespace Derprecated.Api.Models.Dto
         }
     }
 
+    [Route("/api/v1/products/sku/{Sku}", "GET")]
+    [Authenticate]
+    [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageProducts,
+        Permissions.CanReadProducts)]
+    public sealed class ProductBySku : IReturn<Dto<Product>>
+    {
+        public string Sku { get; set; }
+        public bool IncludeDeleted { get; set; } = false;
+    }
+
     [Route("/api/v1/products/count", "GET")]
     [Authenticate]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanReadProducts)]

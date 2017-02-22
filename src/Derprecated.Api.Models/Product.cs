@@ -21,7 +21,7 @@
         public Category Category { get; set; }
 
         [Whitelist]
-        [ForeignKey(typeof (Category), OnDelete = "NO ACTION", OnUpdate = "CASCADE")]
+        [ForeignKey(typeof(Category), OnDelete = "NO ACTION", OnUpdate = "CASCADE")]
         public int? CategoryId { get; set; }
 
         [Whitelist]
@@ -66,6 +66,7 @@
 
         [Whitelist]
         [EqualityCheck]
+        [Index(Unique = true)]
         public string Sku { get; set; }
 
         [Whitelist]
@@ -107,13 +108,9 @@
                 var i = Images.FirstOrDefault(x => x.ShopifyId == img.Id);
 
                 if (default(ProductImage) == i)
-                {
                     Images.Add(ProductImage.From(img));
-                }
                 else
-                {
                     i.SourceUrl = img.Url;
-                }
             }
         }
 
@@ -128,13 +125,9 @@
                 var i = Images.FirstOrDefault(x => x.ShopifyId == img.Id);
 
                 if (default(ProductImage) == i)
-                {
                     Images.Add(ProductImage.From(img));
-                }
                 else
-                {
                     i.SourceUrl = img.SourceUrl;
-                }
             }
         }
 
@@ -165,9 +158,7 @@
         {
             var product = obj as Product;
             if (product != null)
-            {
                 return this.DeepEquals(product);
-            }
 
             return false;
         }

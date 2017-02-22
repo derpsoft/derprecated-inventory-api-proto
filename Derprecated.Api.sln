@@ -50,6 +50,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "v1.2.0", "v1.2.0", "{76BA2D2D-32F4-4D02-BA59-27E168C893B4}"
 	ProjectSection(SolutionItems) = preProject
 		v1.2.0-add-soft-deletes-to-multiple-models.sql = v1.2.0-add-soft-deletes-to-multiple-models.sql
+		v1.2.0-add-unique-constraint-to-product-sku.sql = v1.2.0-add-unique-constraint-to-product-sku.sql
 		v1.2.0.sql = v1.2.0.sql
 	EndProjectSection
 EndProject

@@ -20,6 +20,20 @@ namespace Derprecated.Api.Handlers
         private IDbConnection Db { get; }
         private UserSession User { get; }
 
+        public Product Get(string sku, bool includeDeleted = false)
+        {
+            sku.ThrowIfNullOrEmpty();
+
+            var query = Db.From<Product>()
+                .Where(x => x.Sku == sku);
+
+            if (!includeDeleted)
+                query = query.Where(x => !x.IsDeleted);
+
+            return Db.LoadSelect(query)
+                .First();
+        }
+
         public Product Get(int id, bool includeDeleted = false)
         {
             id.ThrowIfLessThan(1);

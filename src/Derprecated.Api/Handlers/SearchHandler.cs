@@ -35,7 +35,7 @@
             return Db.LoadSelect(
                 Db.From<Product>()
                   .Where(x => x.Title.Contains(q))
-                  .Or(x => x.Sku.Contains(q))
+                  .Or(x => x.Sku.Contains(q.ToUpper()))
                   .SelectDistinct()
                 );
         }

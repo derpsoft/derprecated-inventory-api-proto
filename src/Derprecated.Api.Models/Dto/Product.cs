@@ -48,9 +48,7 @@ namespace Derprecated.Api.Models.Dto
 
         public static Product From(Models.Product source)
         {
-            var p = new Product().PopulateWith(source);
-            p.Images = source.Images.Map(Image.From);
-            return p;
+            return new Product().PopulateWith(source);
         }
     }
 

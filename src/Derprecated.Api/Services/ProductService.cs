@@ -79,44 +79,6 @@
             return resp;
         }
 
-        public object Get(ProductImage request)
-        {
-            var resp = new Dto<Image>();
-
-            return resp;
-        }
-
-        public object Delete(ProductImage request)
-        {
-            throw new NotImplementedException();
-            var resp = new Dto<Image>();
-
-            return resp;
-        }
-
-        public object Any(ProductImage request)
-        {
-            var resp = new Dto<Image>();
-            if (Request.Files.Length > 0)
-            {
-                var productHandler = new ProductHandler(Db, CurrentSession);
-                var product = productHandler.Get(request.ProductId);
-
-                if (null != product)
-                {
-                    var imageHandler = ResolveService<ImageHandler>();
-                    var uri = imageHandler.SaveImage(Request.Files.First(), "products");
-
-                    resp.Result = Image.From(productHandler.SaveImage(product.Id, new Models.ProductImage
-                    {
-                        ProductId = product.Id,
-                        SourceUrl = uri.ToString()
-                    }));
-                }
-            }
-            return resp;
-        }
-
         public object Any(ProductTypeahead request)
         {
             var resp = new Dto<List<Product>>();

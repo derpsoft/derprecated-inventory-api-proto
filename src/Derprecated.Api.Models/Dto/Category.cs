@@ -52,8 +52,8 @@
 
     [Route("/api/v1/categories", "GET, SEARCH")]
     [Authenticate]
-    [RequiresAnyPermission(ApplyTo.Search, Permissions.CanDoEverything, Permissions.CanManageVendors,
-         Permissions.CanReadVendors)]
+    [RequiresAnyPermission(ApplyTo.Search, Permissions.CanDoEverything, Permissions.CanManageCategories,
+         Permissions.CanReadCategories)]
     public sealed class CategorySearch : QueryDb<Models.Category, Category>
     {
         [QueryDbField(Term = QueryTerm.Or)]

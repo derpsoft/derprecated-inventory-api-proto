@@ -16,7 +16,7 @@
 
         protected IHandler<TModel> Handler { get; }
 
-        private object Create(TDto request)
+        protected virtual object Create(TDto request)
         {
             var resp = new Dto<TDto>();
             var newRecord = Handler.Save(request.ConvertTo<TModel>());
@@ -24,7 +24,7 @@
             return resp;
         }
 
-        private object Update(TDto request)
+        protected virtual object Update(TDto request)
         {
             var resp = new Dto<TDto>();
             var newRecord = Handler.Save(request.ConvertTo<TModel>());

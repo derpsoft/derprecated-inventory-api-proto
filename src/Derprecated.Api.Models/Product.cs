@@ -103,16 +103,6 @@
             Title = source.Title;
             Description = source.BodyHtml;
             Tags = source.Tags;
-
-            foreach (var img in source.Images)
-            {
-                var i = Images.FirstOrDefault(x => x.ShopifyId == img.Id);
-
-                if (default(ProductImage) == i)
-                    Images.Add(ProductImage.From(img));
-                else
-                    i.SourceUrl = img.Url;
-            }
         }
 
         public void Merge(Product source)
@@ -120,16 +110,6 @@
             Title = source.Title;
             Description = source.Description;
             Tags = source.Tags;
-
-            foreach (var img in source.Images)
-            {
-                var i = Images.FirstOrDefault(x => x.ShopifyId == img.Id);
-
-                if (default(ProductImage) == i)
-                    Images.Add(ProductImage.From(img));
-                else
-                    i.SourceUrl = img.SourceUrl;
-            }
         }
 
         public static Product From(Shopify.Product source)

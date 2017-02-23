@@ -35,6 +35,8 @@ namespace Derprecated.Api.Models.Dto
         public decimal QuantityOnHand { get; set; }
 
         public long? ShopifyId { get; set; }
+
+        [StringLength(200)]
         public string Sku { get; set; }
         public string Tags { get; set; }
         public string Title { get; set; }

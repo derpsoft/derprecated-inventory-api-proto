@@ -40,7 +40,7 @@ namespace Derprecated.Api.Models.Dto
         public string Title { get; set; }
         public string UnitOfMeasure { get; set; } = "each";
         public int VendorId { get; set; }
-        public ulong Version { get; set; }
+        public ulong RowVersion { get; set; }
         public decimal Weight { get; set; }
         public string WeightUnit { get; set; }
 

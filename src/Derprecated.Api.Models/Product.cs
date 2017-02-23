@@ -67,6 +67,7 @@
         [Whitelist]
         [EqualityCheck]
         [Index(Unique = true)]
+        [StringLength(200)]
         public string Sku { get; set; }
 
         [Whitelist]

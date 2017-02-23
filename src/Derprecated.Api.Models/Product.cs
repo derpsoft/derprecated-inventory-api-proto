@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using Attributes;
     using ServiceStack.DataAnnotations;
 
@@ -133,6 +132,7 @@
 
         private void OnUpsert()
         {
+            Sku = Sku.ToUpper();
         }
 
         public override bool Equals(object obj)

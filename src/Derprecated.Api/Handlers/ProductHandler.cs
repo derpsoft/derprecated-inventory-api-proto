@@ -25,7 +25,7 @@
             sku.ThrowIfNullOrEmpty();
 
             var query = Db.From<Product>()
-                          .Where(x => x.Sku == sku);
+                          .Where(x => x.Sku == sku.ToUpper());
 
             if (!includeDeleted)
                 query = query.Where(x => !x.IsDeleted);
@@ -132,23 +132,6 @@
             if (existing.IsDeleted)
                 throw new Exception("that product was already deleted");
             return Db.SoftDelete(existing);
-        }
-
-        public ProductImage SaveImage(int id, ProductImage image)
-        {
-            image.ThrowIfNull(nameof(image));
-            image.ProductId = id;
-            if (image.Id > 0)
-            {
-                var existing = GetProductImage(image.Id);
-                if (default(ProductImage) == existing)
-                    throw new ArgumentException("invalid Id for existing product image", nameof(image));
-
-                image = existing.PopulateFromPropertiesWithAttribute(image, typeof(WhitelistAttribute));
-            }
-            Db.Save(image);
-
-            return image;
         }
     }
 }

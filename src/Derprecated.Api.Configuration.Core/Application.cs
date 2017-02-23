@@ -197,13 +197,13 @@
 
             // Handlers
             container.RegisterAutoWired<ImageHandler>();
-            container.RegisterAutoWired<LocationHandler>()
+            container.RegisterAs<LocationHandler, IHandler<Location>>()
                 .ReusedWithin(ReuseScope.Request);
-            container.RegisterAutoWired<CategoryHandler>()
+            container.RegisterAs<CategoryHandler,IHandler<Category>>()
                 .ReusedWithin(ReuseScope.Request);
-            container.RegisterAutoWired<VendorHandler>()
+            container.RegisterAs<VendorHandler, IHandler<Vendor>>()
                 .ReusedWithin(ReuseScope.Request);
-            container.RegisterAutoWired<WarehouseHandler>()
+            container.RegisterAs<WarehouseHandler, IHandler<Warehouse>>()
                 .ReusedWithin(ReuseScope.Request);
 
             // Misc

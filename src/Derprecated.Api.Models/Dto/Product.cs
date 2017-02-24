@@ -1,22 +1,22 @@
 ﻿// ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
 
-using System.Collections.Generic;
-using ServiceStack;
-using ServiceStack.DataAnnotations;
-
 namespace Derprecated.Api.Models.Dto
 {
+    using System.Collections.Generic;
+    using ServiceStack;
+    using ServiceStack.DataAnnotations;
+
     [Route("/api/v1/products", "POST")]
     [Route("/api/v1/products/{Id}", "GET, DELETE, PUT, PATCH")]
     [Authenticate]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageProducts,
-        Permissions.CanReadProducts)]
+         Permissions.CanReadProducts)]
     [RequiresAnyPermission(ApplyTo.Delete, Permissions.CanDoEverything, Permissions.CanManageProducts,
-        Permissions.CanDeleteProducts)]
+         Permissions.CanDeleteProducts)]
     [RequiresAnyPermission(ApplyTo.Post | ApplyTo.Put | ApplyTo.Patch, Permissions.CanDoEverything,
-        Permissions.CanManageProducts,
-        Permissions.CanUpsertProducts)]
+         Permissions.CanManageProducts,
+         Permissions.CanUpsertProducts)]
     public sealed class Product : IReturn<Dto<Product>>
     {
         public string Barcode { get; set; }
@@ -33,16 +33,17 @@ namespace Derprecated.Api.Models.Dto
         public decimal Price { get; set; }
 
         public decimal QuantityOnHand { get; set; }
+        public ulong RowVersion { get; set; }
 
         public long? ShopifyId { get; set; }
 
         [StringLength(200)]
         public string Sku { get; set; }
+
         public string Tags { get; set; }
         public string Title { get; set; }
         public string UnitOfMeasure { get; set; } = "each";
         public int VendorId { get; set; }
-        public ulong RowVersion { get; set; }
         public decimal Weight { get; set; }
         public string WeightUnit { get; set; }
 
@@ -52,14 +53,23 @@ namespace Derprecated.Api.Models.Dto
         }
     }
 
+    [Route("/api/v1/products/import", "POST")]
+    [RequiresAnyPermission(ApplyTo.Post, Permissions.CanDoEverything,
+         Permissions.CanManageProducts,
+         Permissions.CanUpsertProducts)]
+    public sealed class ProductImport : IReturn<Dto<List<Product>>>
+    {
+        public List<Product> Products { get; set; }
+    }
+
     [Route("/api/v1/products/sku/{Sku}", "GET")]
     [Authenticate]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageProducts,
-        Permissions.CanReadProducts)]
+         Permissions.CanReadProducts)]
     public sealed class ProductBySku : IReturn<Dto<Product>>
     {
-        public string Sku { get; set; }
         public bool IncludeDeleted { get; set; } = false;
+        public string Sku { get; set; }
     }
 
     [Route("/api/v1/products/count", "GET")]
@@ -73,7 +83,7 @@ namespace Derprecated.Api.Models.Dto
     [Route("/api/v1/products", "GET")]
     [Authenticate]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageProducts,
-        Permissions.CanReadProducts)]
+         Permissions.CanReadProducts)]
     public sealed class Products : IReturn<Dto<List<Product>>>
     {
         public bool IncludeDeleted { get; set; } = false;
@@ -84,10 +94,11 @@ namespace Derprecated.Api.Models.Dto
     [Route("/api/v1/products/search")]
     [Authenticate]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanReadProducts)]
-    public sealed class ProductSearch : QueryDb<Models.Product, Dto<Product>>, IJoin<Models.Product, Models.ProductImage>
+    public sealed class ProductSearch : QueryDb<Models.Product, Dto<Product>>,
+        IJoin<Models.Product, Models.ProductImage>
     {
         [QueryDbField(Term = QueryTerm.And, Template = "FREETEXT({Field}, {Value})", Field = "Description",
-            ValueFormat = "{0}")]
+             ValueFormat = "{0}")]
         public string Query { get; set; }
     }
 

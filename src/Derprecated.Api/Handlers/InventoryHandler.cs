@@ -51,7 +51,7 @@
             quantity.ThrowIfLessThan(1);
 
             var transaction = new InventoryTransaction();
-            var product = new ProductHandler(Db, User).Get(productId);
+            var product = new ProductHandler(Db).Get(productId);
             //var location = new LocationHandler(Db, User).Get(locationId);
 
             product.ThrowIfNull(nameof(product));
@@ -111,7 +111,7 @@
             quantity.ThrowIfGreaterThan(0);
 
             var transaction = new InventoryTransaction();
-            var product = new ProductHandler(Db, User).Get(productId);
+            var product = new ProductHandler(Db).Get(productId);
             //var location = new LocationHandler(Db, User).Get(locationId);
 
             product.ThrowIfNull(nameof(product));

@@ -1,12 +1,12 @@
 ﻿namespace Derprecated.Api.Services
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
     using Handlers;
+    using Models;
     using Models.Dto;
     using ServiceStack;
     using ServiceStack.Logging;
+    using Product = Models.Dto.Product;
 
     public class ProductService : BaseService
     {
@@ -15,7 +15,7 @@
         public object Any(ProductCount request)
         {
             var resp = new Dto<long>();
-            var handler = new ProductHandler(Db, CurrentSession);
+            var handler = new ProductHandler(Db);
 
             resp.Result = handler.Count(request.IncludeDeleted);
 
@@ -25,7 +25,7 @@
         public object Get(Product request)
         {
             var resp = new Dto<Product>();
-            var productHandler = new ProductHandler(Db, CurrentSession);
+            var productHandler = new ProductHandler(Db);
             var inventoryHandler = new InventoryHandler(Db, CurrentSession);
 
             var product = Product.From(productHandler.Get(request.Id, request.IncludeDeleted));
@@ -39,7 +39,7 @@
         public object Get(ProductBySku request)
         {
             var resp = new Dto<Product>();
-            var productHandler = new ProductHandler(Db, CurrentSession);
+            var productHandler = new ProductHandler(Db);
             var inventoryHandler = new InventoryHandler(Db, CurrentSession);
 
             var product = Product.From(productHandler.Get(request.Sku, request.IncludeDeleted));
@@ -53,7 +53,7 @@
         public object Any(Product request)
         {
             var resp = new Dto<Product>();
-            var productHandler = new ProductHandler(Db, CurrentSession);
+            var productHandler = new ProductHandler(Db);
 
             var product = productHandler.Save(new Models.Product().PopulateWith(request));
 
@@ -65,7 +65,7 @@
         public object Any(Products request)
         {
             var resp = new Dto<List<Product>>();
-            var productHandler = new ProductHandler(Db, CurrentSession);
+            var productHandler = new ProductHandler(Db);
             var inventoryHandler = new InventoryHandler(Db, CurrentSession);
 
             resp.Result = productHandler.List(request.Skip, request.Take, request.IncludeDeleted)
@@ -82,7 +82,7 @@
         public object Any(ProductTypeahead request)
         {
             var resp = new Dto<List<Product>>();
-            var productHandler = new ProductHandler(Db, CurrentSession);
+            var productHandler = new ProductHandler(Db);
             var searchHandler = new SearchHandler(Db, CurrentSession);
             var inventoryHandler = new InventoryHandler(Db, CurrentSession);
 
@@ -91,7 +91,7 @@
             if (request.Query.IsNullOrEmpty())
                 intermediate = productHandler.List(0, int.MaxValue);
             else
-                intermediate = searchHandler.ProductTypeahead(request.Query);
+                intermediate = productHandler.Typeahead(request.Query, request.IncludeDeleted);
 
             resp.Result = intermediate.Map(product =>
             {
@@ -100,6 +100,23 @@
                 return p;
             });
 
+            return resp;
+        }
+    }
+
+    public class ProductImportService : CreateService<Models.Product, ProductImport>
+    {
+        public ProductImportService(IHandler<Models.Product> handler) : base(handler)
+        {
+        }
+
+        private new ProductHandler Handler => base.Handler as ProductHandler;
+
+        protected override object Create(ProductImport request)
+        {
+            var resp = new Dto<List<Product>>();
+            var newRecords = Handler.SaveMany(request.Products.ConvertAll(x => x.ConvertTo<Models.Product>()));
+            resp.Result = newRecords.ConvertAll(x => x.ConvertTo<Product>());
             return resp;
         }
     }

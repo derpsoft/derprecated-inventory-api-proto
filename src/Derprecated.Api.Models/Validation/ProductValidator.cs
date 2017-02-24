@@ -59,6 +59,19 @@
         }
     }
 
+    public class ProductImportValidator : AbstractValidator<ProductImport>
+    {
+        public ProductImportValidator()
+        {
+            RuleSet(ApplyTo.Post, () =>
+            {
+                RuleForEach(x => x.Products)
+                    .Must(x => x.Id == default(int)).WithMessage("{0} may not be set when creating a Product")
+                    .Must(x => x.RowVersion == default(long)).WithMessage("{0} may not be set when creating a Product");
+            });
+        }
+    }
+
     public class ProductBySkuValidator : AbstractValidator<ProductBySku>
     {
         public ProductBySkuValidator()

@@ -16,7 +16,7 @@
     [RequiresAnyPermission(ApplyTo.Post | ApplyTo.Patch | ApplyTo.Put, Permissions.CanDoEverything,
          Permissions.CanManageCategories,
          Permissions.CanUpsertCategories)]
-    public sealed class Category : IReturn<Dto<Category>>
+    public sealed class Category : IReturn<Dto<Category>>, IPrimaryKeyable
     {
         public int Id { get; set; }
         public bool IncludeDeleted { get; set; } = false;
@@ -52,8 +52,8 @@
 
     [Route("/api/v1/categories", "GET, SEARCH")]
     [Authenticate]
-    [RequiresAnyPermission(ApplyTo.Search, Permissions.CanDoEverything, Permissions.CanManageVendors,
-         Permissions.CanReadVendors)]
+    [RequiresAnyPermission(ApplyTo.Search, Permissions.CanDoEverything, Permissions.CanManageCategories,
+         Permissions.CanReadCategories)]
     public sealed class CategorySearch : QueryDb<Models.Category, Category>
     {
         [QueryDbField(Term = QueryTerm.Or)]

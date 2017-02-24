@@ -1,74 +1,52 @@
 ﻿namespace Derprecated.Api.Services
 {
-    using System;
     using System.Collections.Generic;
-    using Handlers;
+    using Models;
     using Models.Dto;
     using ServiceStack;
     using ServiceStack.Logging;
+    using Warehouse = Models.Warehouse;
 
-    public class WarehouseService : BaseService
+    public static class WarehouseServices
     {
-        protected static ILog Log = LogManager.GetLogger(typeof(WarehouseService));
+        private static ILog Log = LogManager.GetLogger(typeof(WarehouseService));
 
-        public WarehouseHandler Handler { get; set; }
-
-        public object Any(WarehouseCount request)
+        // ReSharper disable once MemberCanBePrivate.Global
+        public class WarehouseService : CrudService<Warehouse, Models.Dto.Warehouse>
         {
-            var resp = new Dto<long>();
+            public WarehouseService(IHandler<Warehouse> handler) : base(handler)
+            {
+            }
 
-            resp.Result = Handler.Count();
+            public object Get(WarehouseCount request)
+            {
+                var resp = new Dto<long>();
 
-            return resp;
-        }
+                resp.Result = Handler.Count();
 
-        public object Get(Warehouse request)
-        {
-            var resp = new Dto<Warehouse>();
+                return resp;
+            }
 
-            resp.Result = Warehouse.From(Handler.Get(request.Id));
+            public object Get(Warehouses request)
+            {
+                var resp = new Dto<List<Models.Dto.Warehouse>>();
 
-            return resp;
-        }
+                resp.Result = Handler.List(request.Skip, request.Take).Map(Models.Dto.Warehouse.From);
 
-        public object Delete(Warehouse request)
-        {
-            var resp = new Dto<Warehouse>();
+                return resp;
+            }
 
-            resp.Result = Warehouse.From(Handler.Delete(request.Id));
+            public object Any(WarehouseTypeahead request)
+            {
+                var resp = new Dto<List<Models.Dto.Warehouse>>();
 
-            return resp;
-        }
-
-        public object Any(Warehouse request)
-        {
-            var resp = new Dto<Warehouse>();
-            var warehouse = new Models.Warehouse().PopulateWith(request);
-
-            resp.Result = Warehouse.From(Handler.Save(warehouse));
-
-            return resp;
-        }
-
-        public object Any(Warehouses request)
-        {
-            var resp = new Dto<List<Warehouse>>();
-
-            resp.Result = Handler.List(request.Skip, request.Take).Map(Warehouse.From);
-
-            return resp;
-        }
-
-        public object Any(WarehouseTypeahead request)
-        {
-            var resp = new Dto<List<Warehouse>>();
-
-            if (request.Query.IsNullOrEmpty())
-                resp.Result = Handler.List(0, int.MaxValue).Map(Warehouse.From);
-            else
-                resp.Result = Handler.Typeahead(request.Query, request.IncludeDeleted).Map(Warehouse.From);
-
-            return resp;
+                if (request.Query.IsNullOrEmpty())
+                    resp.Result = Handler.List(0, int.MaxValue).Map(Models.Dto.Warehouse.From);
+                else
+                    resp.Result = Handler.Typeahead(request.Query, request.IncludeDeleted)
+                                         .Map(Models.Dto.Warehouse.From);
+                return resp;
+            }
         }
     }
 }

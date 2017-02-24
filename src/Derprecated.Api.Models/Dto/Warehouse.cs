@@ -14,7 +14,7 @@
          Permissions.CanManageWarehouses, Permissions.CanUpsertWarehouses)]
     [RequiresAnyPermission(ApplyTo.Delete, Permissions.CanDoEverything, Permissions.CanManageWarehouses,
          Permissions.CanDeleteWarehouses)]
-    public class Warehouse : IReturn<Dto<Warehouse>>
+    public class Warehouse : IReturn<Dto<Warehouse>>, IPrimaryKeyable
     {
         public DateTime CreateDate { get; set; }
         public int Id { get; set; }

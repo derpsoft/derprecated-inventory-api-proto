@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using Derprecated.Api.Models;
-using Derprecated.Api.Models.Attributes;
-using ServiceStack;
-using ServiceStack.OrmLite;
-
-namespace Derprecated.Api.Handlers
+﻿namespace Derprecated.Api.Handlers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
+    using Models;
+    using Models.Attributes;
+    using ServiceStack;
+    using ServiceStack.OrmLite;
+
     public class ProductHandler
     {
         public ProductHandler(IDbConnection db, UserSession user)
@@ -20,18 +20,32 @@ namespace Derprecated.Api.Handlers
         private IDbConnection Db { get; }
         private UserSession User { get; }
 
-        public Product Get(int id, bool includeDeleted = false)
+        public Product Get(string sku, bool includeDeleted = false)
         {
-            id.ThrowIfLessThan(1);
+            sku.ThrowIfNullOrEmpty();
 
             var query = Db.From<Product>()
-                .Where(x => x.Id == id);
+                          .Where(x => x.Sku == sku.ToUpper());
 
             if (!includeDeleted)
                 query = query.Where(x => !x.IsDeleted);
 
             return Db.LoadSelect(query)
-                .First();
+                     .First();
+        }
+
+        public Product Get(int id, bool includeDeleted = false)
+        {
+            id.ThrowIfLessThan(1);
+
+            var query = Db.From<Product>()
+                          .Where(x => x.Id == id);
+
+            if (!includeDeleted)
+                query = query.Where(x => !x.IsDeleted);
+
+            return Db.LoadSelect(query)
+                     .First();
         }
 
         public ProductImage GetProductImage(int id)
@@ -55,8 +69,8 @@ namespace Derprecated.Api.Handlers
             take.ThrowIfLessThan(1);
 
             var query = Db.From<Product>()
-                .Skip(skip)
-                .Take(take);
+                          .Skip(skip)
+                          .Take(take);
 
             if (!includeDeleted)
                 query = query.Where(x => !x.IsDeleted);
@@ -74,7 +88,7 @@ namespace Derprecated.Api.Handlers
                 // ReSharper disable once PossibleUnintendedReferenceComparison
                 if (default(Product) == existing)
                     throw new ArgumentException("invalid Id for existing product", nameof(product));
-                if(existing.IsDeleted)
+                if (existing.IsDeleted)
                     throw new Exception("deleted products must be undeleted before updates can be made");
 
                 product = existing.PopulateFromPropertiesWithAttribute(product, typeof(WhitelistAttribute));
@@ -105,7 +119,7 @@ namespace Derprecated.Api.Handlers
             var existing = Get(id);
             if (default(Product) == existing)
                 throw new ArgumentException("unable to locate product with id");
-            if(existing.IsDeleted)
+            if (existing.IsDeleted)
                 throw new Exception("that product was already deleted");
             return Db.SoftDelete(existing);
         }
@@ -118,23 +132,6 @@ namespace Derprecated.Api.Handlers
             if (existing.IsDeleted)
                 throw new Exception("that product was already deleted");
             return Db.SoftDelete(existing);
-        }
-
-        public ProductImage SaveImage(int id, ProductImage image)
-        {
-            image.ThrowIfNull(nameof(image));
-            image.ProductId = id;
-            if (image.Id > 0)
-            {
-                var existing = GetProductImage(image.Id);
-                if (default(ProductImage) == existing)
-                    throw new ArgumentException("invalid Id for existing product image", nameof(image));
-
-                image = existing.PopulateFromPropertiesWithAttribute(image, typeof(WhitelistAttribute));
-            }
-            Db.Save(image);
-
-            return image;
         }
     }
 }

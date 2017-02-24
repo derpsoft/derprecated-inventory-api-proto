@@ -26,44 +26,5 @@
 
         [Whitelist]
         public string SourceUrl { get; set; }
-
-
-        public static ProductImage From(Image source)
-        {
-            var dest = new ProductImage
-            {
-                ShopifyId = source.Id.GetValueOrDefault(),
-                SourceUrl = source.Url
-            };
-
-
-            return dest;
-        }
-
-        public static ProductImage From(ProductImage source)
-        {
-            var dest = new ProductImage
-            {
-                ShopifyId = source.Id,
-                SourceUrl = source.SourceUrl
-            };
-
-
-            return dest;
-        }
-
-        public void OnInsert()
-        {
-            OnUpsert();
-        }
-
-        public void OnUpdate()
-        {
-            OnUpsert();
-        }
-
-        private void OnUpsert()
-        {
-        }
     }
 }

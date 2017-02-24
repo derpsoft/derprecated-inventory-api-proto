@@ -12,7 +12,7 @@
         {
         }
 
-        public List<Category> Typeahead(string q, bool includeDeleted = false)
+        public override List<Category> Typeahead(string q, bool includeDeleted = false)
         {
             var query = Db.From<Category>()
                 .Where(x => x.Name.Contains(q));

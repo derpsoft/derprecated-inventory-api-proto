@@ -35,21 +35,31 @@ namespace Derprecated.Api.Models.Dto
         public decimal QuantityOnHand { get; set; }
 
         public long? ShopifyId { get; set; }
+
+        [StringLength(200)]
         public string Sku { get; set; }
         public string Tags { get; set; }
         public string Title { get; set; }
         public string UnitOfMeasure { get; set; } = "each";
         public int VendorId { get; set; }
-        public ulong Version { get; set; }
+        public ulong RowVersion { get; set; }
         public decimal Weight { get; set; }
         public string WeightUnit { get; set; }
 
         public static Product From(Models.Product source)
         {
-            var p = new Product().PopulateWith(source);
-            p.Images = source.Images.Map(Image.From);
-            return p;
+            return new Product().PopulateWith(source);
         }
+    }
+
+    [Route("/api/v1/products/sku/{Sku}", "GET")]
+    [Authenticate]
+    [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageProducts,
+        Permissions.CanReadProducts)]
+    public sealed class ProductBySku : IReturn<Dto<Product>>
+    {
+        public string Sku { get; set; }
+        public bool IncludeDeleted { get; set; } = false;
     }
 
     [Route("/api/v1/products/count", "GET")]

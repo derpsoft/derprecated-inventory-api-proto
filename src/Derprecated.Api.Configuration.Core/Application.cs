@@ -198,13 +198,15 @@
             // Handlers
             container.RegisterAutoWired<ImageHandler>();
             container.RegisterAs<LocationHandler, IHandler<Location>>()
-                .ReusedWithin(ReuseScope.Request);
-            container.RegisterAs<CategoryHandler,IHandler<Category>>()
-                .ReusedWithin(ReuseScope.Request);
+                     .ReusedWithin(ReuseScope.Request);
+            container.RegisterAs<CategoryHandler, IHandler<Category>>()
+                     .ReusedWithin(ReuseScope.Request);
             container.RegisterAs<VendorHandler, IHandler<Vendor>>()
-                .ReusedWithin(ReuseScope.Request);
+                     .ReusedWithin(ReuseScope.Request);
             container.RegisterAs<WarehouseHandler, IHandler<Warehouse>>()
-                .ReusedWithin(ReuseScope.Request);
+                     .ReusedWithin(ReuseScope.Request);
+            container.RegisterAs<ProductHandler, IHandler<Product>>()
+                     .ReusedWithin(ReuseScope.Request);
 
             // Misc
             container.Register(new ShopifyServiceClient($"https://{configuration.Shopify.Domain}")

@@ -41,6 +41,7 @@ namespace Derprecated.Api.Models.Dto
         public string Sku { get; set; }
 
         public string Tags { get; set; }
+        [StringLength(500)]
         public string Title { get; set; }
         public string UnitOfMeasure { get; set; } = "each";
         public int VendorId { get; set; }

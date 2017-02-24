@@ -26,7 +26,7 @@
 
                 RuleFor(x => x.Title)
                     .NotEmpty()
-                    .Length(0, 50);
+                    .Length(0, 500);
 
                 RuleFor(x => x.Sku)
                     .NotEmpty()
@@ -44,7 +44,7 @@
 
                 RuleFor(x => x.Title)
                     .NotEmpty()
-                    .Length(0, 50);
+                    .Length(0, 500);
             });
 
             RuleSet(ApplyTo.Delete, () =>
@@ -63,12 +63,8 @@
     {
         public ProductImportValidator()
         {
-            RuleSet(ApplyTo.Post, () =>
-            {
-                RuleForEach(x => x.Products)
-                    .Must(x => x.Id == default(int)).WithMessage("{0} may not be set when creating a Product")
-                    .Must(x => x.RowVersion == default(long)).WithMessage("{0} may not be set when creating a Product");
-            });
+            RuleForEach(x => x.Products)
+                .SetValidator(new ProductValidator());
         }
     }
 

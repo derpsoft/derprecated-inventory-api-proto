@@ -1,70 +1,52 @@
 ﻿namespace Derprecated.Api.Services
 {
-    using System;
     using System.Collections.Generic;
-    using Handlers;
+    using Models;
     using Models.Dto;
     using ServiceStack;
+    using ServiceStack.Logging;
+    using Category = Models.Category;
 
-    public class CategoryService : BaseService
+    public static class CategoryServices
     {
-        public object Get(Category request)
+        private static ILog Log = LogManager.GetLogger(typeof(CategoryServices));
+
+        public class CategoryService : CrudService<Category, Models.Dto.Category>
         {
-            var resp = new Dto<Category>();
-            var handler = new CategoryHandler(Db, CurrentSession);
+            public CategoryService(IHandler<Category> handler) : base(handler)
+            {
+            }
 
-            resp.Result = Category.From(handler.Get(request.Id));
+            public object Get(CategoryCount request)
+            {
+                var resp = new Dto<long>();
 
-            return resp;
-        }
+                resp.Result = Handler.Count(request.IncludeDeleted);
 
-        public object Delete(Category request)
-        {
-            throw new NotImplementedException();
-        }
+                return resp;
+            }
 
-        public object Any(Category request)
-        {
-            var resp = new Dto<Category>();
-            var handler = new CategoryHandler(Db, CurrentSession);
-            var category = handler.Save(new Models.Category().PopulateWith(request));
+            public object Get(Categories request)
+            {
+                var resp = new Dto<List<Models.Dto.Category>>();
 
-            resp.Result = Category.From(category);
-            return resp;
-        }
+                resp.Result =
+                    Handler.List(request.Skip, request.Take, request.IncludeDeleted).Map(Models.Dto.Category.From);
 
-        public object Any(CategoryCount request)
-        {
-            var resp = new Dto<long>();
-            var handler = new CategoryHandler(Db, CurrentSession);
+                return resp;
+            }
 
-            resp.Result = handler.Count();
+            public object Any(CategoryTypeahead request)
+            {
+                var resp = new Dto<List<Models.Dto.Category>>();
 
-            return resp;
-        }
+                if (request.Query.IsNullOrEmpty())
+                    resp.Result = Handler.List(0, int.MaxValue, request.IncludeDeleted).Map(Models.Dto.Category.From);
+                else
+                    resp.Result = Handler.Typeahead(request.Query, request.IncludeDeleted).Map(Models.Dto.Category.From);
 
-        public object Any(Categories request)
-        {
-            var resp = new Dto<List<Category>>();
-            var handler = new CategoryHandler(Db, CurrentSession);
-
-            resp.Result = handler.List(request.Skip, request.Take).Map(Category.From);
-
-            return resp;
-        }
-
-        public object Any(CategoryTypeahead request)
-        {
-            var resp = new Dto<List<Category>>();
-            var categoryHandler = new CategoryHandler(Db, CurrentSession);
-            var searchHandler = new SearchHandler(Db, CurrentSession);
-
-            if (request.Query.IsNullOrEmpty())
-                resp.Result = categoryHandler.List(0, int.MaxValue).Map(Category.From);
-            else
-                resp.Result = searchHandler.CategoryTypeahead(request.Query).Map(Category.From);
-
-            return resp;
+                return resp;
+            }
         }
     }
 }

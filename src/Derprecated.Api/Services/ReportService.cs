@@ -2,8 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Handlers;
     using Models;
+    using Models.Dto;
     using Models.Routing;
     using ServiceStack;
 
@@ -37,6 +39,19 @@
 
             result.Report = handler.GetSalesByVendor(request.StartDate, request.EndDate, request.GroupBy,
                 request.VendorId);
+
+            return result;
+        }
+
+        public object Any(DashboardReport request)
+        {
+            var result = new Dto<DashboardReport>();
+            var handler = new ReportHandler(Db, CurrentSession);
+
+            result.Result = request;
+            result.Result.Dispatched = handler.GetDispatchedInventory(request.StartDate, request.EndDate, request.GroupBy);
+            result.Result.Received = handler.GetReceivedInventory(request.StartDate, request.EndDate, request.GroupBy);
+            result.Result.Sales = handler.GetSalesByTotal(request.StartDate, request.EndDate, request.GroupBy);
 
             return result;
         }

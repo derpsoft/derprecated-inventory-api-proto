@@ -3,6 +3,16 @@
     public static class Permissions
     {
         /// <summary>
+        ///     Delete Images.
+        /// </summary>
+        public const string CanDeleteImages = "deleteImages";
+
+        /// <summary>
+        ///     Read images
+        /// </summary>
+        public const string CanReadImages = "readImages";
+
+        /// <summary>
         ///     Upsert Sales.
         /// </summary>
         public const string CanUpsertSales = "upsertSales";
@@ -172,5 +182,15 @@
         ///     Can read Inventory.
         /// </summary>
         public const string CanReadInventory = "readInventory";
+
+        /// <summary>
+        ///     All Image permissions.
+        /// </summary>
+        public const string CanManageImages = "manageImages";
+
+        /// <summary>
+        ///     Write images
+        /// </summary>
+        public const string CanUpsertImages = "upsertImages";
     }
 }

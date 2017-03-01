@@ -17,7 +17,7 @@ namespace Derprecated.Api.Models.Dto
     [RequiresAnyPermission(ApplyTo.Post | ApplyTo.Put | ApplyTo.Patch, Permissions.CanDoEverything,
         Permissions.CanManageProducts,
         Permissions.CanUpsertProducts)]
-    public class Product : IReturn<Dto<Product>>
+    public sealed class Product : IReturn<Dto<Product>>
     {
         public string Barcode { get; set; }
 
@@ -35,27 +35,37 @@ namespace Derprecated.Api.Models.Dto
         public decimal QuantityOnHand { get; set; }
 
         public long? ShopifyId { get; set; }
+
+        [StringLength(200)]
         public string Sku { get; set; }
         public string Tags { get; set; }
         public string Title { get; set; }
         public string UnitOfMeasure { get; set; } = "each";
         public int VendorId { get; set; }
-        public ulong Version { get; set; }
+        public ulong RowVersion { get; set; }
         public decimal Weight { get; set; }
         public string WeightUnit { get; set; }
 
         public static Product From(Models.Product source)
         {
-            var p = new Product().PopulateWith(source);
-            p.Images = source.Images.Map(Image.From);
-            return p;
+            return new Product().PopulateWith(source);
         }
+    }
+
+    [Route("/api/v1/products/sku/{Sku}", "GET")]
+    [Authenticate]
+    [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageProducts,
+        Permissions.CanReadProducts)]
+    public sealed class ProductBySku : IReturn<Dto<Product>>
+    {
+        public string Sku { get; set; }
+        public bool IncludeDeleted { get; set; } = false;
     }
 
     [Route("/api/v1/products/count", "GET")]
     [Authenticate]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanReadProducts)]
-    public class ProductCount : IReturn<Dto<long>>
+    public sealed class ProductCount : IReturn<Dto<long>>
     {
         public bool IncludeDeleted { get; set; } = false;
     }
@@ -64,21 +74,27 @@ namespace Derprecated.Api.Models.Dto
     [Authenticate]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageProducts,
         Permissions.CanReadProducts)]
-    public class Products : IReturn<Dto<List<Product>>>
+    public sealed class Products : IReturn<Dto<List<Product>>>
     {
         public bool IncludeDeleted { get; set; } = false;
         public int Skip { get; set; } = 0;
         public int Take { get; set; } = 25;
     }
 
-    public class ProductSearch
+    [Route("/api/v1/products/search")]
+    [Authenticate]
+    [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanReadProducts)]
+    public sealed class ProductSearch : QueryDb<Models.Product, Dto<Product>>, IJoin<Models.Product, Models.ProductImage>
     {
+        [QueryDbField(Term = QueryTerm.And, Template = "FREETEXT({Field}, {Value})", Field = "Description",
+            ValueFormat = "{0}")]
+        public string Query { get; set; }
     }
 
     [Route("/api/v1/products/typeahead", "GET, SEARCH")]
     [Authenticate]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanReadProducts)]
-    public class ProductTypeahead : IReturn<Dto<Product>>
+    public sealed class ProductTypeahead : IReturn<Dto<Product>>
     {
         public bool IncludeDeleted { get; set; } = false;
 
@@ -88,14 +104,14 @@ namespace Derprecated.Api.Models.Dto
 
     [Route("/api/v1/products/{ProductId}/images/{Id}", "GET, DELETE")]
     [Route("/api/v1/products/{ProductId}/images", "POST")]
-    public class ProductImage : IReturn<Dto<Image>>
+    public sealed class ProductImage : IReturn<Dto<Image>>
     {
         public int Id { get; set; }
         public int ProductId { get; set; }
     }
 
     [Route("/api/v1/products/{Id}/images", "GET")]
-    public class ProductImages : IReturn<Dto<List<Image>>>
+    public sealed class ProductImages : IReturn<Dto<List<Image>>>
     {
         public int Id { get; set; }
     }

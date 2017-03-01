@@ -8,20 +8,21 @@
     [Route("/api/v1/categories/{Id}", "GET, PUT, PATCH, DELETE")]
     [Authenticate]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything,
-        Permissions.CanManageCategories,
-        Permissions.CanReadCategories)]
+         Permissions.CanManageCategories,
+         Permissions.CanReadCategories)]
     [RequiresAnyPermission(ApplyTo.Delete, Permissions.CanDoEverything,
-        Permissions.CanManageCategories,
-        Permissions.CanDeleteCategories)]
+         Permissions.CanManageCategories,
+         Permissions.CanDeleteCategories)]
     [RequiresAnyPermission(ApplyTo.Post | ApplyTo.Patch | ApplyTo.Put, Permissions.CanDoEverything,
-        Permissions.CanManageCategories,
-        Permissions.CanUpsertCategories)]
-    public sealed class Category : IReturn<Dto<Category>>
+         Permissions.CanManageCategories,
+         Permissions.CanUpsertCategories)]
+    public sealed class Category : IReturn<Dto<Category>>, IPrimaryKeyable
     {
         public int Id { get; set; }
+        public bool IncludeDeleted { get; set; } = false;
         public string Name { get; set; }
+        public int? ParentId { get; set; }
         public ulong RowVersion { get; set; }
-        public int ParentId { get; set; }
 
         public static Category From(Models.Category source)
         {
@@ -32,32 +33,34 @@
     [Route("/api/v1/categories/count", "GET")]
     [Authenticate]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageCategories,
-        Permissions.CanReadCategories)]
+         Permissions.CanReadCategories)]
     public sealed class CategoryCount : IReturn<Dto<long>>
     {
+        public bool IncludeDeleted { get; set; } = false;
     }
 
     [Route("/api/v1/categories", "GET")]
     [Authenticate]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageCategories,
-        Permissions.CanReadCategories)]
+         Permissions.CanReadCategories)]
     public sealed class Categories : IReturn<Dto<List<Category>>>
     {
+        public bool IncludeDeleted { get; set; } = false;
         public int Skip { get; set; } = 0;
         public int Take { get; set; } = 25;
     }
 
     [Route("/api/v1/categories", "GET, SEARCH")]
     [Authenticate]
-    [RequiresAnyPermission(ApplyTo.Search, Permissions.CanDoEverything, Permissions.CanManageVendors,
-        Permissions.CanReadVendors)]
+    [RequiresAnyPermission(ApplyTo.Search, Permissions.CanDoEverything, Permissions.CanManageCategories,
+         Permissions.CanReadCategories)]
     public sealed class CategorySearch : QueryDb<Models.Category, Category>
     {
         [QueryDbField(Term = QueryTerm.Or)]
         public int Id { get; set; }
 
         [QueryDbField(Term = QueryTerm.Or, Template = "LOWER({Field}) like {Value}", Field = "Name",
-            ValueFormat = "%{0}%")]
+             ValueFormat = "%{0}%")]
         public string Name { get; set; }
     }
 
@@ -66,6 +69,8 @@
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageCategories, Permissions.CanReadCategories)]
     public sealed class CategoryTypeahead : IReturn<Dto<List<Category>>>
     {
+        public bool IncludeDeleted { get; set; } = false;
+
         [StringLength(20)]
         public string Query { get; set; }
     }

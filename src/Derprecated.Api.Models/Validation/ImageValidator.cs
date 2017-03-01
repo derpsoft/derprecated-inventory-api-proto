@@ -4,17 +4,11 @@
     using ServiceStack;
     using ServiceStack.FluentValidation;
 
-    public class LocationValidator : AbstractValidator<Location>
+    public class ImageValidator : AbstractValidator<Image>
     {
-        public LocationValidator()
+        public ImageValidator()
         {
             RuleSet(ApplyTo.Get, () =>
-            {
-                RuleFor(x => x.Id)
-                    .GreaterThanOrEqualTo(1);
-            });
-
-            RuleSet(ApplyTo.Delete, () =>
             {
                 RuleFor(x => x.Id)
                     .GreaterThanOrEqualTo(1);
@@ -24,18 +18,11 @@
             {
                 RuleFor(x => x.Id)
                     .Must(x => x == default(int))
-                    .WithMessage("{0} may not be set when creating a Location");
+                    .WithMessage("{0} may not be set when creating a Image");
 
                 RuleFor(x => x.RowVersion)
                     .Must(x => x == default(long))
-                    .WithMessage("{0} may not be set when creating a Location");
-
-                RuleFor(x => x.Name)
-                    .NotEmpty()
-                    .Length(0, 50);
-
-                RuleFor(x => x.WarehouseId)
-                    .GreaterThanOrEqualTo(1);
+                    .WithMessage("{0} may not be set when creating a Image");
             });
 
             RuleSet(ApplyTo.Put | ApplyTo.Patch, () =>
@@ -46,13 +33,16 @@
                 RuleFor(x => x.RowVersion)
                     .NotEmpty()
                     .Must(x => x >= 1L);
+            });
 
-                RuleFor(x => x.Name)
-                    .NotEmpty()
-                    .Length(0, 50);
-
-                RuleFor(x => x.WarehouseId)
+            RuleSet(ApplyTo.Delete, () =>
+            {
+                RuleFor(x => x.Id)
                     .GreaterThanOrEqualTo(1);
+
+                RuleFor(x => x.RowVersion)
+                    .NotEmpty()
+                    .Must(x => x >= 1L);
             });
         }
     }

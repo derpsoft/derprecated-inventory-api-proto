@@ -40,9 +40,9 @@
 
             return Db.Select(
                 Db.From<Sale>()
-                  .Skip(skip)
-                  .Take(take)
-                );
+                    .Skip(skip)
+                    .Take(take)
+            );
         }
 
         public long Count()

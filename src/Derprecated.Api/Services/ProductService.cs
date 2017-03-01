@@ -2,20 +2,15 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using Handlers;
     using Models.Dto;
-    using Models.Shopify;
     using ServiceStack;
     using ServiceStack.Logging;
-    using Image = Models.Dto.Image;
-    using Product = Models.Dto.Product;
 
     public class ProductService : BaseService
     {
-        protected static ILog Log = LogManager.GetLogger(typeof (ProductService));
-        public ShopifyServiceClient ShopifyServiceClient { get; set; }
+        protected static ILog Log = LogManager.GetLogger(typeof(ProductService));
 
         public object Any(ProductCount request)
         {
@@ -41,13 +36,16 @@
             return resp;
         }
 
-
-        public object Delete(Product request)
+        public object Get(ProductBySku request)
         {
             var resp = new Dto<Product>();
-            var handler = new ProductHandler(Db, CurrentSession);
+            var productHandler = new ProductHandler(Db, CurrentSession);
+            var inventoryHandler = new InventoryHandler(Db, CurrentSession);
 
-            resp.Result = Product.From(handler.Delete(request.Id));
+            var product = Product.From(productHandler.Get(request.Sku, request.IncludeDeleted));
+
+            resp.Result = product;
+            resp.Result.QuantityOnHand = inventoryHandler.GetQuantityOnHand(product.Id);
 
             return resp;
         }
@@ -56,34 +54,8 @@
         {
             var resp = new Dto<Product>();
             var productHandler = new ProductHandler(Db, CurrentSession);
-            var shopifyHandler = new ShopifyHandler(ShopifyServiceClient);
 
             var product = productHandler.Save(new Models.Product().PopulateWith(request));
-            var shopifyProduct = Models.Shopify.Product.From(product);
-
-            if (shopifyProduct.Id.HasValue)
-            {
-                shopifyHandler.Update(shopifyProduct);
-            }
-            else
-            {
-                shopifyProduct.Variants = new List<Variant>
-                {
-                    new Variant
-                    {
-                        Option1 = product.Color,
-                        Barcode = product.Barcode,
-                        Sku = product.Sku,
-                        Price = product.Price.ToString(CultureInfo.InvariantCulture),
-                        Weight = product.Weight,
-                        WeightUnit = product.WeightUnit
-                    }
-                };
-                shopifyProduct = shopifyHandler.Create(shopifyProduct);
-                // ReSharper disable once PossibleInvalidOperationException
-                productHandler.SetShopifyId(product.Id, shopifyProduct.Id.Value);
-                product.ShopifyId = shopifyProduct.Id.Value;
-            }
 
             resp.Result = Product.From(product);
 
@@ -107,41 +79,27 @@
             return resp;
         }
 
-        public object Get(ProductImage request)
+        public object Any(ProductTypeahead request)
         {
-            var resp = new Dto<Image>();
+            var resp = new Dto<List<Product>>();
+            var productHandler = new ProductHandler(Db, CurrentSession);
+            var searchHandler = new SearchHandler(Db, CurrentSession);
+            var inventoryHandler = new InventoryHandler(Db, CurrentSession);
 
-            return resp;
-        }
+            List<Models.Product> intermediate;
 
-        public object Delete(ProductImage request)
-        {
-            throw new NotImplementedException();
-            var resp = new Dto<Image>();
+            if (request.Query.IsNullOrEmpty())
+                intermediate = productHandler.List(0, int.MaxValue);
+            else
+                intermediate = searchHandler.ProductTypeahead(request.Query);
 
-            return resp;
-        }
-
-        public object Any(ProductImage request)
-        {
-            var resp = new Dto<Image>();
-            if (Request.Files.Length > 0)
+            resp.Result = intermediate.Map(product =>
             {
-                var productHandler = new ProductHandler(Db, CurrentSession);
-                var product = productHandler.Get(request.ProductId);
+                var p = Product.From(product);
+                p.QuantityOnHand = inventoryHandler.GetQuantityOnHand(p.Id);
+                return p;
+            });
 
-                if (null != product)
-                {
-                    var imageHandler = ResolveService<ImageHandler>();
-                    var uri = imageHandler.SaveImage(Request.Files.First(), "products");
-
-                    resp.Result = Image.From(productHandler.SaveImage(product.Id, new Models.ProductImage
-                    {
-                        ProductId = product.Id,
-                        SourceUrl = uri.ToString()
-                    }));
-                }
-            }
             return resp;
         }
     }

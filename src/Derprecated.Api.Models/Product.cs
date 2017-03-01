@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using Attributes;
     using ServiceStack.DataAnnotations;
 
@@ -21,7 +20,7 @@
         public Category Category { get; set; }
 
         [Whitelist]
-        [ForeignKey(typeof (Category), OnDelete = "NO ACTION", OnUpdate = "CASCADE")]
+        [ForeignKey(typeof(Category), OnDelete = "NO ACTION", OnUpdate = "CASCADE")]
         public int? CategoryId { get; set; }
 
         [Whitelist]
@@ -66,6 +65,8 @@
 
         [Whitelist]
         [EqualityCheck]
+        [Index(Unique = true)]
+        [StringLength(200)]
         public string Sku { get; set; }
 
         [Whitelist]
@@ -101,20 +102,6 @@
             Title = source.Title;
             Description = source.BodyHtml;
             Tags = source.Tags;
-
-            foreach (var img in source.Images)
-            {
-                var i = Images.FirstOrDefault(x => x.ShopifyId == img.Id);
-
-                if (default(ProductImage) == i)
-                {
-                    Images.Add(ProductImage.From(img));
-                }
-                else
-                {
-                    i.SourceUrl = img.Url;
-                }
-            }
         }
 
         public void Merge(Product source)
@@ -122,20 +109,6 @@
             Title = source.Title;
             Description = source.Description;
             Tags = source.Tags;
-
-            foreach (var img in source.Images)
-            {
-                var i = Images.FirstOrDefault(x => x.ShopifyId == img.Id);
-
-                if (default(ProductImage) == i)
-                {
-                    Images.Add(ProductImage.From(img));
-                }
-                else
-                {
-                    i.SourceUrl = img.SourceUrl;
-                }
-            }
         }
 
         public static Product From(Shopify.Product source)
@@ -159,15 +132,14 @@
 
         private void OnUpsert()
         {
+            Sku = Sku.ToUpper();
         }
 
         public override bool Equals(object obj)
         {
             var product = obj as Product;
             if (product != null)
-            {
                 return this.DeepEquals(product);
-            }
 
             return false;
         }

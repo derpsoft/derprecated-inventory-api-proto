@@ -19,6 +19,29 @@
 
         protected IDbConnection Db { get; }
 
+        public virtual SqlExpression<T> AddJoinTables(SqlExpression<T> source)
+        {
+            return source;
+        }
+
+        public virtual SqlExpression<T> QueryForGet(int id, bool includeDeleted = false)
+        {
+            id.ThrowIfLessThan(1);
+
+            var query = AddJoinTables(Db.From<T>())
+                .Where(x => x.Id == id);
+
+            if (!includeDeleted)
+                query = query.Where(x => !x.IsDeleted);
+
+            return query;
+        }
+
+        public void Dispose()
+        {
+            Db?.Dispose();
+        }
+
         public long Count(bool includeDeleted = false)
         {
             if (includeDeleted)
@@ -33,8 +56,8 @@
             take.ThrowIfLessThan(1);
 
             var query = Db.From<T>()
-                .Skip(skip)
-                .Take(take);
+                          .Skip(skip)
+                          .Take(take);
 
             if (!includeDeleted)
                 query = query.Where(x => !x.IsDeleted);
@@ -61,11 +84,6 @@
             return record;
         }
 
-        public void Dispose()
-        {
-            Db?.Dispose();
-        }
-
         public virtual T Delete(int id)
         {
             var existing = Get(id);
@@ -80,16 +98,8 @@
 
         public virtual T Get(int id, bool includeDeleted = false)
         {
-            id.ThrowIfLessThan(1);
-
-            var query = Db.From<T>()
-                .Where(x => x.Id == id);
-
-            if (!includeDeleted)
-                query = query.Where(x => !x.IsDeleted);
-
-            return Db.LoadSelect(query)
-                .First();
+            return Db.LoadSelect(QueryForGet(id, includeDeleted))
+                     .First();
         }
     }
 }

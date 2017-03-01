@@ -6,11 +6,19 @@
     using Models.Dto;
     using ServiceStack;
     using ServiceStack.Logging;
+    using Image = Models.Dto.Image;
     using Product = Models.Dto.Product;
 
     public class ProductService : BaseService
     {
         protected static ILog Log = LogManager.GetLogger(typeof(ProductService));
+
+        public ProductService(IHandler<ProductImage> productImageHandler)
+        {
+            ProductImageHandler = (ProductImageHandler) productImageHandler;
+        }
+
+        protected ProductImageHandler ProductImageHandler { get; }
 
         public object Any(ProductCount request)
         {
@@ -28,10 +36,12 @@
             var productHandler = new ProductHandler(Db);
             var inventoryHandler = new InventoryHandler(Db, CurrentSession);
 
-            var product = Product.From(productHandler.Get(request.Id, request.IncludeDeleted));
+            var product = productHandler.Get(request.Id, request.IncludeDeleted).ConvertTo<Product>();
 
             resp.Result = product;
             resp.Result.QuantityOnHand = inventoryHandler.GetQuantityOnHand(product.Id);
+            resp.Result.Images =
+                ProductImageHandler.GetImages(request.Id, request.IncludeDeleted).ConvertAll(x => x.ConvertTo<Image>());
 
             return resp;
         }
@@ -42,7 +52,7 @@
             var productHandler = new ProductHandler(Db);
             var inventoryHandler = new InventoryHandler(Db, CurrentSession);
 
-            var product = Product.From(productHandler.Get(request.Sku, request.IncludeDeleted));
+            var product = productHandler.Get(request.Sku, request.IncludeDeleted).ConvertTo<Product>();
 
             resp.Result = product;
             resp.Result.QuantityOnHand = inventoryHandler.GetQuantityOnHand(product.Id);
@@ -57,7 +67,7 @@
 
             var product = productHandler.Save(new Models.Product().PopulateWith(request));
 
-            resp.Result = Product.From(product);
+            resp.Result = product.ConvertTo<Product>();
 
             return resp;
         }
@@ -71,7 +81,7 @@
             resp.Result = productHandler.List(request.Skip, request.Take, request.IncludeDeleted)
                                         .Map(product =>
                                         {
-                                            var p = Product.From(product);
+                                            var p = product.ConvertTo<Product>();
                                             p.QuantityOnHand = inventoryHandler.GetQuantityOnHand(p.Id);
                                             return p;
                                         });
@@ -95,7 +105,7 @@
 
             resp.Result = intermediate.Map(product =>
             {
-                var p = Product.From(product);
+                var p = product.ConvertTo<Product>();
                 p.QuantityOnHand = inventoryHandler.GetQuantityOnHand(p.Id);
                 return p;
             });

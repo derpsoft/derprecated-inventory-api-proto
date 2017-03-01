@@ -19,8 +19,11 @@
     public class Image : IReturn<Dto<Image>>, IPrimaryKeyable
     {
         public int Id { get; set; }
+        public List<int> ProductIds { get; set; }
+        public List<Product> Products { get; set; }
         public ulong RowVersion { get; set; }
         public string Url { get; set; }
+        public bool IncludeDeleted { get; set; } = false;
     }
 
     [Route("/api/v1/images/count", "GET")]
@@ -43,7 +46,6 @@
         public int Take { get; set; } = 25;
     }
 
-
     [Route("/api/v1/images/typeahead", "GET, SEARCH")]
     [Authenticate]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageImages, Permissions.CanReadImages)]
@@ -54,4 +56,5 @@
         [StringLength(20)]
         public string Query { get; set; }
     }
+
 }

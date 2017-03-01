@@ -41,17 +41,14 @@ namespace Derprecated.Api.Models.Dto
         public string Sku { get; set; }
 
         public string Tags { get; set; }
+
         [StringLength(500)]
         public string Title { get; set; }
+
         public string UnitOfMeasure { get; set; } = "each";
         public int VendorId { get; set; }
         public decimal Weight { get; set; }
         public string WeightUnit { get; set; }
-
-        public static Product From(Models.Product source)
-        {
-            return new Product().PopulateWith(source);
-        }
     }
 
     [Route("/api/v1/products/import", "POST")]
@@ -96,7 +93,7 @@ namespace Derprecated.Api.Models.Dto
     [Authenticate]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanReadProducts)]
     public sealed class ProductSearch : QueryDb<Models.Product, Dto<Product>>,
-        IJoin<Models.Product, Models.ProductImage>
+        IJoin<Models.Product, ProductImage>
     {
         [QueryDbField(Term = QueryTerm.And, Template = "FREETEXT({Field}, {Value})", Field = "Description",
              ValueFormat = "{0}")]

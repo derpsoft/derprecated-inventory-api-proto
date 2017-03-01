@@ -10,7 +10,7 @@
     using ServiceStack.OrmLite;
 
     public abstract class CrudHandler<T> : IHandler<T>, IDisposable
-        where T : class, ISoftDeletable, IPrimaryKeyable
+        where T : class, ISoftDeletable, IPrimaryKeyable, IAuditable
     {
         protected CrudHandler(IDbConnectionFactory db)
         {
@@ -39,7 +39,7 @@
             if (!includeDeleted)
                 query = query.Where(x => !x.IsDeleted);
 
-            return Db.LoadSelect(query);
+            return Db.LoadSelect(query.OrderByDescending(x => x.ModifyDate));
         }
 
         public abstract List<T> Typeahead(string query, bool includeDeleted = false);

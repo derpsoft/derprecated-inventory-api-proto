@@ -113,18 +113,4 @@ namespace Derprecated.Api.Models.Dto
         [StringLength(20)]
         public string Query { get; set; }
     }
-
-    [Route("/api/v1/products/{ProductId}/images/{Id}", "GET, DELETE")]
-    [Route("/api/v1/products/{ProductId}/images", "POST")]
-    public sealed class ProductImage : IReturn<Dto<Image>>
-    {
-        public int Id { get; set; }
-        public int ProductId { get; set; }
-    }
-
-    [Route("/api/v1/products/{Id}/images", "GET")]
-    public sealed class ProductImages : IReturn<Dto<List<Image>>>
-    {
-        public int Id { get; set; }
-    }
 }

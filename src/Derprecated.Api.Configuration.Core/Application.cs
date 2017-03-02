@@ -129,6 +129,7 @@
                 ctx.CreateTableIfNotExists<Sale>();
                 ctx.CreateTableIfNotExists<Warehouse>();
                 ctx.CreateTableIfNotExists<Location>();
+                ctx.CreateTableIfNotExists<Image>();
             }
 #if DEBUG
             var testUser = new UserAuth
@@ -196,7 +197,8 @@
             Plugins.Add(new SwaggerFeature());
 
             // Handlers
-            container.RegisterAutoWired<ImageHandler>();
+            container.RegisterAs<ImageHandler, IHandler<Image>>()
+                     .ReusedWithin(ReuseScope.Request);
             container.RegisterAs<LocationHandler, IHandler<Location>>()
                      .ReusedWithin(ReuseScope.Request);
             container.RegisterAs<CategoryHandler, IHandler<Category>>()

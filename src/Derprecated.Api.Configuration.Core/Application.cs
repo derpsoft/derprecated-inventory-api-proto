@@ -19,9 +19,12 @@
     using ServiceStack.Caching;
     using ServiceStack.Configuration;
     using ServiceStack.Data;
+    using ServiceStack.Logging;
     using ServiceStack.OrmLite;
     using ServiceStack.Text;
     using ServiceStack.Validation;
+    using Auth0.AuthenticationApi;
+    using Auth0.ManagementApi;
 
     public class Application : AppHostBase
     {
@@ -61,6 +64,8 @@
             JsConfig.ExcludeTypeInfo = true;
             JsConfig<UserSession>.IncludeTypeInfo = true;
             JsConfig.DateHandler = DateHandler.ISO8601;
+
+            LogManager.LogFactory = new ConsoleLogFactory(debugEnabled:true);
 
             var baseSettings = new AppSettings();
             container.Register(baseSettings);
@@ -190,6 +195,7 @@
 
             var jwk = JwkFromUri(new Uri(configuration.Auth0.Jwks));
             var rsaPubkey = RsaPubkeyFromJwk(jwk);
+            var managementUri = new Uri($"https://{configuration.Auth0.Domain}/");
             var tokenAuth = new JwtAuthProviderReader
             {
                 RequireHashAlgorithm = true,
@@ -199,7 +205,14 @@
                 Issuer = configuration.Auth0.Issuer,
                 PopulateSessionFilter = (session, json, request) =>
                 {
-                    var x = json;
+                    var authorization = json.Object("app_metadata")
+                      .Object("authorization");
+                    session.Permissions = authorization
+                      .GetArray<string>("permissions")
+                      .ToList();
+                    session.Roles = authorization
+                      .GetArray<string>("roles")
+                      .ToList();
                 },
 #if DEBUG
                 RequireSecureConnection = false
@@ -237,6 +250,7 @@
                      .ReusedWithin(ReuseScope.Request);
 
             // Misc
+            container.Register(new AuthenticationApiClient(new Uri($"https://{configuration.Auth0.Domain}/")));
             container.Register(new ShopifyServiceClient($"https://{configuration.Shopify.Domain}")
             {
                 UserName = configuration.Shopify.ApiKey,

@@ -199,6 +199,8 @@
             // Handlers
             container.RegisterAs<ImageHandler, IHandler<Image>>()
                      .ReusedWithin(ReuseScope.Request);
+            container.RegisterAs<ProductImageHandler, IHandler<ProductImage>>()
+                     .ReusedWithin(ReuseScope.Request);
             container.RegisterAs<LocationHandler, IHandler<Location>>()
                      .ReusedWithin(ReuseScope.Request);
             container.RegisterAs<CategoryHandler, IHandler<Category>>()

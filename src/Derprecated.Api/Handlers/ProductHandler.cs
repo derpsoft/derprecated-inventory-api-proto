@@ -33,12 +33,6 @@
                      .First();
         }
 
-        public ProductImage GetProductImage(int id)
-        {
-            id.ThrowIfLessThan(1);
-            return Db.SingleById<ProductImage>(id);
-        }
-
         public void SetShopifyId(int productId, long shopifyId)
         {
             var q = Db.From<Product>();

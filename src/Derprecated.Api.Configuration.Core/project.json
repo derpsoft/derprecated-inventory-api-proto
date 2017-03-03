@@ -1,15 +1,7 @@
 {
   "version": "1.0.0-*",
   "dependencies": {
-    "ServiceStack.Core": "1.0.*",
     "ServiceStack.Redis.Core": "1.0.*",
-    "ServiceStack.Common.Core": "1.0.*",
-    "ServiceStack.Client.Core": "1.0.*",
-    "ServiceStack.Interfaces.Core": "1.0.*",
-    "ServiceStack.Text.Core": "1.0.*",
-    "ServiceStack.OrmLite.Core": "1.0.*",
-    "ServiceStack.OrmLite.SqlServer.Core": "1.0.*",
-    "ServiceStack.Server.Core": "1.0.*",
     "Derprecated.Api.Models": "1.0.*",
     "Derprecated.Api": "1.0.*",
     "System.Linq": "4.3.*",
@@ -19,7 +11,15 @@
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.*",
     "ServiceStack.Api.Swagger.Core": "1.0.*",
     "System.Security.Cryptography.Csp": "4.3.0",
-    "ChilkatDnCore": "9.5.0.65"
+    "ChilkatDnCore": "9.5.0.65",
+    "ServiceStack.Client.Core": "1.0.37",
+    "ServiceStack.Common.Core": "1.0.37",
+    "ServiceStack.Core": "1.0.37",
+    "ServiceStack.Interfaces.Core": "1.0.37",
+    "ServiceStack.OrmLite.Core": "1.0.37",
+    "ServiceStack.OrmLite.SqlServer.Core": "1.0.37",
+    "ServiceStack.Server.Core": "1.0.37",
+    "ServiceStack.Text.Core": "1.0.37"
   },
   "frameworks": {
     "netcoreapp1.0": {

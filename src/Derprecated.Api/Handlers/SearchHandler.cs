@@ -8,14 +8,12 @@
 
     public class SearchHandler
     {
-        public SearchHandler(IDbConnection db, UserSession user)
+        public SearchHandler(IDbConnection db, IAuthSession user)
         {
             Db = db;
-            User = user;
         }
 
         private IDbConnection Db { get; }
-        private UserSession User { get; }
 
         public List<UserAuth> UserTypeahead(string q)
         {

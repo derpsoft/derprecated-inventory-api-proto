@@ -6,18 +6,19 @@
     using Models;
     using Models.Routing;
     using ServiceStack;
+    using ServiceStack.Auth;
     using ServiceStack.OrmLite;
 
     public class InventoryHandler
     {
-        public InventoryHandler(IDbConnection db, UserSession user)
+        public InventoryHandler(IDbConnection db, IAuthSession user)
         {
             Db = db;
             User = user;
         }
 
         private IDbConnection Db { get; }
-        private UserSession User { get; }
+        private IAuthSession User { get; }
 
         /// <summary>
         ///     Receive inventory into the system.

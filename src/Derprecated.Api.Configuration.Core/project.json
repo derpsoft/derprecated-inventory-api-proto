@@ -17,7 +17,9 @@
     "MailKit": "1.10.*",
     "NETStandard.Library": "1.6.1",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.*",
-    "ServiceStack.Api.Swagger.Core": "1.0.*"
+    "ServiceStack.Api.Swagger.Core": "1.0.*",
+    "System.Security.Cryptography.Csp": "4.3.0",
+    "ChilkatDnCore": "9.5.0.65"
   },
   "frameworks": {
     "netcoreapp1.0": {

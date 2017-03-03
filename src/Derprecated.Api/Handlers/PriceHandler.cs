@@ -4,18 +4,19 @@
     using System.Linq;
     using Models;
     using ServiceStack;
+    using ServiceStack.Auth;
     using ServiceStack.OrmLite;
 
     internal class PriceHandler
     {
-        public PriceHandler(IDbConnection db, UserSession user)
+        public PriceHandler(IDbConnection db, IAuthSession user)
         {
             Db = db;
             User = user;
         }
 
         private IDbConnection Db { get; }
-        private UserSession User { get; }
+        private IAuthSession User { get; }
 
         public decimal GetPrice(Product product)
         {

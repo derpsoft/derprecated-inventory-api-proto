@@ -10,15 +10,16 @@
 
     public class UserHandler
     {
-        public UserHandler(IDbConnection db, IUserAuthRepository userAuthRepository, UserSession user)
+        public UserHandler(IDbConnection db, IUserAuthRepository userAuthRepository, IAuthSession user)
         {
             Db = db;
-            User = user;
             UserAuthRepository = userAuthRepository;
+            User = user;
         }
 
         private IDbConnection Db { get; }
-        private UserSession User { get; }
+
+        private IAuthSession User { get; }
 
         private IUserAuthRepository UserAuthRepository { get; }
 
@@ -39,7 +40,7 @@
                 Db.From<UserAuth>()
                   .Skip(skip)
                   .Take(take)
-                );
+            );
         }
 
         public UserAuth Update(int id, UserAuth user)

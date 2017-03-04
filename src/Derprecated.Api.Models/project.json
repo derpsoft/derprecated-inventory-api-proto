@@ -1,11 +1,12 @@
 {
   "version": "1.0.0-*",
   "dependencies": {
-    "ServiceStack.Core": "1.0.*",
-    "ServiceStack.Text.Core": "1.0.*",
     "System.Linq": "4.3.*",
-    "ServiceStack.Server.Core": "1.0.*",
-    "NETStandard.Library": "1.6.1"
+    "NETStandard.Library": "1.6.1",
+    "ServiceStack.Core": "1.0.37",
+    "ServiceStack.Server.Core": "1.0.37",
+    "ServiceStack.Text.Core": "1.0.37",
+    "Auth0": "3.6.*"
   },
   "frameworks": {
     "netcoreapp1.0": {

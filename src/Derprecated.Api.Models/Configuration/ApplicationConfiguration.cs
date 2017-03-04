@@ -2,6 +2,7 @@
 {
     public sealed class ApplicationConfiguration
     {
+        public Auth0 Auth0 { get; set; }
         public ConnectionStrings ConnectionStrings { get; set; }
         public Mail Mail { get; set; }
         public ServiceStack ServiceStack { get; set; }

@@ -14,11 +14,11 @@
         {
             base.OnAuthenticated(authService, session, tokens, authInfo);
 
-            var userRepo = authService.TryResolve<IUserAuthRepository>();
-            var user = userRepo.GetUserAuth(UserAuthId);
+            // var userRepo = authService.TryResolve<IUserAuthRepository>();
+            // var user = userRepo.GetUserAuth(UserAuthId);
 
-            Roles = userRepo.GetRoles(user).ToList();
-            Permissions = userRepo.GetPermissions(user).ToList();
+            // Roles = userRepo.GetRoles(user).ToList();
+            // Permissions = userRepo.GetPermissions(user).ToList();
             //var userId = UserAuthId.ToInt();
 
             //using (var ctx = authService.TryResolve<IDbConnectionFactory>().Open())

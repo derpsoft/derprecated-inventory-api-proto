@@ -11,26 +11,26 @@
             RuleSet(ApplyTo.Get, () =>
             {
                 RuleFor(x => x.Id)
-                    .GreaterThanOrEqualTo(1);
+                    .NotEmpty();
             });
 
             RuleSet(ApplyTo.Put | ApplyTo.Patch, () =>
             {
                 RuleFor(x => x.Id)
-                    .GreaterThanOrEqualTo(1);
+                    .NotEmpty();
             });
 
             RuleSet(ApplyTo.Post, () =>
             {
                 RuleFor(x => x.Id)
-                    .Must(x => x == default(int))
+                    .Must(x => x == default(string))
                     .WithMessage("{0} may not be set when creating a User");
             });
 
             RuleSet(ApplyTo.Delete, () =>
             {
                 RuleFor(x => x.Id)
-                    .GreaterThanOrEqualTo(1);
+                    .NotEmpty();
             });
         }
     }

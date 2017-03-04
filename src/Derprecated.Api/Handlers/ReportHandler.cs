@@ -5,20 +5,21 @@
     using System.Data;
     using System.Linq;
     using Models;
+    using ServiceStack.Auth;
     using ServiceStack.OrmLite;
 
     public class ReportHandler
     {
         private static readonly string[] AcceptableGroupBy = {DateSegments.Day, DateSegments.Week, DateSegments.Month};
 
-        public ReportHandler(IDbConnection db, UserSession user)
+        public ReportHandler(IDbConnection db, IAuthSession user)
         {
             Db = db;
             User = user;
         }
 
         private IDbConnection Db { get; }
-        private UserSession User { get; }
+        private IAuthSession User { get; }
 
         public Dictionary<DateTime, decimal> GetSalesByVendor(DateTime startDate, DateTime endDate, string groupBy,
                                                               int vendorId)

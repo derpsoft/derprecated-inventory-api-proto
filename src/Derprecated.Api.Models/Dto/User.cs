@@ -19,7 +19,7 @@
     {
         public string Email { get; set; }
         public string FirstName { get; set; }
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string LastName { get; set; }
 
         public List<string> Permissions { get; set; }
@@ -70,6 +70,6 @@
         public string Email { get; set; }
 
         [QueryDbField(Term = QueryTerm.Or)]
-        public int Id { get; set; }
+        public string Id { get; set; }
     }
 }

@@ -6,15 +6,16 @@
     "MailKit": "1.10.*",
     "MimeKit": "1.10.*",
     "NETStandard.Library": "1.6.1",
-    "ServiceStack.Client.Core": "1.0.*",
-    "ServiceStack.Common.Core": "1.0.*",
-    "ServiceStack.Core": "1.0.*",
-    "ServiceStack.Interfaces.Core": "1.0.*",
-    "ServiceStack.OrmLite.Core": "1.0.*",
-    "ServiceStack.Text.Core": "1.0.*",
+    "ServiceStack.Client.Core": "1.0.37",
+    "ServiceStack.Common.Core": "1.0.37",
+    "ServiceStack.Core": "1.0.37",
+    "ServiceStack.Interfaces.Core": "1.0.37",
+    "ServiceStack.OrmLite.Core": "1.0.37",
+    "ServiceStack.Text.Core": "1.0.37",
     "System.Linq": "4.3.*",
     "System.Linq.Parallel": "4.3.0",
-    "WindowsAzure.Storage": "7.2.*"
+    "WindowsAzure.Storage": "8.1.1",
+    "Auth0": "3.6.*"
   },
   "frameworks": {
     "netcoreapp1.0": {

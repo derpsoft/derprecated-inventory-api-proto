@@ -250,12 +250,10 @@
                      .ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWired<UserHandler>()
                      .ReusedWithin(ReuseScope.Request);
+            container.RegisterAutoWired<Auth0Handler>();
+
             // Misc
             container.Register(new AuthenticationApiClient(new Uri($"https://{configuration.Auth0.Domain}/")));
-            container.Register(new ManagementApiClient(
-              configuration.Auth0.ClientSecret,
-              new Uri($"https://{configuration.Auth0.Domain}/api/v2"))
-            );
             container.Register(new ShopifyServiceClient($"https://{configuration.Shopify.Domain}")
             {
                 UserName = configuration.Shopify.ApiKey,

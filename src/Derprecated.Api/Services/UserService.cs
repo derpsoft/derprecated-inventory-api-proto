@@ -3,12 +3,12 @@ namespace Derprecated.Api.Services
     using System;
     using System.Collections.Generic;
     using Handlers;
+    using Models;
     using Models.Dto;
     using Models.Routing;
     using ServiceStack;
     using ServiceStack.Auth;
     using ServiceStack.Logging;
-    using ServiceStack.OrmLite;
 
     public class UserService : BaseService
     {
@@ -31,10 +31,7 @@ namespace Derprecated.Api.Services
             var user = Handler.GetUser(request.Id);
 
             if (null != user)
-            {
                 response.Result = User.From(user);
-                // response.Result.Permissions = Handler.GetPermissions(user.Id);
-            }
 
             return response;
         }
@@ -59,8 +56,8 @@ namespace Derprecated.Api.Services
             var response = new Dto<List<User>>();
 
             response.Result = Handler.List(request.Skip.GetValueOrDefault(0),
-              request.Take.GetValueOrDefault(50))
-              .ConvertAll(x => x.ConvertTo<User>());
+                                         request.Take.GetValueOrDefault(50))
+                                     .ConvertAll(x => x.ToDto());
 
             return response;
         }

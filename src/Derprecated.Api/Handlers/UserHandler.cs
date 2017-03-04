@@ -2,25 +2,20 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data;
     using System.Linq;
-    using Models;
+    using Auth0.Core;
     using ServiceStack;
     using ServiceStack.Auth;
-    using ServiceStack.OrmLite;
-    using Auth0.ManagementApi;
 
     public class UserHandler
     {
-        public ManagementApiClient Auth0 { get; set; }
+        public Auth0Handler Auth0Handler { get; set; }
 
         public UserAuth GetUser(string id)
         {
             id.ThrowIfNullOrEmpty();
 
-            var req = Auth0.Users.GetAsync(id);
-            req.Wait();
-            return new UserAuth().PopulateWith(req.Result);
+            return Auth0Handler.GetUser(id).ConvertTo<UserAuth>();
         }
 
         public long Count()
@@ -29,11 +24,9 @@
             // return Db.Count<UserAuth>();
         }
 
-        public List<UserAuth> List(int page = 0, int perPage = 25)
+        public List<User> List(int page = 0, int perPage = 25)
         {
-            var req = Auth0.Users.GetAllAsync(page, perPage);
-            req.Wait();
-            return req.Result.ToList().ConvertAll(x => x.ConvertTo<UserAuth>());
+            return Auth0Handler.GetAllUsers(page, perPage).ToList();
         }
 
         public UserAuth Update(string id, UserAuth user)

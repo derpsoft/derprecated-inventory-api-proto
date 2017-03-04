@@ -14,7 +14,8 @@
     "ServiceStack.Text.Core": "1.0.37",
     "System.Linq": "4.3.*",
     "System.Linq.Parallel": "4.3.0",
-    "WindowsAzure.Storage": "8.1.1"
+    "WindowsAzure.Storage": "8.1.1",
+    "Auth0": "3.6.*"
   },
   "frameworks": {
     "netcoreapp1.0": {

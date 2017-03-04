@@ -1,5 +1,6 @@
 ﻿namespace Derprecated.Api.Handlers
 {
+    using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
@@ -7,86 +8,46 @@
     using ServiceStack;
     using ServiceStack.Auth;
     using ServiceStack.OrmLite;
+    using Auth0.ManagementApi;
 
     public class UserHandler
     {
-        public UserHandler(IDbConnection db, IUserAuthRepository userAuthRepository, IAuthSession user)
+        public ManagementApiClient Auth0 { get; set; }
+
+        public UserAuth GetUser(string id)
         {
-            Db = db;
-            UserAuthRepository = userAuthRepository;
-            User = user;
-        }
+            id.ThrowIfNullOrEmpty();
 
-        private IDbConnection Db { get; }
-
-        private IAuthSession User { get; }
-
-        private IUserAuthRepository UserAuthRepository { get; }
-
-        public UserAuth GetUser(int id)
-        {
-            id.ThrowIfLessThan(1);
-            return UserAuthRepository.GetUserAuth(id) as UserAuth;
+            var req = Auth0.Users.GetAsync(id);
+            req.Wait();
+            return new UserAuth().PopulateWith(req.Result);
         }
 
         public long Count()
         {
-            return Db.Count<UserAuth>();
+            return 0;
+            // return Db.Count<UserAuth>();
         }
 
-        public List<UserAuth> List(int skip = 0, int take = 25)
+        public List<UserAuth> List(int page = 0, int perPage = 25)
         {
-            return Db.Select(
-                Db.From<UserAuth>()
-                  .Skip(skip)
-                  .Take(take)
-            );
+            var req = Auth0.Users.GetAllAsync(page, perPage);
+            req.Wait();
+            return req.Result.ToList().ConvertAll(x => x.ConvertTo<UserAuth>());
         }
 
-        public UserAuth Update(int id, UserAuth user)
+        public UserAuth Update(string id, UserAuth user)
         {
-            id.ThrowIfLessThan(1);
+            id.ThrowIfNullOrEmpty();
             user.ThrowIfNull();
 
-            var existing = UserAuthRepository.GetUserAuth(id);
-            var updates = new UserAuth().PopulateWith(existing).PopulateWithNonDefaultValues(user);
-
-            UserAuthRepository.UpdateUserAuth(existing, updates);
-
-            return updates;
-        }
-
-        public UserAuth Update<T>(int id, IUpdatableField<T> update)
-        {
-            update.ThrowIfNull();
-            var user = GetUser(id);
-            user.SetProperty(update.FieldName, update.Value);
-            Db.UpdateOnly(user, new[] {update.FieldName}, p => p.Id == user.Id);
-            return user;
-        }
-
-        public List<string> GetRoles(int id)
-        {
-            var user = GetUser(id);
-            return UserAuthRepository.GetRoles(user).ToList();
-        }
-
-        public List<string> GetRoles()
-        {
-            User.ThrowIfNull();
-            return GetRoles(User.UserAuthId.ToInt());
-        }
-
-        public List<string> GetPermissions()
-        {
-            User.ThrowIfNull();
-            return GetPermissions(User.UserAuthId.ToInt());
-        }
-
-        public List<string> GetPermissions(int id)
-        {
-            var user = GetUser(id);
-            return UserAuthRepository.GetPermissions(user).ToList();
+            throw new NotImplementedException();
+            // var existing = UserAuthRepository.GetUserAuth(id);
+            // var updates = new UserAuth().PopulateWith(existing).PopulateWithNonDefaultValues(user);
+            //
+            // UserAuthRepository.UpdateUserAuth(existing, updates);
+            //
+            // return updates;
         }
 
         /// <summary>
@@ -95,16 +56,18 @@
         /// <param name="userId"></param>
         /// <param name="permissions"></param>
         /// <returns></returns>
-        public List<string> SetPermissions(int userId, ICollection<string> permissions)
+        public List<string> SetPermissions(string userId, ICollection<string> permissions)
         {
-            var user = GetUser(userId);
-            var current = GetPermissions(userId);
-            var remove = current.Except(permissions);
+            throw new NotImplementedException();
 
-            UserAuthRepository.UnAssignRoles(user, permissions: remove.ToArray());
-            UserAuthRepository.AssignRoles(user, permissions: permissions.ToArray());
+            // var user = GetUser(userId);
+            // var current = GetPermissions(userId);
+            // var remove = current.Except(permissions);
 
-            return permissions.ToList();
+            // UserAuthRepository.UnAssignRoles(user, permissions: remove.ToArray());
+            // UserAuthRepository.AssignRoles(user, permissions: permissions.ToArray());
+            //
+            // return permissions.ToList();
         }
     }
 }

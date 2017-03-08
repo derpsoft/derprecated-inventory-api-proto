@@ -11,11 +11,11 @@
     {
         public Auth0Handler Auth0Handler { get; set; }
 
-        public UserAuth GetUser(string id)
+        public User GetUser(string id)
         {
             id.ThrowIfNullOrEmpty();
 
-            return Auth0Handler.GetUser(id).ConvertTo<UserAuth>();
+            return Auth0Handler.GetUser(id);
         }
 
         public long Count()
@@ -29,18 +29,19 @@
             return Auth0Handler.GetAllUsers(page, perPage).ToList();
         }
 
-        public UserAuth Update(string id, UserAuth user)
+        public User Update(string id, User user)
         {
             id.ThrowIfNullOrEmpty();
             user.ThrowIfNull();
 
-            throw new NotImplementedException();
+            // return Auth0Handler.UpdateUser(id, user);
             // var existing = UserAuthRepository.GetUserAuth(id);
             // var updates = new UserAuth().PopulateWith(existing).PopulateWithNonDefaultValues(user);
             //
             // UserAuthRepository.UpdateUserAuth(existing, updates);
             //
             // return updates;
+            return user;
         }
 
         /// <summary>

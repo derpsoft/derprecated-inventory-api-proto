@@ -28,10 +28,8 @@ namespace Derprecated.Api.Services
         public object Get(User request)
         {
             var response = new Dto<User>();
-            var user = Handler.GetUser(request.Id);
 
-            if (null != user)
-                response.Result = User.From(user);
+            response.Result = Handler.GetUser(request.Id).ToDto();
 
             return response;
         }
@@ -41,12 +39,11 @@ namespace Derprecated.Api.Services
             var resp = new Dto<User>();
             // var handler = new UserHandler(Db, UserAuthRepository, CurrentSession);
 
-            var update = Handler.Update(request.Id, new UserAuth().PopulateWithNonDefaultValues(request));
             // update.Permissions = request.Permissions.IsNullOrEmpty()
             //     ? handler.GetPermissions(request.Id)
             //     : handler.SetPermissions(request.Id, request.Permissions);
 
-            resp.Result = User.From(update);
+            resp.Result = Handler.Update(request.Id, request.FromDto()).ToDto();
 
             return resp;
         }

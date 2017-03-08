@@ -26,12 +26,7 @@
         public string PhoneNumber { get; set; }
         public string UserName { get; set; }
 
-        public static User From(UserAuth source)
-        {
-            var result = new User().PopulateWith(source);
-
-            return result;
-        }
+        public bool IncludeDeleted { get; set; } = false;
     }
 
     [Route("/api/v1/users", "GET")]

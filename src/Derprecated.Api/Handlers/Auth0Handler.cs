@@ -6,6 +6,7 @@ namespace Derprecated.Api.Handlers
     using Auth0.Core;
     using Auth0.Core.Collections;
     using Auth0.ManagementApi;
+    using Auth0.ManagementApi.Models;
     using Models.Configuration;
     using ServiceStack;
     using ServiceStack.Logging;

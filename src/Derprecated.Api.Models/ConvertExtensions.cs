@@ -18,5 +18,14 @@
 
             return to;
         }
+
+        public static Auth0.Core.User FromDto(this User from)
+        {
+          var to = from.ConvertTo<Auth0.Core.User>();
+
+          to.UserId = from.Id;
+
+          return to;
+        }
     }
 }

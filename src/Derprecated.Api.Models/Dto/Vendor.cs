@@ -7,6 +7,7 @@
     [Route("/api/v1/vendors", "POST")]
     [Route("/api/v1/vendors/{Id}", "GET, DELETE, PATCH, PUT")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageVendors,
          Permissions.CanReadVendors)]
     [RequiresAnyPermission(ApplyTo.Delete, Permissions.CanDoEverything, Permissions.CanManageVendors,
@@ -34,6 +35,7 @@
 
     [Route("/api/v1/vendors/count", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageVendors,
          Permissions.CanReadVendors)]
     public sealed class VendorCount : IReturn<Dto<long>>
@@ -43,6 +45,7 @@
 
     [Route("/api/v1/vendors", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageVendors,
          Permissions.CanReadVendors)]
     public sealed class Vendors : IReturn<Dto<List<Vendor>>>
@@ -54,6 +57,7 @@
 
     [Route("/api/v1/vendors", "GET, SEARCH")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Search, Permissions.CanDoEverything, Permissions.CanManageVendors,
          Permissions.CanReadVendors)]
     public sealed class VendorSearch : QueryDb<Models.Vendor, Vendor>
@@ -68,6 +72,7 @@
 
     [Route("/api/v1/vendors/typeahead", "GET, SEARCH")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageVendors, Permissions.CanReadVendors)]
     public sealed class VendorTypeahead : IReturn<Dto<Vendor>>
     {

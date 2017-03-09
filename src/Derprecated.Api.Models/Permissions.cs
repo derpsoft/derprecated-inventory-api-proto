@@ -3,6 +3,11 @@
     public static class Permissions
     {
         /// <summary>
+        ///     Login to the app.
+        /// </summary>
+        public const string CanLogin = "login";
+
+        /// <summary>
         ///     Delete Images.
         /// </summary>
         public const string CanDeleteImages = "deleteImages";

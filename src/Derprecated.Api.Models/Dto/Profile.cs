@@ -7,6 +7,7 @@
     [Route("/api/v1/profile", "GET, PUT, POST, PATCH")]
     [EnsureHttps(SkipIfDebugMode = true, SkipIfXForwardedFor = true)]
     [Authenticate]
+    [RequiredPermission(Models.Permissions.CanLogin)]
     public class Profile : IReturn<Dto<Profile>>
     {
         public string DisplayName { get; set; }

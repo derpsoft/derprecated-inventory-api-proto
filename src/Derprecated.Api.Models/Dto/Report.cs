@@ -11,6 +11,7 @@
 
     [Route("/api/v1/reports/dashboard", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanReadReports)]
     public sealed class DashboardReport : IReturn<Dto<DashboardReport>>
     {

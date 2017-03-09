@@ -8,6 +8,7 @@
     [Route("/api/v1/warehouses", "POST")]
     [Route("/api/v1/warehouses/{Id}", "GET, PUT, PATCH, DELETE")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageWarehouses,
          Permissions.CanReadWarehouses)]
     [RequiresAnyPermission(ApplyTo.Post | ApplyTo.Put | ApplyTo.Patch, Permissions.CanDoEverything,
@@ -31,6 +32,7 @@
 
     [Route("/api/v1/warehouses/count", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageWarehouses, Permissions.CanReadWarehouses)]
     public class WarehouseCount : IReturn<Dto<long>>
     {
@@ -39,6 +41,7 @@
 
     [Route("/api/v1/warehouses", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageWarehouses, Permissions.CanReadWarehouses)]
     public class Warehouses : IReturn<Dto<List<Warehouse>>>
     {
@@ -49,6 +52,7 @@
 
     [Route("/api/v1/warehouses", "SEARCH")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageWarehouses, Permissions.CanReadWarehouses)]
     public class WarehouseSearch : QueryDb<Warehouse, Warehouse>
     {
@@ -62,6 +66,7 @@
 
     [Route("/api/v1/warehouses/typeahead", "SEARCH")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageWarehouses, Permissions.CanReadWarehouses)]
     public class WarehouseTypeahead : IReturn<Dto<List<Warehouse>>>
     {

@@ -10,6 +10,7 @@ namespace Derprecated.Api.Models.Dto
     [Route("/api/v1/products", "POST")]
     [Route("/api/v1/products/{Id}", "GET, DELETE, PUT, PATCH")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageProducts,
          Permissions.CanReadProducts)]
     [RequiresAnyPermission(ApplyTo.Delete, Permissions.CanDoEverything, Permissions.CanManageProducts,
@@ -52,6 +53,7 @@ namespace Derprecated.Api.Models.Dto
     }
 
     [Route("/api/v1/products/import", "POST")]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Post, Permissions.CanDoEverything,
          Permissions.CanManageProducts,
          Permissions.CanUpsertProducts)]
@@ -62,6 +64,7 @@ namespace Derprecated.Api.Models.Dto
 
     [Route("/api/v1/products/sku/{Sku}", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageProducts,
          Permissions.CanReadProducts)]
     public sealed class ProductBySku : IReturn<Dto<Product>>
@@ -72,6 +75,7 @@ namespace Derprecated.Api.Models.Dto
 
     [Route("/api/v1/products/count", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanReadProducts)]
     public sealed class ProductCount : IReturn<Dto<long>>
     {
@@ -80,6 +84,7 @@ namespace Derprecated.Api.Models.Dto
 
     [Route("/api/v1/products", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageProducts,
          Permissions.CanReadProducts)]
     public sealed class Products : IReturn<Dto<List<Product>>>
@@ -91,6 +96,7 @@ namespace Derprecated.Api.Models.Dto
 
     [Route("/api/v1/products/search")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanReadProducts)]
     public sealed class ProductSearch : QueryDb<Models.Product, Dto<Product>>,
         IJoin<Models.Product, ProductImage>
@@ -102,6 +108,7 @@ namespace Derprecated.Api.Models.Dto
 
     [Route("/api/v1/products/typeahead", "GET, SEARCH")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageProducts, Permissions.CanReadProducts)]
     public sealed class ProductTypeahead : IReturn<Dto<Product>>
     {

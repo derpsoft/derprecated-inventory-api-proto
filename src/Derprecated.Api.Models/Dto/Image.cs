@@ -7,6 +7,7 @@
     [Route("/api/v1/images", "POST")]
     [Route("/api/v1/images/{Id}", "GET, PUT, PATCH, DELETE")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything,
          Permissions.CanManageImages,
          Permissions.CanReadImages)]
@@ -28,6 +29,7 @@
 
     [Route("/api/v1/images/count", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageImages,
          Permissions.CanReadImages)]
     public sealed class ImageCount : IReturn<Dto<long>>
@@ -37,6 +39,7 @@
 
     [Route("/api/v1/images", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageImages,
          Permissions.CanReadImages)]
     public sealed class Images : IReturn<Dto<List<Image>>>
@@ -48,6 +51,7 @@
 
     [Route("/api/v1/images/typeahead", "GET, SEARCH")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageImages, Permissions.CanReadImages)]
     public sealed class ImageTypeahead : IReturn<Dto<List<Image>>>
     {

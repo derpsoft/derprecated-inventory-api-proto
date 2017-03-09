@@ -8,6 +8,7 @@
     [Route("/api/v1/sales", "POST")]
     [Route("/api/v1/sales/{Id}", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageSales,
         Permissions.CanReadSales)]
     [RequiresAnyPermission(ApplyTo.Post, Permissions.CanDoEverything, Permissions.CanManageSales,
@@ -29,6 +30,7 @@
 
     [Route("/api/v1/sales", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageSales,
         Permissions.CanReadSales)]
     public class Sales : IReturn<Dto<List<Sale>>>
@@ -39,6 +41,7 @@
 
     [Route("/api/v1/sales/count", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageSales,
         Permissions.CanReadSales)]
     public class SaleCount : IReturn<Dto<long>>
@@ -47,6 +50,7 @@
 
     [Route("/api/v1/sales/typeahead", "GET, SEARCH")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageSales,
         Permissions.CanReadSales)]
     public sealed class SaleTypeahead : IReturn<Dto<List<Sale>>>

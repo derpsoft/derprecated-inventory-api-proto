@@ -9,6 +9,7 @@ namespace Derprecated.Api.Handlers
     using Auth0.ManagementApi.Models;
     using Models.Configuration;
     using ServiceStack;
+    using ServiceStack.Caching;
     using ServiceStack.Logging;
 
     public class Auth0Handler
@@ -19,6 +20,7 @@ namespace Derprecated.Api.Handlers
 
         public AuthenticationApiClient AuthClient { get; set; }
         public ApplicationConfiguration Configuration { get; set; }
+        public ICacheClient Cache { get; set; }
         private static ClientCredentials Credentials { get; set; }
 
         private bool IsTokenAlmostExpired()
@@ -50,20 +52,34 @@ namespace Derprecated.Api.Handlers
             }
         }
 
-        public User GetUser(string id)
+        private string GetUserCacheKey(string id) => $"auth0:user:{id}";
+        public User GetUser(string id, bool forceRefresh = false)
         {
-            var client = GetManagementApiClient();
-            var req = client.Users.GetAsync(id);
-            req.Wait();
-            return req.Result;
+            var key = GetUserCacheKey(id);
+            if (forceRefresh) {
+              Cache.Remove(key);
+            }
+            return Cache.GetOrCreate(key, TimeSpan.FromMinutes(5), () => {
+              var client = GetManagementApiClient();
+              var req = client.Users.GetAsync(id);
+              req.Wait();
+              return req.Result;
+            });
         }
 
-        public IPagedList<User> GetAllUsers(int page = 0, int perPage = 50)
+        private string GetAllUsersCacheKey(int page = 0, int perPage = 50) => $"auth0:allUsers:{page},{perPage}";
+        public IPagedList<User> GetAllUsers(int page = 0, int perPage = 50, bool forceRefresh = false)
         {
-            var client = GetManagementApiClient();
-            var req = client.Users.GetAllAsync(page, perPage);
-            req.Wait();
-            return req.Result;
+            var key = GetAllUsersCacheKey(page, perPage);
+            if (forceRefresh) {
+              Cache.Remove(key);
+            }
+            return Cache.GetOrCreate(key, TimeSpan.FromMinutes(5), () => {
+              var client = GetManagementApiClient();
+              var req = client.Users.GetAllAsync(page, perPage);
+              req.Wait();
+              return req.Result;
+            });
         }
     }
 

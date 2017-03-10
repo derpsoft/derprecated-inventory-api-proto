@@ -155,6 +155,10 @@
                 ctx.CreateTableIfNotExists<Warehouse>();
                 ctx.CreateTableIfNotExists<Location>();
                 ctx.CreateTableIfNotExists<Image>();
+                ctx.CreateTableIfNotExists<Address>();
+                ctx.CreateTableIfNotExists<Merchant>();
+                ctx.CreateTableIfNotExists<Customer>();
+                ctx.CreateTableIfNotExists<Order>();
             }
 
             // Mail
@@ -251,6 +255,8 @@
             container.RegisterAutoWired<UserHandler>()
                      .ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWired<Auth0Handler>();
+            container.RegisterAs<AddressHandler, IHandler<Address>>()
+                     .ReusedWithin(ReuseScope.Request);
 
             // Misc
             container.Register(new AuthenticationApiClient(new Uri($"https://{configuration.Auth0.Domain}/")));

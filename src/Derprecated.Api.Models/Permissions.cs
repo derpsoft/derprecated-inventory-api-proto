@@ -3,6 +3,11 @@
     public static class Permissions
     {
         /// <summary>
+        ///     Manage addresses.
+        /// </summary>
+        public const string CanManageAddresses = "manageAddresses";
+
+        /// <summary>
         ///     Login to the app.
         /// </summary>
         public const string CanLogin = "login";

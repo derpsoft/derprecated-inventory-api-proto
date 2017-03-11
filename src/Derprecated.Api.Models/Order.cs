@@ -5,7 +5,7 @@
     using ServiceStack.DataAnnotations;
 
     // See https://developers.google.com/schemas/reference/order
-    public class Order : IPrimaryKeyable, IAuditable
+    public class Order : IPrimaryKeyable, IAuditable, ISoftDeletable
     {
         public int Id { get; set; }
         public string OrderNumber { get; set; }
@@ -24,11 +24,12 @@
         public int CustomerId { get; set; }
         [Reference]
         public Customer Customer { get; set; }
-
         public Address BillingAddress { get; set; }
 
         public DateTime CreateDate { get; set; }
         public DateTime ModifyDate { get; set; }
+        public DateTime? DeleteDate { get; set; }
+        public bool IsDeleted { get; set; }
         public ulong RowVersion { get; set; }
     }
 }

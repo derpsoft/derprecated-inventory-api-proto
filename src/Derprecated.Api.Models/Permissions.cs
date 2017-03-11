@@ -5,6 +5,11 @@
         /// <summary>
         ///     Manage addresses.
         /// </summary>
+        public const string CanManageOrders = "manageOrders";
+
+        /// <summary>
+        ///     Manage addresses.
+        /// </summary>
         public const string CanManageAddresses = "manageAddresses";
 
         /// <summary>

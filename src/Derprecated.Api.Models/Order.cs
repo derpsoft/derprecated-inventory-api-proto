@@ -7,12 +7,15 @@
     // See https://developers.google.com/schemas/reference/order
     public class Order : IPrimaryKeyable, IAuditable, ISoftDeletable
     {
+        [PrimaryKey]
+        [AutoIncrement]
         public int Id { get; set; }
+        [Index(Unique = true)]
         public string OrderNumber { get; set; }
-        [References(typeof(Merchant))]
-        public int MerchantId { get; set; }
-        [Reference]
-        public Merchant Merchant { get; set; }
+        // [References(typeof(Merchant))]
+        // public int MerchantId { get; set; }
+        // [Reference]
+        // public Merchant Merchant { get; set; }
         public decimal Price { get; set; }
         public string PriceCurrency { get; set; }
         [Reference]
@@ -20,10 +23,15 @@
         public string OrderStatus { get; set; }
         public string PaymentMethod { get; set; }
         public string PaymentMethodId { get; set; }
-        [References(typeof(Customer))]
-        public int CustomerId { get; set; }
-        [Reference]
-        public Customer Customer { get; set; }
+
+        // [References(typeof(Customer))]
+        // public int ShippingCustomerId { get; set; }
+        // [References(typeof(Customer))]
+        // public int BillingCustomerId {get; set;}
+
+        public Customer ShippingCustomer { get; set; }
+        public Address ShippingAddress { get; set; }
+        public Customer BillingCustomer { get; set; }
         public Address BillingAddress { get; set; }
 
         public DateTime CreateDate { get; set; }

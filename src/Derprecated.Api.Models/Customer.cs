@@ -6,6 +6,8 @@ namespace Derprecated.Api.Models
 
     public class Customer : IPrimaryKeyable, IAuditable
     {
+        [PrimaryKey]
+        [AutoIncrement]
         public int Id { get; set; }
 
         public string Name { get; set; }

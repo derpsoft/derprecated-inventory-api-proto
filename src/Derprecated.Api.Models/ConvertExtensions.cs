@@ -27,5 +27,14 @@
 
           return to;
         }
+
+        public static Order FromDto(this Dto.Order from)
+        {
+          var to = from.ConvertTo<Order>();
+          to.ShippingCustomer = from.ShippingCustomer.ConvertTo<Customer>();
+          to.BillingCustomer = from.BillingCustomer.ConvertTo<Customer>();
+          to.AcceptedOffers = from.AcceptedOffers.ConvertAll(x => x.ConvertTo<Offer>());
+          return to;
+        }
     }
 }

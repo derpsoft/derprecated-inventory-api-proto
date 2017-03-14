@@ -156,11 +156,13 @@
                 ctx.CreateTableIfNotExists<Location>();
                 ctx.CreateTableIfNotExists<Image>();
 
+#if DEBUG
                 ctx.DropTable<Address>();
                 ctx.DropTable<Offer>();
                 ctx.DropTable<Order>();
                 ctx.DropTable<Merchant>();
                 ctx.DropTable<Customer>();
+#endif
 
                 ctx.CreateTableIfNotExists<Customer>();
                 ctx.CreateTableIfNotExists<Merchant>();

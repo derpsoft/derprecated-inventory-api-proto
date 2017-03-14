@@ -67,7 +67,7 @@
 
         public abstract List<T> Typeahead(string query, bool includeDeleted = false);
 
-        public virtual T Save(T record)
+        public virtual T Save(T record, bool includeReferences = false)
         {
             record.ThrowIfNull();
 
@@ -79,7 +79,7 @@
 
                 record = existing.PopulateWith(record);
             }
-            Db.Save(record);
+            Db.Save(record, includeReferences);
 
             return record;
         }

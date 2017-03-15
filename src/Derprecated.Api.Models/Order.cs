@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using ServiceStack.DataAnnotations;
+    using ServiceStack.Stripe.Types;
 
     // See https://developers.google.com/schemas/reference/order
     public class Order : IPrimaryKeyable, IAuditable, ISoftDeletable
@@ -44,6 +45,19 @@
         public Customer BillingCustomer { get; set; }
         public Address BillingAddress { get; set; }
 
+        [StringLength(64)]
+        [Index(Unique=false)]
+        public string BillingUserAuthId {get;set;}
+        [StringLength(64)]
+        [Index(Unique=false)]
+        public string ShippingUserAuthId {get;set;}
+        // [StringLength(64)]
+        // [Index(Unique=false)]
+        // public string FulfillmentUserAuthId {get;set;}
+
+        public StripeCharge StripeCharge {get;set;}
+
+        public DateTime? BillDate { get; set; }
         public DateTime? ShipDate { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime ModifyDate { get; set; }

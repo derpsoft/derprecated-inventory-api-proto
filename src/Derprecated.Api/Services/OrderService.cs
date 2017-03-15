@@ -33,9 +33,15 @@ namespace Derprecated.Api.Services
 
                 if(null != order && order.Status.EqualsIgnoreCase(OrderStatus.AwaitingPayment)){
                   var priceInCents = (int)order.Price * 100;
-                  var charge = StripeHandler.CaptureChargeWithToken(priceInCents, request.Token);
-                  Log.Info(charge);
+                  var description = $"Custom order {order.OrderNumber}";
+                  var stripeCharge = StripeHandler.CaptureChargeWithToken(priceInCents, order.OrderNumber, request.Token, description);
+
+                  order.StripeCharge = stripeCharge;
+                  order.PaymentMethod = stripeCharge.Source.Brand;
+                  order.PaymentMethodId = stripeCharge.Source.Last4;
                   order.Status = OrderStatus.AwaitingShipment;
+                  order.BillDate = DateTime.UtcNow;
+
                   Handler.Save(order);
                 }
 
@@ -49,7 +55,8 @@ namespace Derprecated.Api.Services
 
               if(null != order && order.Status.Equals(OrderStatus.AwaitingShipment))
               {
-                resp.Result = OrderHandler.Ship(request.Id).ToDto();
+                order.ShippingUserAuthId = CurrentSession.UserAuthId.ToString();
+                resp.Result = OrderHandler.Ship(order).ToDto();
               }
 
               return resp;
@@ -60,6 +67,7 @@ namespace Derprecated.Api.Services
                 var resp = new Dto<Models.Dto.Order>();
                 var order = request.FromDto();
 
+                order.BillingUserAuthId = CurrentSession.UserAuthId.ToString();
                 order.OrderNumber = $"DERP-{DateTime.UtcNow.ToUnixTime()}";
                 order.Price = order.AcceptedOffers.Sum(x => x.Price);
                 order.Status = OrderStatus.AwaitingPayment;

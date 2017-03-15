@@ -3,6 +3,7 @@ namespace Derprecated.Api.Handlers
     using System;
     using System.Collections.Generic;
     using Models;
+    using ServiceStack;
     using ServiceStack.Data;
     using ServiceStack.OrmLite;
 
@@ -29,11 +30,11 @@ namespace Derprecated.Api.Handlers
             return Db.Select(query.SelectDistinct());
         }
 
-        public Order Ship(int id)
+        public Order Ship(Order order)
         {
-          var order = Get(id);
+          order.ThrowIfNull();
 
-          if(null == order || !order.Status.Equals(OrderStatus.AwaitingShipment))
+          if(!order.Status.Equals(OrderStatus.AwaitingShipment))
           {
             throw new Exception("Order is not ready for shipment");
           }

@@ -27,16 +27,31 @@ namespace Derprecated.Api.Handlers
       throw new NotImplementedException();
     }
 
-    public StripeCharge CaptureChargeWithToken(int amountAsCents, string cardToken, string currency = "usd")
+    public StripeCharge CaptureChargeWithToken(int amountAsCents, string orderNumber, string cardToken, string description = "", string currency = "usd")
     {
-      var charge = new ChargeStripeCustomer
+      var charge = new ChargeStripeCustomerWithMetadata
       {
           Amount = amountAsCents,
           Currency = currency,
           Card = cardToken,
           Capture = true,
+          Description = description,
+          Metadata = {
+            {"order_number", orderNumber}
+          },
       };
       return StripeGateway.Post(charge);
     }
+  }
+
+  [Route("/charges")]
+  class ChargeStripeCustomerWithMetadata : ChargeStripeCustomer
+  {
+      public ChargeStripeCustomerWithMetadata()
+      {
+          Metadata = new Dictionary<string,string>();
+      }
+
+      public Dictionary<string,string> Metadata { get; set; }
   }
 }

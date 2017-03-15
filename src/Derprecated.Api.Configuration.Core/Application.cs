@@ -220,6 +220,25 @@
                 Issuer = configuration.Auth0.Issuer,
                 PopulateSessionFilter = (session, json, request) =>
                 {
+                    /* JSON object looks like:
+                      {
+                        "app_metadata": {
+                          "authorization": {
+                            "roles": ["Admin", "User", "Delegated Admin - Administrator", "Delegated Admin - User"],
+                            "permissions": ["everything", "login", "manageCategories", "dispatchInventory"]
+                          }
+                        },
+                        "iss": "https://derprecated.auth0.com/",
+                        "sub": "google-oauth2|108854378958464530522",
+                        "aud": "HgdpKajxywOUlc52Uv6rASdiABMsnYd4",
+                        "exp": 1489635158,
+                        "iat": 1489599158
+                      }
+
+                      session props already set:
+                      session.UserAuthId = json.sub.split('|',2)[1]
+                    */
+
                     var authorization = json.Object("app_metadata")
                       .Object("authorization");
                     session.Permissions = authorization

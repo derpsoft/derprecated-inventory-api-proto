@@ -70,4 +70,13 @@
         public int Id {get;set;}
         public string Token {get;set;}
     }
+
+    [Route("/api/v1/orders/{Id}/shipped", "POST")]
+    [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
+    [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageOrders)]
+    public sealed class OrderShipped : IReturn<Dto<Order>>
+    {
+        public int Id {get;set;}
+    }
 }

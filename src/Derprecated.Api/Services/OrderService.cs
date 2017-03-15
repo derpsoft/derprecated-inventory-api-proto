@@ -23,12 +23,12 @@ namespace Derprecated.Api.Services
               StripeHandler = stripeHandler;
             }
 
+            private OrderHandler OrderHandler => (OrderHandler)Handler;
             private StripeHandler StripeHandler {get;set;}
 
             public object Post(Models.Dto.OrderBillingCaptured request)
             {
                 var resp = new Dto<Models.Dto.Order>();
-
                 var order = Handler.Get(request.Id);
 
                 if(null != order && order.Status.EqualsIgnoreCase(OrderStatus.AwaitingPayment)){
@@ -40,6 +40,19 @@ namespace Derprecated.Api.Services
                 }
 
                 return resp;
+            }
+
+            public object Post(Models.Dto.OrderShipped request)
+            {
+              var resp = new Dto<Models.Dto.Order>();
+              var order = Handler.Get(request.Id);
+
+              if(null != order && order.Status.Equals(OrderStatus.AwaitingShipment))
+              {
+                resp.Result = OrderHandler.Ship(request.Id).ToDto();
+              }
+
+              return resp;
             }
 
             protected override object Create(Models.Dto.Order request)

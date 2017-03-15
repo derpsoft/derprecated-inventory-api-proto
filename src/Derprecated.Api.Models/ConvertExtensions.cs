@@ -36,5 +36,13 @@
           to.AcceptedOffers = from.AcceptedOffers.ConvertAll(x => x.ConvertTo<Offer>());
           return to;
         }
+
+        public static Dto.Order ToDto(this Order from) {
+          var to = from.ConvertTo<Dto.Order>();
+          to.ShippingCustomer = from.ShippingCustomer.ConvertTo<Dto.Customer>();
+          to.BillingCustomer = from.BillingCustomer.ConvertTo<Dto.Customer>();
+          to.AcceptedOffers = from.AcceptedOffers.ConvertAll(x => x.ConvertTo<Dto.Offer>());
+          return to;
+        }
     }
 }

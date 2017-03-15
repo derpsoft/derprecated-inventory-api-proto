@@ -44,6 +44,7 @@
         public Customer BillingCustomer { get; set; }
         public Address BillingAddress { get; set; }
 
+        public DateTime? ShipDate { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime ModifyDate { get; set; }
         public DateTime? DeleteDate { get; set; }

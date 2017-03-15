@@ -1,5 +1,6 @@
 namespace Derprecated.Api.Handlers
 {
+    using System;
     using System.Collections.Generic;
     using Models;
     using ServiceStack.Data;
@@ -26,6 +27,25 @@ namespace Derprecated.Api.Handlers
                 query = query.And(x => !x.IsDeleted);
 
             return Db.Select(query.SelectDistinct());
+        }
+
+        public Order Ship(int id)
+        {
+          var order = Get(id);
+
+          if(null == order || !order.Status.Equals(OrderStatus.AwaitingShipment))
+          {
+            throw new Exception("Order is not ready for shipment");
+          }
+
+          order.Status = OrderStatus.Shipped;
+          order.ShipDate = DateTime.UtcNow;
+          Save(order);
+
+          // TODO(jcunningham)
+          // Send email?
+
+          return order;
         }
     }
 }

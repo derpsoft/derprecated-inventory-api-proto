@@ -8,6 +8,7 @@
         public ServiceStack ServiceStack { get; set; }
         public Shopify Shopify { get; set; }
         public Storage Storage { get; set; }
+        public Stripe Stripe {get; set;}
         public Web Web { get; set; }
     }
 }

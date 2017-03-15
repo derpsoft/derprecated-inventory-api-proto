@@ -19,6 +19,7 @@
     "ServiceStack.OrmLite.SqlServer.Core": "1.0.37",
     "ServiceStack.Server.Core": "1.0.37",
     "ServiceStack.Text.Core": "1.0.37",
+    "ServiceStack.Stripe.Core": "1.0.37",
     "Auth0": "3.6.*"
   },
   "frameworks": {

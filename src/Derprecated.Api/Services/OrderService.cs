@@ -17,9 +17,29 @@ namespace Derprecated.Api.Services
 
         public class OrderCrudService : CrudService<Order, Models.Dto.Order>
         {
-            public OrderCrudService(IHandler<Order> handler)
+            public OrderCrudService(IHandler<Order> handler, StripeHandler stripeHandler)
                 : base(handler)
             {
+              StripeHandler = stripeHandler;
+            }
+
+            private StripeHandler StripeHandler {get;set;}
+
+            public object Post(Models.Dto.OrderBillingCaptured request)
+            {
+                var resp = new Dto<Models.Dto.Order>();
+
+                var order = Handler.Get(request.Id);
+
+                if(null != order && order.Status.EqualsIgnoreCase(OrderStatus.AwaitingPayment)){
+                  var priceInCents = (int)order.Price * 100;
+                  var charge = StripeHandler.CaptureChargeWithToken(priceInCents, request.Token);
+                  Log.Info(charge);
+                  order.Status = OrderStatus.AwaitingShipment;
+                  Handler.Save(order);
+                }
+
+                return resp;
             }
 
             protected override object Create(Models.Dto.Order request)
@@ -29,7 +49,7 @@ namespace Derprecated.Api.Services
 
                 order.OrderNumber = $"DERP-{DateTime.UtcNow.ToUnixTime()}";
                 order.Price = order.AcceptedOffers.Sum(x => x.Price);
-                order.OrderStatus = OrderStatus.AwaitingPayment;
+                order.Status = OrderStatus.AwaitingPayment;
                 order.PriceCurrency = Currency.USD;
 
                 var newRecord = Handler.Save(order, true);

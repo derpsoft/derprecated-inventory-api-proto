@@ -84,6 +84,8 @@
             return record;
         }
 
+        protected virtual void BeforeDelete(T record){}
+
         public virtual T Delete(int id)
         {
             var existing = Get(id);
@@ -92,6 +94,8 @@
                 throw new ArgumentException("unable to find a record with that id", nameof(id));
             if (existing.IsDeleted)
                 throw new Exception("that record was already deleted");
+
+            BeforeDelete(existing);
 
             return Db.SoftDelete(existing);
         }

@@ -14,8 +14,8 @@ namespace Derprecated.Api.Models
         // public Order Order { get; set; }
         [References(typeof(Product))]
         public int ProductId { get; set; }
-        // [Reference]
-        // public Product Product { get; set; }
+        [Reference]
+        public Product Product { get; set; }
         public decimal Price { get; set; }
         public string PriceCurrency { get; set; }
         public decimal Quantity { get; set; }

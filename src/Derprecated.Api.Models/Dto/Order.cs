@@ -34,20 +34,11 @@
         public List<Offer> AcceptedOffers { get; set; }
         public Address ShippingAddress {get;set;}
         public Address BillingAddress { get; set; }
-        public string OrderStatus { get; set; }
+        public string Status { get; set; }
         public string PaymentMethod {get;set;}
         public string PaymentMethodId {get;set;}
         public DateTime CreateDate {get;set;}
-
-        public static Order From(Models.Order source)
-        {
-            var dest = new Order().PopulateWith(source);
-            // dest.Merchant = source.Merchant.ConvertTo<Merchant>();
-            dest.ShippingCustomer = source.ShippingCustomer.ConvertTo<Customer>();
-            dest.BillingCustomer = source.BillingCustomer.ConvertTo<Customer>();
-            dest.AcceptedOffers = source.AcceptedOffers.ConvertAll(x => x.ConvertTo<Offer>());
-            return dest;
-        }
+        public ulong RowVersion { get; set; }
     }
 
     [Route("/api/v1/orders", "GET")]
@@ -68,5 +59,15 @@
     public sealed class OrderCount : IReturn<Dto<long>>
     {
         public bool IncludeDeleted { get; set; } = false;
+    }
+
+    [Route("/api/v1/orders/{Id}/billing", "POST")]
+    [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
+    [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageOrders)]
+    public sealed class OrderBillingCaptured: IReturn<Dto<Order>>
+    {
+        public int Id {get;set;}
+        public string Token {get;set;}
     }
 }

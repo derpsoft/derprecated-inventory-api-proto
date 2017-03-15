@@ -23,6 +23,7 @@
     using ServiceStack.OrmLite;
     using ServiceStack.Text;
     using ServiceStack.Validation;
+    using ServiceStack.Stripe;
     using Auth0.AuthenticationApi;
     using Auth0.ManagementApi;
 
@@ -269,7 +270,7 @@
                      .ReusedWithin(ReuseScope.Request);
             container.RegisterAs<OrderHandler, IHandler<Order>>()
                      .ReusedWithin(ReuseScope.Request);
-
+            container.Register(new StripeHandler(configuration.Stripe.SecretKey));
             // Misc
             container.Register(new AuthenticationApiClient(new Uri($"https://{configuration.Auth0.Domain}/")));
             container.Register(new ShopifyServiceClient($"https://{configuration.Shopify.Domain}")

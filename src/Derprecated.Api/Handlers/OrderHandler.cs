@@ -12,6 +12,11 @@ namespace Derprecated.Api.Handlers
         {
         }
 
+        protected override void BeforeDelete(Order record)
+        {
+            record.Status = OrderStatus.Cancelled;
+        }
+
         public override List<Order> Typeahead(string q, bool includeDeleted = false)
         {
             var query = Db.From<Order>()

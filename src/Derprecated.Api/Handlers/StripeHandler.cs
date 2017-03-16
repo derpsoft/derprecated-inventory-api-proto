@@ -3,6 +3,7 @@ namespace Derprecated.Api.Handlers
   using System;
   using System.Collections.Generic;
   using Models;
+  using Models.Dto.Stripe;
   using ServiceStack;
   using ServiceStack.Data;
   using ServiceStack.OrmLite;
@@ -41,6 +42,12 @@ namespace Derprecated.Api.Handlers
           },
       };
       return StripeGateway.Post(charge);
+    }
+
+    public Event GetEvent(string id)
+    {
+      var evt = new Event(){ Id = id };
+      return StripeGateway.Post(evt);
     }
   }
 

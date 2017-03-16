@@ -267,6 +267,10 @@
             Plugins.Add(new AutoQueryFeature {MaxLimit = 100});
             Plugins.Add(new SwaggerFeature());
 
+            // Restrictions
+            typeof(AssignRoles).AddAttributes(new RestrictAttribute { VisibleLocalhostOnly = true });
+            typeof(UnAssignRoles).AddAttributes(new RestrictAttribute { VisibleLocalhostOnly = true });
+
             // Handlers
             container.RegisterAs<ImageHandler, IHandler<Image>>()
                      .ReusedWithin(ReuseScope.Request);

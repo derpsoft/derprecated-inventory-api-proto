@@ -149,11 +149,12 @@
 
         public List<InventoryTransaction> List(int skip = 0, int take = 25)
         {
-            return Db.Select(
-                Db.From<InventoryTransaction>()
-                  .Skip(skip)
-                  .Take(take)
-                );
+            var q = Db.From<InventoryTransaction>()
+              .OrderByDescending(x => x.CreateDate)
+              .Skip(skip)
+              .Take(take);
+
+            return Db.LoadSelect<InventoryTransaction>(q);
         }
 
         public long CountInventoryTransactions()

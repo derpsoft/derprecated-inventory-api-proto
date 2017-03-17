@@ -13,8 +13,10 @@
 
         public DateTime ModifyDate { get; set; }
 
-        [Required]
+        [References(typeof(Product))]
         public int ProductId { get; set; }
+        [Reference]
+        public Product Product { get; set; }
 
         public decimal Quantity { get; set; }
         public ulong RowVersion { get; set; }

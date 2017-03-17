@@ -9,6 +9,13 @@
         // See http://docs.servicestack.net/auto-mapping#advanced-mapping-using-custom-extension-methods
         // for details on how to use this class
 
+        public static Dto.InventoryTransaction ToDto(this InventoryTransaction from)
+        {
+          var to = from.ConvertTo<Dto.InventoryTransaction>();
+          to.Product = from.Product.ConvertTo<Dto.Product>();
+          return to;
+        }
+
         public static User ToDto(this Auth0.Core.User from)
         {
             var to = from.ConvertTo<User>();

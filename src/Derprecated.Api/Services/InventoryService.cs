@@ -1,14 +1,28 @@
 ﻿namespace Derprecated.Api.Services
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Handlers;
+    using Models;
     using Models.Dto;
     using Models.Routing;
+    using ServiceStack;
     using ServiceStack.Logging;
 
     public class InventoryService : BaseService
     {
         protected static ILog Log = LogManager.GetLogger(typeof (InventoryService));
+
+        public object Get(InventoryTransactions request)
+        {
+            var resp = new Dto<List<Models.Dto.InventoryTransaction>>();
+            var handler = new InventoryHandler(Db, CurrentSession);
+
+            resp.Result = handler.List().ConvertAll(x => x.ToDto());
+
+            return resp;
+        }
 
         public object Any(CountInventoryTransactions request)
         {
@@ -31,7 +45,7 @@
             if (request.Quantity > 0)
                 handler.Receive(request);
             else
-                resp.InventoryTransaction = InventoryTransaction.From(handler.Release(request));
+                resp.InventoryTransaction = Models.Dto.InventoryTransaction.From(handler.Release(request));
 
             return resp;
         }

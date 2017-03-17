@@ -22,7 +22,8 @@
         }
 
         public int Id { get; set; }
-        public string OrderNumber { get; set; }
+        public ulong OrderNumber { get; set; }
+        public string OrderKey { get; set; }
         public decimal Price { get; set; }
         public string PriceCurrency { get; set; }
         // public int MerchantId {get;set;}
@@ -38,6 +39,8 @@
         public string PaymentMethod {get;set;}
         public string PaymentMethodId {get;set;}
         public DateTime CreateDate {get;set;}
+        public DateTime? BillDate { get; set; }
+        public DateTime? ShipDate { get; set; }
         public ulong RowVersion { get; set; }
     }
 
@@ -78,5 +81,25 @@
     public sealed class OrderShipped : IReturn<Dto<Order>>
     {
         public int Id {get;set;}
+    }
+
+    [Route("/api/v1/orders/summary/{Key}/{OrderNumber}", "GET")]
+    public sealed class OrderSummary : IReturn<Dto<OrderSummary>>
+    {
+        // Get this from the order number. Order numbers are of the format Prefix-Id, like DERP-1234. 1234 would be the Id.
+        public ulong OrderNumber {get;set;}
+        public string Key {get;set;}
+
+        public string OrderStatus {get;set;}
+        public decimal Price {get;set;}
+        public string PriceCurrency {get;set;}
+        public string Status { get; set; }
+        public string PaymentMethod {get;set;}
+        public string PaymentMethodId {get;set;}
+        public AddressSummary ShippingAddress {get;set;}
+        public AddressSummary BillingAddress {get;set;}
+        public DateTime CreateDate {get;set;}
+        public DateTime? BillDate { get; set; }
+        public DateTime? ShipDate { get; set; }
     }
 }

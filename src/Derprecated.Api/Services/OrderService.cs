@@ -6,6 +6,7 @@ namespace Derprecated.Api.Services
     using Handlers;
     using Models;
     using Models.Dto;
+    using Models.Configuration;
     using ServiceStack;
     using ServiceStack.Logging;
     using ServiceStack.Text;
@@ -17,14 +18,16 @@ namespace Derprecated.Api.Services
 
         public class OrderCrudService : CrudService<Order, Models.Dto.Order>
         {
-            public OrderCrudService(IHandler<Order> handler, StripeHandler stripeHandler)
+            public OrderCrudService(IHandler<Order> handler, StripeHandler stripeHandler, ApplicationConfiguration config)
                 : base(handler)
             {
               StripeHandler = stripeHandler;
+              Config = config;
             }
 
             private OrderHandler OrderHandler => (OrderHandler)Handler;
-            private StripeHandler StripeHandler {get;set;}
+            private ApplicationConfiguration Config {get;}
+            private StripeHandler StripeHandler {get;}
 
             public object Post(Models.Dto.OrderBillingCaptured request)
             {
@@ -33,8 +36,9 @@ namespace Derprecated.Api.Services
 
                 if(null != order && order.Status.EqualsIgnoreCase(OrderStatus.AwaitingPayment)){
                   var priceInCents = (int)order.Price * 100;
-                  var description = $"Custom order {order.OrderNumber}";
-                  var stripeCharge = StripeHandler.CaptureChargeWithToken(priceInCents, order.OrderNumber, request.Token, description);
+                  var prefixedOrderNumber = $"{Config.App.OrderPrefix}-{order.OrderNumber}";
+                  var description = $"Custom order {prefixedOrderNumber}";
+                  var stripeCharge = StripeHandler.CaptureChargeWithToken(priceInCents, prefixedOrderNumber, request.Token, description);
 
                   order.StripeCharge = stripeCharge;
                   order.PaymentMethod = stripeCharge.Source.Brand;
@@ -68,7 +72,7 @@ namespace Derprecated.Api.Services
                 var order = request.FromDto();
 
                 order.BillingUserAuthId = CurrentSession.UserAuthId.ToString();
-                order.OrderNumber = $"DERP-{DateTime.UtcNow.ToUnixTime()}";
+                order.OrderNumber = Order.GetNewOrderNumber();
                 order.Price = order.AcceptedOffers.Sum(x => x.Price);
                 order.Status = OrderStatus.AwaitingPayment;
                 order.PriceCurrency = Currency.USD;
@@ -83,6 +87,16 @@ namespace Derprecated.Api.Services
                 var resp = new Dto<List<Models.Dto.Order>>();
                 resp.Result = Handler.List(request.Skip, request.Take)
                                      .ConvertAll(x => x.ConvertTo<Models.Dto.Order>());
+                return resp;
+            }
+
+            public object Get(Models.Dto.OrderSummary request)
+            {
+                var resp = new Dto<Models.Dto.OrderSummary>();
+
+                var order = OrderHandler.GetByKey(request.OrderNumber, request.Key);
+                resp.Result = order.ToSummary();
+
                 return resp;
             }
         }

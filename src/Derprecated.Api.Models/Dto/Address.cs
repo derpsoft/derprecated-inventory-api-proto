@@ -75,4 +75,10 @@ namespace Derprecated.Api.Models.Dto
         [StringLength(20)]
         public string Query { get; set; }
     }
+
+    public sealed class AddressSummary : IReturn<Dto<AddressSummary>>
+    {
+        public string City {get;set;}
+        public string State {get;set;}
+    }
 }

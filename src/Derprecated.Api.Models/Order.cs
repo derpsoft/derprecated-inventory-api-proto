@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using ServiceStack.Text;
+    using ServiceStack.Auth;
     using ServiceStack.DataAnnotations;
     using ServiceStack.Stripe.Types;
 
@@ -17,8 +19,10 @@
         [AutoIncrement]
         public int Id { get; set; }
         [Index(Unique = true)]
-        [StringLength(256)]
-        public string OrderNumber { get; set; }
+        public ulong OrderNumber { get; set; }
+        [Index(Unique = true)]
+        [StringLength(64)]
+        public string OrderKey { get; set; }
         // [References(typeof(Merchant))]
         // public int MerchantId { get; set; }
         // [Reference]
@@ -64,5 +68,15 @@
         public DateTime? DeleteDate { get; set; }
         public bool IsDeleted { get; set; }
         public ulong RowVersion { get; set; }
+
+        public static ulong GetNewOrderNumber()
+        {
+          return (ulong)DateTime.UtcNow.ToUnixTimeMs();
+        }
+
+        public string GetKey(string salt)
+        {
+          return $"{OrderNumber}:{salt}".ToSha256Hash();
+        }
     }
 }

@@ -294,6 +294,7 @@
             container.RegisterAs<OrderHandler, IHandler<Order>>()
                      .ReusedWithin(ReuseScope.Request);
             container.Register(new StripeHandler(configuration.Stripe.SecretKey));
+            
             // Misc
             container.Register(new AuthenticationApiClient(new Uri($"https://{configuration.Auth0.Domain}/")));
             container.Register(new ShopifyServiceClient($"https://{configuration.Shopify.Domain}")

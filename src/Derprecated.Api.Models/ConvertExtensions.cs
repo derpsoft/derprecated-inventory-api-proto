@@ -2,6 +2,7 @@
 {
     using Dto;
     using ServiceStack;
+    using System.Linq;
 
     public static class ConvertExtensions
     {
@@ -42,6 +43,18 @@
           to.ShippingCustomer = from.ShippingCustomer.ConvertTo<Dto.Customer>();
           to.BillingCustomer = from.BillingCustomer.ConvertTo<Dto.Customer>();
           to.AcceptedOffers = from.AcceptedOffers.ConvertAll(x => x.ConvertTo<Dto.Offer>());
+          return to;
+        }
+
+        public static Dto.AddressSummary ToSummary(this Address from) {
+          var to = from.ConvertTo<Dto.AddressSummary>();
+          return to;
+        }
+
+        public static Dto.OrderSummary ToSummary(this Order from) {
+          var to = from.ConvertTo<Dto.OrderSummary>();
+          to.ShippingAddress = from.ShippingAddress.ToSummary();
+          to.BillingAddress = from.BillingAddress.ToSummary();
           return to;
         }
     }

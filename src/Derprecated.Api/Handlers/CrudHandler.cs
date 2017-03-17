@@ -67,6 +67,8 @@
 
         public abstract List<T> Typeahead(string query, bool includeDeleted = false);
 
+        protected virtual void BeforeCreate(T record){}
+
         public virtual T Save(T record, bool includeReferences = false)
         {
             record.ThrowIfNull();
@@ -78,6 +80,10 @@
                     throw new ArgumentException("unable to find a record with that id", nameof(record));
 
                 record = existing.PopulateWith(record);
+            }
+            else
+            {
+                BeforeCreate(record);
             }
             Db.Save(record, includeReferences);
 

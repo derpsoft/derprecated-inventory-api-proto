@@ -15,5 +15,6 @@
         public decimal Quantity { get; set; }
         public string ItemCondition { get; set; }
         public string SellerId { get; set; }
+        public ulong RowVersion {get;set;}
     }
 }

@@ -12,7 +12,7 @@
     {
         public Order()
         {
-            AcceptedOffers = new List<Offer>();
+            Offers = new List<Offer>();
         }
 
         [PrimaryKey]
@@ -31,7 +31,7 @@
         [StringLength(8)]
         public string PriceCurrency { get; set; }
         [Reference]
-        public List<Offer> AcceptedOffers { get; set; }
+        public List<Offer> Offers { get; set; }
         [StringLength(32)]
         public string Status { get; set; }
         [StringLength(32)]

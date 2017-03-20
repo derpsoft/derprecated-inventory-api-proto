@@ -36,12 +36,26 @@
           return to;
         }
 
+        public static Dto.Offer ToDto(this Offer from)
+        {
+          var to = from.ConvertTo<Dto.Offer>();
+          to.Product = from.Product.ConvertTo<Dto.Product>();
+          return to;
+        }
+
+        public static Offer FromDto(this Dto.Offer from)
+        {
+          var to = from.ConvertTo<Offer>();
+          // to.Product = from.Product.ConvertTo<Product>();
+          return to;
+        }
+
         public static Order FromDto(this Dto.Order from)
         {
           var to = from.ConvertTo<Order>();
           to.ShippingCustomer = from.ShippingCustomer.ConvertTo<Customer>();
           to.BillingCustomer = from.BillingCustomer.ConvertTo<Customer>();
-          to.AcceptedOffers = from.AcceptedOffers.ConvertAll(x => x.ConvertTo<Offer>());
+          to.Offers = from.Offers.ConvertAll(x => x.FromDto());
           return to;
         }
 
@@ -49,7 +63,7 @@
           var to = from.ConvertTo<Dto.Order>();
           to.ShippingCustomer = from.ShippingCustomer.ConvertTo<Dto.Customer>();
           to.BillingCustomer = from.BillingCustomer.ConvertTo<Dto.Customer>();
-          to.AcceptedOffers = from.AcceptedOffers.ConvertAll(x => x.ConvertTo<Dto.Offer>());
+          to.Offers = from.Offers.ConvertAll(x => x.ToDto());
           return to;
         }
 

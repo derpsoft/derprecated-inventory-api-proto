@@ -29,6 +29,11 @@ namespace Derprecated.Api.Handlers
             record.OrderKey = record.GetKey(Configuration.App.OrderSalt);
         }
 
+        public override Order Save(Order record, bool includeReferences = true)
+        {
+          return base.Save(record, includeReferences);
+        }
+
         public override List<Order> Typeahead(string q, bool includeDeleted = false)
         {
             var query = Db.From<Order>()

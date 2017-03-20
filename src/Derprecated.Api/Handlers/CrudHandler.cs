@@ -55,7 +55,7 @@
             skip.ThrowIfLessThan(0);
             take.ThrowIfLessThan(1);
 
-            var query = Db.From<T>()
+            var query = AddJoinTables(Db.From<T>())
                           .Skip(skip)
                           .Take(take);
 
@@ -109,7 +109,7 @@
         public virtual T Get(int id, bool includeDeleted = false)
         {
             return Db.LoadSelect(QueryForGet(id, includeDeleted))
-                     .First();
+                     .Single();
         }
     }
 }

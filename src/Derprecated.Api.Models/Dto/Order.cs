@@ -18,10 +18,11 @@
     {
         public Order()
         {
-            AcceptedOffers = new List<Offer>();
+            Offers = new List<Offer>();
         }
 
         public int Id { get; set; }
+        public bool IncludeDeleted { get; set; } = false;
         public ulong OrderNumber { get; set; }
         public string OrderKey { get; set; }
         public decimal Price { get; set; }
@@ -32,7 +33,7 @@
         public Customer ShippingCustomer { get; set; }
         public int BillingCustomerId {get;set;}
         public Customer BillingCustomer { get; set; }
-        public List<Offer> AcceptedOffers { get; set; }
+        public List<Offer> Offers { get; set; }
         public Address ShippingAddress {get;set;}
         public Address BillingAddress { get; set; }
         public string Status { get; set; }

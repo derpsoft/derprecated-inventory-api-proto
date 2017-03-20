@@ -19,7 +19,7 @@
             var resp = new Dto<List<Models.Dto.InventoryTransaction>>();
             var handler = new InventoryHandler(Db, CurrentSession);
 
-            resp.Result = handler.List().ConvertAll(x => x.ToDto());
+            resp.Result = handler.List(request.Skip, request.Take).ConvertAll(x => x.ToDto());
 
             return resp;
         }

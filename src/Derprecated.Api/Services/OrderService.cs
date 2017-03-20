@@ -29,6 +29,21 @@ namespace Derprecated.Api.Services
             private ApplicationConfiguration Config {get;}
             private StripeHandler StripeHandler {get;}
 
+            public override object Get(Models.Dto.Order request)
+            {
+                var resp = new Dto<Models.Dto.Order>();
+                resp.Result = Handler.Get(request.Id, request.IncludeDeleted).ToDto();
+                return resp;
+            }
+
+            protected override object Update(Models.Dto.Order request)
+            {
+              var resp = new Dto<Models.Dto.Order>();
+              var newRecord = Handler.Save(request.FromDto(), true);
+              resp.Result = newRecord.ToDto();
+              return resp;
+            }
+
             public object Post(Models.Dto.OrderBillingCaptured request)
             {
                 var resp = new Dto<Models.Dto.Order>();
@@ -73,7 +88,7 @@ namespace Derprecated.Api.Services
 
                 order.BillingUserAuthId = CurrentSession.UserAuthId.ToString();
                 order.OrderNumber = Order.GetNewOrderNumber();
-                order.Price = order.AcceptedOffers.Sum(x => x.Price);
+                order.Price = order.Offers.Sum(x => x.Price);
                 order.Status = OrderStatus.AwaitingPayment;
                 order.PriceCurrency = Currency.USD;
 
@@ -86,7 +101,7 @@ namespace Derprecated.Api.Services
             {
                 var resp = new Dto<List<Models.Dto.Order>>();
                 resp.Result = Handler.List(request.Skip, request.Take)
-                                     .ConvertAll(x => x.ConvertTo<Models.Dto.Order>());
+                                     .ConvertAll(x => x.ToDto());
                 return resp;
             }
 

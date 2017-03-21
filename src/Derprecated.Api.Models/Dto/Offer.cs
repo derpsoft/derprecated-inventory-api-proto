@@ -17,4 +17,14 @@
         public string SellerId { get; set; }
         public ulong RowVersion {get;set;}
     }
+
+    public class OfferSummary
+    {
+      public int Id { get; set; }
+      public int OrderId { get; set; }
+      public int ProductId { get; set; }
+      public decimal Quantity { get; set; }
+      public string ItemCondition { get; set; }
+      public ulong RowVersion {get;set;}
+    }
 }

@@ -87,11 +87,16 @@
     [Route("/api/v1/orders/summary/{Key}/{OrderNumber}", "GET")]
     public sealed class OrderSummary : IReturn<Dto<OrderSummary>>
     {
+        public OrderSummary()
+        {
+          Offers = new List<OfferSummary>();
+        }
         // Get this from the order number. Order numbers are of the format Prefix-Id, like DERP-1234. 1234 would be the Id.
         public ulong OrderNumber {get;set;}
         public string Key {get;set;}
 
         public string OrderStatus {get;set;}
+        public List<OfferSummary> Offers {get;set;}
         public decimal Price {get;set;}
         public string PriceCurrency {get;set;}
         public string Status { get; set; }

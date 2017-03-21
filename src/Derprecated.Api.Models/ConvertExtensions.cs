@@ -72,10 +72,16 @@
           return to;
         }
 
+        public static Dto.OfferSummary ToSummary(this Offer from) {
+          var to = from.ConvertTo<Dto.OfferSummary>();
+          return to;
+        }
+
         public static Dto.OrderSummary ToSummary(this Order from) {
           var to = from.ConvertTo<Dto.OrderSummary>();
           to.ShippingAddress = from.ShippingAddress.ToSummary();
           to.BillingAddress = from.BillingAddress.ToSummary();
+          to.Offers = from.Offers.ConvertAll(x => x.ToSummary());
           return to;
         }
     }

@@ -3,7 +3,7 @@
     using System;
     using ServiceStack.DataAnnotations;
 
-    public class InventoryTransaction : IAuditable
+    public class InventoryTransaction : IAuditable, IPrimaryKeyable
     {
         public DateTime CreateDate { get; set; }
 
@@ -13,17 +13,19 @@
 
         public DateTime ModifyDate { get; set; }
 
-        [Required]
+        [References(typeof(Product))]
         public int ProductId { get; set; }
+        [Reference]
+        public Product Product { get; set; }
 
         public decimal Quantity { get; set; }
         public ulong RowVersion { get; set; }
+        [StringLength(16)]
         public InventoryTransactionTypes TransactionType { get; set; }
 
         [Required]
-        public int UnitOfMeasureId { get; set; }
-
-        [Required]
-        public int UserId { get; set; }
+        [StringLength(64)]
+        [Index(Unique=false)]
+        public string UserAuthId { get; set; }
     }
 }

@@ -55,7 +55,7 @@
             skip.ThrowIfLessThan(0);
             take.ThrowIfLessThan(1);
 
-            var query = Db.From<T>()
+            var query = AddJoinTables(Db.From<T>())
                           .Skip(skip)
                           .Take(take);
 
@@ -67,7 +67,9 @@
 
         public abstract List<T> Typeahead(string query, bool includeDeleted = false);
 
-        public virtual T Save(T record)
+        protected virtual void BeforeCreate(T record){}
+
+        public virtual T Save(T record, bool includeReferences = false)
         {
             record.ThrowIfNull();
 
@@ -79,10 +81,16 @@
 
                 record = existing.PopulateWith(record);
             }
-            Db.Save(record);
+            else
+            {
+                BeforeCreate(record);
+            }
+            Db.Save(record, includeReferences);
 
             return record;
         }
+
+        protected virtual void BeforeDelete(T record){}
 
         public virtual T Delete(int id)
         {
@@ -93,13 +101,15 @@
             if (existing.IsDeleted)
                 throw new Exception("that record was already deleted");
 
+            BeforeDelete(existing);
+
             return Db.SoftDelete(existing);
         }
 
         public virtual T Get(int id, bool includeDeleted = false)
         {
             return Db.LoadSelect(QueryForGet(id, includeDeleted))
-                     .First();
+                     .Single();
         }
     }
 }

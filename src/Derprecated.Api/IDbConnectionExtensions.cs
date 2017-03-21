@@ -8,7 +8,8 @@ namespace Derprecated.Api
     public static class DbConnectionExtensions
     {
         /// <summary>
-        /// Mark this record as deleted, update the deleteDate, and save.
+        /// Mark this record as deleted, update the deleteDate, and save the record.
+        /// Other modifications to record are included in the save.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>

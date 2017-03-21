@@ -23,6 +23,7 @@
     using ServiceStack.OrmLite;
     using ServiceStack.Text;
     using ServiceStack.Validation;
+    using ServiceStack.Stripe;
     using Auth0.AuthenticationApi;
     using Auth0.ManagementApi;
 
@@ -141,6 +142,15 @@
             // Schema init
             using (var ctx = container.Resolve<IDbConnectionFactory>().Open())
             {
+#if DEBUG
+                ctx.DropTable<Address>();
+                ctx.DropTable<Offer>();
+                ctx.DropTable<Order>();
+                ctx.DropTable<Merchant>();
+                ctx.DropTable<Customer>();
+                ctx.DropTable<InventoryTransaction>();
+#endif
+
                 ctx.CreateTableIfNotExists<ApiKey>();
                 ctx.CreateTableIfNotExists<Category>();
                 ctx.CreateTableIfNotExists<Product>();
@@ -155,6 +165,11 @@
                 ctx.CreateTableIfNotExists<Warehouse>();
                 ctx.CreateTableIfNotExists<Location>();
                 ctx.CreateTableIfNotExists<Image>();
+                ctx.CreateTableIfNotExists<Customer>();
+                ctx.CreateTableIfNotExists<Merchant>();
+                ctx.CreateTableIfNotExists<Order>();
+                ctx.CreateTableIfNotExists<Offer>();
+                ctx.CreateTableIfNotExists<Address>();
             }
 
             // Mail
@@ -205,6 +220,25 @@
                 Issuer = configuration.Auth0.Issuer,
                 PopulateSessionFilter = (session, json, request) =>
                 {
+                    /* JSON object looks like:
+                      {
+                        "app_metadata": {
+                          "authorization": {
+                            "roles": ["Admin", "User", "Delegated Admin - Administrator", "Delegated Admin - User"],
+                            "permissions": ["everything", "login", "manageCategories", "dispatchInventory"]
+                          }
+                        },
+                        "iss": "https://derprecated.auth0.com/",
+                        "sub": "google-oauth2|108854378958464530522",
+                        "aud": "HgdpKajxywOUlc52Uv6rASdiABMsnYd4",
+                        "exp": 1489635158,
+                        "iat": 1489599158
+                      }
+
+                      session props already set:
+                      session.UserAuthId = json.sub.split('|',2)[1]
+                    */
+
                     var authorization = json.Object("app_metadata")
                       .Object("authorization");
                     session.Permissions = authorization
@@ -233,6 +267,10 @@
             Plugins.Add(new AutoQueryFeature {MaxLimit = 100});
             Plugins.Add(new SwaggerFeature());
 
+            // Restrictions
+            typeof(AssignRoles).AddAttributes(new RestrictAttribute { VisibleLocalhostOnly = true });
+            typeof(UnAssignRoles).AddAttributes(new RestrictAttribute { VisibleLocalhostOnly = true });
+
             // Handlers
             container.RegisterAs<ImageHandler, IHandler<Image>>()
                      .ReusedWithin(ReuseScope.Request);
@@ -251,6 +289,13 @@
             container.RegisterAutoWired<UserHandler>()
                      .ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWired<Auth0Handler>();
+            container.RegisterAs<AddressHandler, IHandler<Address>>()
+                     .ReusedWithin(ReuseScope.Request);
+            container.RegisterAs<OrderHandler, IHandler<Order>>()
+                     .ReusedWithin(ReuseScope.Request);
+            container.Register(new StripeHandler(configuration.Stripe.SecretKey));
+            container.RegisterAutoWired<InventoryHandler>()
+                     .ReusedWithin(ReuseScope.Request);
 
             // Misc
             container.Register(new AuthenticationApiClient(new Uri($"https://{configuration.Auth0.Domain}/")));

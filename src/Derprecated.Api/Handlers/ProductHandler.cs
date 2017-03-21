@@ -99,7 +99,7 @@
             );
         }
 
-        public Product Save(Product product)
+        public Product Save(Product product, bool includeReferences = false)
         {
             product.ThrowIfNull(nameof(product));
 
@@ -114,7 +114,7 @@
 
                 product = existing.PopulateFromPropertiesWithAttribute(product, typeof(WhitelistAttribute));
             }
-            Db.Save(product);
+            Db.Save(product, includeReferences);
 
             return product;
         }

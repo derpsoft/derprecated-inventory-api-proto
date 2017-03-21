@@ -16,6 +16,12 @@
           return to;
         }
 
+        public static InventoryTransaction FromDto(this Dto.InventoryTransaction from)
+        {
+          var to = from.ConvertTo<InventoryTransaction>();
+          return to;
+        }
+
         public static User ToDto(this Auth0.Core.User from)
         {
             var to = from.ConvertTo<User>();

@@ -14,40 +14,35 @@
     {
         protected static ILog Log = LogManager.GetLogger(typeof (InventoryService));
 
+        public InventoryHandler Handler {get;set;}
+
         public object Get(InventoryTransactions request)
         {
             var resp = new Dto<List<Models.Dto.InventoryTransaction>>();
-            var handler = new InventoryHandler(Db, CurrentSession);
 
-            resp.Result = handler.List(request.Skip, request.Take).ConvertAll(x => x.ToDto());
-
-            return resp;
-        }
-
-        public object Any(CountInventoryTransactions request)
-        {
-            var resp = new CountResponse();
-            var handler = new InventoryHandler(Db, CurrentSession);
-
-            resp.Count = handler.CountInventoryTransactions();
+            resp.Result = Handler.List(request.Skip, request.Take).ConvertAll(x => x.ToDto());
 
             return resp;
         }
 
-        public object Any(CreateInventoryTransaction request)
+        public object Any(InventoryTransactionCount request)
         {
-            if (request.Quantity == 0)
-                throw new ArgumentOutOfRangeException(nameof(request.Quantity));
-            Log.Info(request.ToJson());
-            var resp = new InventoryTransactionResponse();
-            var handler = new InventoryHandler(Db, CurrentSession);
+            var resp = new Dto<long>();
 
-            if (request.Quantity > 0)
-                handler.Receive(request);
-            else
-                resp.InventoryTransaction = Models.Dto.InventoryTransaction.From(handler.Release(request));
+            resp.Result = Handler.Count();
 
             return resp;
+        }
+
+        public object Post(Models.Dto.InventoryTransaction request)
+        {
+          var resp = new Dto<Models.Dto.InventoryTransaction>();
+          var transaction = request.FromDto();
+
+          transaction.UserAuthId = CurrentSession.UserAuthId.ToString();
+          resp.Result = Handler.Save(transaction).ToDto();
+
+          return resp;
         }
     }
 }

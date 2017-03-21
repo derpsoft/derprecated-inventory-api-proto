@@ -294,6 +294,8 @@
             container.RegisterAs<OrderHandler, IHandler<Order>>()
                      .ReusedWithin(ReuseScope.Request);
             container.Register(new StripeHandler(configuration.Stripe.SecretKey));
+            container.RegisterAutoWired<InventoryHandler>()
+                     .ReusedWithin(ReuseScope.Request);
 
             // Misc
             container.Register(new AuthenticationApiClient(new Uri($"https://{configuration.Auth0.Domain}/")));

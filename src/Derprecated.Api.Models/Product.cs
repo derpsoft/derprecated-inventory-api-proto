@@ -5,7 +5,7 @@
     using Attributes;
     using ServiceStack.DataAnnotations;
 
-    public class Product : IAuditable, ISoftDeletable
+    public class Product : IAuditable, ISoftDeletable, IPrimaryKeyable
     {
         public Product()
         {

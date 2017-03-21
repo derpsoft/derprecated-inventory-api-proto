@@ -26,6 +26,8 @@
         public int UnitOfMeasureId { get; set; }
 
         [Required]
-        public int UserId { get; set; }
+        [StringLength(64)]
+        [Index(Unique=false)]
+        public string UserAuthId { get; set; }
     }
 }

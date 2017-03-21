@@ -27,22 +27,26 @@
         public string OrderKey { get; set; }
         public decimal Price { get; set; }
         public string PriceCurrency { get; set; }
+        public List<Offer> Offers { get; set; }
+        public string Status { get; set; }
+        public DateTime CreateDate {get;set;}
+        public ulong RowVersion { get; set; }
+
         // public int MerchantId {get;set;}
         // public Merchant Merchant {get;set;}
         public int ShippingCustomerId {get;set;}
         public Customer ShippingCustomer { get; set; }
+        public Address ShippingAddress {get;set;}
+        public DateTime? ShipDate { get; set; }
+        public string ShipByUserAuthId {get;set;}
+
         public int BillingCustomerId {get;set;}
         public Customer BillingCustomer { get; set; }
-        public List<Offer> Offers { get; set; }
-        public Address ShippingAddress {get;set;}
         public Address BillingAddress { get; set; }
-        public string Status { get; set; }
+        public DateTime? BillDate { get; set; }
+        public string BillByUserAuthId {get;set;}
         public string PaymentMethod {get;set;}
         public string PaymentMethodId {get;set;}
-        public DateTime CreateDate {get;set;}
-        public DateTime? BillDate { get; set; }
-        public DateTime? ShipDate { get; set; }
-        public ulong RowVersion { get; set; }
     }
 
     [Route("/api/v1/orders", "GET")]

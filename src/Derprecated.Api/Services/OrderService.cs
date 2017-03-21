@@ -74,7 +74,7 @@ namespace Derprecated.Api.Services
 
               if(null != order && order.Status.Equals(OrderStatus.AwaitingShipment))
               {
-                order.ShippingUserAuthId = CurrentSession.UserAuthId.ToString();
+                order.ShipByUserAuthId = CurrentSession.UserAuthId.ToString();
                 resp.Result = OrderHandler.Ship(order).ToDto();
               }
 
@@ -86,7 +86,7 @@ namespace Derprecated.Api.Services
                 var resp = new Dto<Models.Dto.Order>();
                 var order = request.FromDto();
 
-                order.BillingUserAuthId = CurrentSession.UserAuthId.ToString();
+                order.BillByUserAuthId = CurrentSession.UserAuthId.ToString();
                 order.OrderNumber = Order.GetNewOrderNumber();
                 order.Price = order.Offers.Sum(x => x.Price);
                 order.Status = OrderStatus.AwaitingPayment;

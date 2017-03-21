@@ -13,7 +13,7 @@
         public decimal Quantity { get; set; }
         public InventoryTransactionTypes TransactionType { get; set; }
         public int UnitOfMeasureId { get; set; }
-        public int UserId { get; set; }
+        public ulong UserAuthId { get; set; }
 
         public static InventoryTransaction From(Models.InventoryTransaction source)
         {

@@ -51,10 +51,10 @@
 
         [StringLength(64)]
         [Index(Unique=false)]
-        public string BillingUserAuthId {get;set;}
+        public string BillByUserAuthId {get;set;}
         [StringLength(64)]
         [Index(Unique=false)]
-        public string ShippingUserAuthId {get;set;}
+        public string ShipByUserAuthId {get;set;}
         // [StringLength(64)]
         // [Index(Unique=false)]
         // public string FulfillmentUserAuthId {get;set;}

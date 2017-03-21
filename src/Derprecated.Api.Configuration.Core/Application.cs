@@ -142,6 +142,15 @@
             // Schema init
             using (var ctx = container.Resolve<IDbConnectionFactory>().Open())
             {
+#if DEBUG
+                ctx.DropTable<Address>();
+                ctx.DropTable<Offer>();
+                ctx.DropTable<Order>();
+                ctx.DropTable<Merchant>();
+                ctx.DropTable<Customer>();
+                ctx.DropTable<InventoryTransaction>();
+#endif
+
                 ctx.CreateTableIfNotExists<ApiKey>();
                 ctx.CreateTableIfNotExists<Category>();
                 ctx.CreateTableIfNotExists<Product>();
@@ -156,15 +165,6 @@
                 ctx.CreateTableIfNotExists<Warehouse>();
                 ctx.CreateTableIfNotExists<Location>();
                 ctx.CreateTableIfNotExists<Image>();
-
-#if DEBUG
-                ctx.DropTable<Address>();
-                ctx.DropTable<Offer>();
-                ctx.DropTable<Order>();
-                ctx.DropTable<Merchant>();
-                ctx.DropTable<Customer>();
-#endif
-
                 ctx.CreateTableIfNotExists<Customer>();
                 ctx.CreateTableIfNotExists<Merchant>();
                 ctx.CreateTableIfNotExists<Order>();
@@ -294,7 +294,7 @@
             container.RegisterAs<OrderHandler, IHandler<Order>>()
                      .ReusedWithin(ReuseScope.Request);
             container.Register(new StripeHandler(configuration.Stripe.SecretKey));
-            
+
             // Misc
             container.Register(new AuthenticationApiClient(new Uri($"https://{configuration.Auth0.Domain}/")));
             container.Register(new ShopifyServiceClient($"https://{configuration.Shopify.Domain}")

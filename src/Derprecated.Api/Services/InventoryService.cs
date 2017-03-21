@@ -38,7 +38,7 @@
         {
             if (request.Quantity == 0)
                 throw new ArgumentOutOfRangeException(nameof(request.Quantity));
-
+            Log.Info(request.ToJson());
             var resp = new InventoryTransactionResponse();
             var handler = new InventoryHandler(Db, CurrentSession);
 

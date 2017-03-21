@@ -7,10 +7,13 @@
     using Models.Routing;
     using ServiceStack;
     using ServiceStack.Auth;
+    using ServiceStack.Logging;
     using ServiceStack.OrmLite;
 
     public class InventoryHandler
     {
+        protected static ILog Log = LogManager.GetLogger(typeof (InventoryHandler));
+
         public InventoryHandler(IDbConnection db, IAuthSession user)
         {
             Db = db;
@@ -58,10 +61,12 @@
             product.ThrowIfNull(nameof(product));
             //location.ThrowIfNull(nameof(location));
 
+            Log.Info(User.UserAuthId);
+
             transaction.ProductId = product.Id;
             transaction.Quantity = quantity;
             transaction.TransactionType = InventoryTransactionTypes.In;
-            transaction.UserId = User.UserAuthId.ToInt();
+            transaction.UserAuthId = User.UserAuthId.ToString();
             transaction.UnitOfMeasureId = 1;
 
             Db.Save(transaction);
@@ -121,7 +126,7 @@
             transaction.ProductId = product.Id;
             transaction.Quantity = quantity;
             transaction.TransactionType = InventoryTransactionTypes.Out;
-            transaction.UserId = User.UserAuthId.ToInt();
+            transaction.UserAuthId = User.UserAuthId.ToString();
             transaction.UnitOfMeasureId = 1;
 
             Db.Save(transaction);

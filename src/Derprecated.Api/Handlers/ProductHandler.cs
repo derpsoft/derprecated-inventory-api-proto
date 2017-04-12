@@ -33,24 +33,6 @@
                      .First();
         }
 
-        public void SetShopifyId(int productId, long shopifyId)
-        {
-            var q = Db.From<Product>();
-
-            Db.UpdateOnly(new Product {ShopifyId = shopifyId},
-                q.Update(x => x.ShopifyId).Where(x => x.Id == productId));
-        }
-
-        public Product Restore(int id)
-        {
-            var existing = Get(id);
-            if (default(Product) == existing)
-                throw new ArgumentException("unable to locate product with id");
-            if (existing.IsDeleted)
-                throw new Exception("that product was already deleted");
-            return Db.SoftDelete(existing);
-        }
-
         public Product Get(int id, bool includeDeleted = false)
         {
             id.ThrowIfLessThan(1);
@@ -63,6 +45,11 @@
 
             return Db.LoadSelect(query)
                      .First();
+        }
+
+        protected virtual SqlExpression<Product> AddJoinTables(SqlExpression<Product> query)
+        {
+            return query;
         }
 
         /// <summary>
@@ -79,9 +66,24 @@
             skip.ThrowIfLessThan(0);
             take.ThrowIfLessThan(1);
 
-            var query = Db.From<Product>()
+            var query = AddJoinTables(Db.From<Product>())
                           .Skip(skip)
                           .Take(take);
+
+            if (!includeDeleted)
+                query = query.Where(x => !x.IsDeleted);
+
+            return Db.LoadSelect(query);
+        }
+
+        public List<Product> ListCategory(int categoryId, int skip = 0, int take = 25, bool includeDeleted = false)
+        {
+            categoryId.ThrowIfLessThan(1);
+
+            var query = AddJoinTables(Db.From<Product>())
+                .Where(x => x.CategoryId == categoryId)
+                .Skip(skip)
+                .Take(take);
 
             if (!includeDeleted)
                 query = query.Where(x => !x.IsDeleted);

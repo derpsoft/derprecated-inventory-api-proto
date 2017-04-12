@@ -94,6 +94,18 @@ namespace Derprecated.Api.Models.Dto
         public int Take { get; set; } = 25;
     }
 
+    [Route("/api/v1/products/category/{CategoryId}", "GET")]
+    [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
+    [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageProducts)]
+    public sealed class ProductsByCategory : IReturn<Dto<List<Product>>>
+    {
+        public bool IncludeDeleted { get; set; } = false;
+        public int Skip { get; set; } = 0;
+        public int Take { get; set; } = 25;
+        public int CategoryId { get; set; }
+    }
+
     [Route("/api/v1/products/search")]
     [Authenticate]
     [RequiredPermission(Permissions.CanLogin)]

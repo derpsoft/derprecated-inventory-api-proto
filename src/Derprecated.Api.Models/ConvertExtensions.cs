@@ -90,5 +90,17 @@
           to.Offers = from.Offers.ConvertAll(x => x.ToSummary());
           return to;
         }
+
+        public static Dto.Product ToDto(this Product from)
+        {
+            var to = from.ConvertTo<Dto.Product>();
+            return to;
+        }
+
+        public static Product FromDto(this Dto.Product from)
+        {
+            var to = from.ConvertTo<Product>();
+            return to;
+        }
     }
 }

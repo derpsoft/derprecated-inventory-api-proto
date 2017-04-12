@@ -88,6 +88,17 @@
             return resp;
         }
 
+        public object Any(ProductsByCategory request)
+        {
+            var resp = new Dto<List<Product>>();
+            var handler = new ProductHandler(Db);
+
+            resp.Result = handler.ListCategory(request.CategoryId, request.Skip, request.Take, request.IncludeDeleted)
+                .ConvertAll(x => x.ToDto());
+
+            return resp;
+        }
+
         public object Any(ProductTypeahead request)
         {
             var resp = new Dto<List<Product>>();

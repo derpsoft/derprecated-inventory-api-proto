@@ -198,6 +198,7 @@
                 {
                     "http://localhost:6307",
                     "http://localhost:8080",
+                    "http://localhost:5000",
                     "http://0.0.0.0:8080",
                     "http://0.0.0.0:3000",
                     "http://inventory-web-dev-wb45gu.herokuapp.com",

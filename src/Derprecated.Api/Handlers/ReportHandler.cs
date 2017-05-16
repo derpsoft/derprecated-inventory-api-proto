@@ -35,10 +35,10 @@
             return
                 Db.Dictionary<DateTime, decimal>(
                     $@"
-                SELECT 
+                SELECT
                     CAST(MIN([Timestamp]) AS DATE)
                     , SUM([Total])
-                FROM 
+                FROM
                     [Sale]
                 WHERE
                     [Timestamp] BETWEEN @startDate AND @endDate
@@ -68,10 +68,10 @@
             return
                 Db.Dictionary<DateTime, decimal>(
                     $@"
-                SELECT 
+                SELECT
                     CAST(MIN([Timestamp]) AS DATE)
                     , SUM([Total])
-                FROM 
+                FROM
                     [Sale]
                 WHERE
                     [Timestamp] BETWEEN @startDate AND @endDate
@@ -98,10 +98,10 @@
             return
                 Db.Dictionary<DateTime, int>(
                    $@"
-                SELECT 
+                SELECT
                     CAST(MIN([CreateDate]) AS DATE)
                     , SUM([Quantity])
-                FROM 
+                FROM
                     [InventoryTransaction]
                 WHERE
                     [CreateDate] BETWEEN @startDate AND @endDate
@@ -129,10 +129,10 @@
             return
                 Db.Dictionary<DateTime, int>(
                     $@"
-                SELECT 
+                SELECT
                     CAST(MIN([CreateDate]) AS DATE)
                     , SUM([Quantity])
-                FROM 
+                FROM
                     [InventoryTransaction]
                 WHERE
                     [CreateDate] BETWEEN @startDate AND @endDate
@@ -146,7 +146,66 @@
                         transactionType = InventoryTransactionTypes.In
                     });
         }
-        
+
+        public int GetSalesByUser(string userId, DateTime startDate, DateTime endDate)
+        {
+            if (startDate >= endDate)
+                throw new ArgumentOutOfRangeException(nameof(startDate),
+                    $"{nameof(startDate)} should come before {nameof(endDate)}");
+
+            return
+                Db.Scalar<int>(
+                    $@"
+                SELECT
+                    COUNT([Id])
+                FROM
+                    [Order]
+                WHERE
+                    BillByUserAuthId = @userId
+                    AND [BillDate] BETWEEN @startDate AND @endDate
+                ;",
+                    new
+                    {
+                        userId,
+                        startDate,
+                        endDate,
+                    });
+        }
+
+        public decimal GetRevenueByUser(string userId, DateTime startDate, DateTime endDate)
+        {
+            if (startDate >= endDate)
+                throw new ArgumentOutOfRangeException(nameof(startDate),
+                    $"{nameof(startDate)} should come before {nameof(endDate)}");
+
+            return
+                Db.Scalar<decimal>(
+                    $@"
+                SELECT
+                    SUM([Price])
+                FROM
+                    [Order]
+                WHERE
+                    BillByUserAuthId = @userId
+                    AND [BillDate] BETWEEN @startDate AND @endDate
+                ;",
+                    new
+                    {
+                        userId,
+                        startDate,
+                        endDate,
+                    });
+        }
+
+        public int GetListingsByUser(string userId, DateTime startDate, DateTime endDate)
+        {
+            if (startDate >= endDate)
+                throw new ArgumentOutOfRangeException(nameof(startDate),
+                    $"{nameof(startDate)} should come before {nameof(endDate)}");
+
+            return 0;
+        }
+
         public Dictionary<DateTime, decimal> GetSalesByTotal(DateTime startDate, DateTime endDate, string groupBy)
         {
             if (startDate >= endDate)
@@ -160,10 +219,10 @@
             return
                 Db.Dictionary<DateTime, decimal>(
                     $@"
-                SELECT 
+                SELECT
                     CAST(MIN([Timestamp]) AS DATE)
                     , SUM([Total])
-                FROM 
+                FROM
                     [Sale]
                 WHERE
                     [Timestamp] BETWEEN @startDate AND @endDate

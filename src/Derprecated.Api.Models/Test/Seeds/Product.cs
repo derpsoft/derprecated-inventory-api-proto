@@ -11,7 +11,7 @@
             Color = "Transparent",
             Description = "",
             Grams = 0,
-            Images = new List<ProductImage>(),
+            ProductImages = new List<ProductImage>(),
             Price = 0m,
             RowVersion = 1,
             Tags = "",

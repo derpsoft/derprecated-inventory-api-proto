@@ -5,11 +5,11 @@
     using Attributes;
     using ServiceStack.DataAnnotations;
 
-    public class Product : IAuditable, ISoftDeletable
+    public class Product : IAuditable, ISoftDeletable, IPrimaryKeyable
     {
         public Product()
         {
-            Images = new List<ProductImage>();
+            ProductImages = new List<ProductImage>();
         }
 
         [Whitelist]
@@ -44,7 +44,7 @@
         public int Id { get; set; }
 
         [Reference]
-        public List<ProductImage> Images { get; set; }
+        public List<ProductImage> ProductImages { get; set; }
 
         public bool IsDeleted { get; set; }
 

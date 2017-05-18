@@ -7,14 +7,18 @@
     using Models.Dto;
     using ServiceStack;
     using Image = Models.Image;
+    using Product = Models.Dto.Product;
 
     public class ImageService : CrudService<Image, Models.Dto.Image>
     {
-        public ImageService(IHandler<Image> handler) : base(handler)
+        public ImageService(IHandler<Image> handler, IHandler<ProductImage> productImageHandler) : base(handler)
         {
+            ProductImageHandler = (ProductImageHandler) productImageHandler;
         }
 
         private ImageHandler ImageHandler => Handler as ImageHandler;
+
+        private ProductImageHandler ProductImageHandler { get; }
 
         protected override object Create(Models.Dto.Image request)
         {
@@ -26,6 +30,15 @@
                 resp.Result = Handler.Save(image).ConvertTo<Models.Dto.Image>();
             }
             return resp;
+        }
+
+        protected override object Update(Models.Dto.Image request)
+        {
+            var dto = (Dto<Models.Dto.Image>) base.Update(request);
+
+            dto.Result.ProductIds = ProductImageHandler.AssociateProducts(dto.Result.Id, request.ProductIds);
+
+            return dto;
         }
 
         public object Get(ImageCount request)
@@ -62,6 +75,17 @@
                     Handler.Typeahead(request.Query, request.IncludeDeleted)
                            .ConvertAll(x => x.ConvertTo<Models.Dto.Image>());
 
+
+            return resp;
+        }
+
+        public override object Get(Models.Dto.Image request)
+        {
+            var resp = (Dto<Models.Dto.Image>) base.Get(request);
+
+            resp.Result.Products =
+                ProductImageHandler.GetProducts(resp.Result.Id, request.IncludeDeleted)
+                                   .ConvertAll(x => x.ConvertTo<Product>());
 
             return resp;
         }

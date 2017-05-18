@@ -66,15 +66,15 @@
         where TModel : class, ISoftDeletable
         where TDto : class
     {
-        protected CreateService(IHandler<TModel> handler)
+        protected CreateService(IWriteHandler<TModel> handler)
         {
             Handler = handler;
         }
 
         // ReSharper disable once MemberCanBePrivate.Global
-        protected IHandler<TModel> Handler { get; }
+        protected IWriteHandler<TModel> Handler { get; }
 
-        private object Create(TDto request)
+        protected virtual object Create(TDto request)
         {
             var resp = new Dto<TDto>();
             var newRecord = Handler.Save(request.ConvertTo<TModel>());
@@ -92,13 +92,13 @@
         where TModel : class, IPrimaryKeyable, ISoftDeletable
         where TDto : class, IPrimaryKeyable
     {
-        protected ReadService(IHandler<TModel> handler)
+        protected ReadService(IReadHandler<TModel> handler)
         {
             Handler = handler;
         }
 
         // ReSharper disable once MemberCanBePrivate.Global
-        protected IHandler<TModel> Handler { get; }
+        protected IReadHandler<TModel> Handler { get; }
 
         public virtual object Get(TDto request)
         {
@@ -111,13 +111,13 @@
     public abstract class UpdateService<TModel, TDto> : BaseService, IUpdateService<TModel, TDto>
         where TModel : class, IPrimaryKeyable, ISoftDeletable where TDto : class, IPrimaryKeyable
     {
-        protected UpdateService(IHandler<TModel> handler)
+        protected UpdateService(IWriteHandler<TModel> handler)
         {
             Handler = handler;
         }
 
         // ReSharper disable once MemberCanBePrivate.Global
-        protected IHandler<TModel> Handler { get; }
+        protected IWriteHandler<TModel> Handler { get; }
 
         private object Update(TDto request)
         {
@@ -142,13 +142,13 @@
         where TModel : class, IPrimaryKeyable, ISoftDeletable
         where TDto : class, IPrimaryKeyable
     {
-        protected DeleteService(IHandler<TModel> handler)
+        protected DeleteService(IWriteHandler<TModel> handler)
         {
             Handler = handler;
         }
 
         // ReSharper disable once MemberCanBePrivate.Global
-        protected IHandler<TModel> Handler { get; }
+        protected IWriteHandler<TModel> Handler { get; }
 
         public object Delete(TDto request)
         {

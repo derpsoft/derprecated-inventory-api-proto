@@ -5,20 +5,21 @@
     using System.Data;
     using System.Linq;
     using Models;
+    using ServiceStack.Auth;
     using ServiceStack.OrmLite;
 
     public class ReportHandler
     {
         private static readonly string[] AcceptableGroupBy = {DateSegments.Day, DateSegments.Week, DateSegments.Month};
 
-        public ReportHandler(IDbConnection db, UserSession user)
+        public ReportHandler(IDbConnection db, IAuthSession user)
         {
             Db = db;
             User = user;
         }
 
         private IDbConnection Db { get; }
-        private UserSession User { get; }
+        private IAuthSession User { get; }
 
         public Dictionary<DateTime, decimal> GetSalesByVendor(DateTime startDate, DateTime endDate, string groupBy,
                                                               int vendorId)
@@ -34,10 +35,10 @@
             return
                 Db.Dictionary<DateTime, decimal>(
                     $@"
-                SELECT 
+                SELECT
                     CAST(MIN([Timestamp]) AS DATE)
                     , SUM([Total])
-                FROM 
+                FROM
                     [Sale]
                 WHERE
                     [Timestamp] BETWEEN @startDate AND @endDate
@@ -67,10 +68,10 @@
             return
                 Db.Dictionary<DateTime, decimal>(
                     $@"
-                SELECT 
+                SELECT
                     CAST(MIN([Timestamp]) AS DATE)
                     , SUM([Total])
-                FROM 
+                FROM
                     [Sale]
                 WHERE
                     [Timestamp] BETWEEN @startDate AND @endDate
@@ -97,10 +98,10 @@
             return
                 Db.Dictionary<DateTime, int>(
                    $@"
-                SELECT 
+                SELECT
                     CAST(MIN([CreateDate]) AS DATE)
                     , SUM([Quantity])
-                FROM 
+                FROM
                     [InventoryTransaction]
                 WHERE
                     [CreateDate] BETWEEN @startDate AND @endDate
@@ -128,10 +129,10 @@
             return
                 Db.Dictionary<DateTime, int>(
                     $@"
-                SELECT 
+                SELECT
                     CAST(MIN([CreateDate]) AS DATE)
                     , SUM([Quantity])
-                FROM 
+                FROM
                     [InventoryTransaction]
                 WHERE
                     [CreateDate] BETWEEN @startDate AND @endDate
@@ -145,7 +146,132 @@
                         transactionType = InventoryTransactionTypes.In
                     });
         }
-        
+
+        public int GetSalesByUser(string userId, DateTime startDate, DateTime endDate)
+        {
+            if (startDate >= endDate)
+                throw new ArgumentOutOfRangeException(nameof(startDate),
+                    $"{nameof(startDate)} should come before {nameof(endDate)}");
+
+            return
+                Db.Scalar<int>(
+                    $@"
+                SELECT
+                    COUNT([Id])
+                FROM
+                    [Order]
+                WHERE
+                    BillByUserAuthId = @userId
+                    AND [BillDate] BETWEEN @startDate AND @endDate
+                ;",
+                    new
+                    {
+                        userId,
+                        startDate,
+                        endDate,
+                    });
+        }
+
+        public decimal GetRevenueByUser(string userId, DateTime startDate, DateTime endDate)
+        {
+            if (startDate >= endDate)
+                throw new ArgumentOutOfRangeException(nameof(startDate),
+                    $"{nameof(startDate)} should come before {nameof(endDate)}");
+
+            return
+                Db.Scalar<decimal>(
+                    $@"
+                SELECT
+                    SUM([Price])
+                FROM
+                    [Order]
+                WHERE
+                    BillByUserAuthId = @userId
+                    AND [BillDate] BETWEEN @startDate AND @endDate
+                ;",
+                    new
+                    {
+                        userId,
+                        startDate,
+                        endDate,
+                    });
+        }
+
+        public int GetListingsByUser(string userId, DateTime startDate, DateTime endDate)
+        {
+            if (startDate >= endDate)
+                throw new ArgumentOutOfRangeException(nameof(startDate),
+                    $"{nameof(startDate)} should come before {nameof(endDate)}");
+
+            return Db.Scalar<int>($@"
+                SELECT
+                    SUM([Price])
+                FROM
+                    [Order]
+                WHERE
+                    BillByUserAuthId = @userId
+                    AND [Status] = @status
+                    AND [BillDate] BETWEEN @startDate AND @endDate
+                ;",
+                    new
+                    {
+                        userId,
+                        startDate,
+                        endDate,
+                        status = OrderStatus.Pending,
+                    });
+        }
+
+        public int GetShippedInventoryByUser(string userId, DateTime startDate, DateTime endDate)
+        {
+            if (startDate >= endDate)
+                throw new ArgumentOutOfRangeException(nameof(startDate),
+                    $"{nameof(startDate)} should come before {nameof(endDate)}");
+
+            return Db.Scalar<int>($@"
+                SELECT
+                    SUM([Quantity])
+                FROM
+                    [InventoryTransaction]
+                WHERE
+                    UserAuthId = @userId
+                    AND [CreateDate] BETWEEN @startDate AND @endDate
+                    AND [TransactionType] = @transactionType
+                ;",
+                    new
+                    {
+                        userId,
+                        startDate,
+                        endDate,
+                        transactiontype = InventoryTransactionTypes.Out,
+                    });
+        }
+
+        public int GetReceivedInventoryByUser(string userId, DateTime startDate, DateTime endDate)
+        {
+            if (startDate >= endDate)
+                throw new ArgumentOutOfRangeException(nameof(startDate),
+                    $"{nameof(startDate)} should come before {nameof(endDate)}");
+
+            return Db.Scalar<int>($@"
+                SELECT
+                    CAST(SUM([Quantity]) AS INTEGER)
+                FROM
+                    [InventoryTransaction]
+                WHERE
+                    UserAuthId = @userId
+                    AND [CreateDate] BETWEEN @startDate AND @endDate
+                    AND [TransactionType] = @transactionType
+                ;",
+                    new
+                    {
+                        userId,
+                        startDate,
+                        endDate,
+                        transactiontype = InventoryTransactionTypes.In,
+                    });
+        }
+
         public Dictionary<DateTime, decimal> GetSalesByTotal(DateTime startDate, DateTime endDate, string groupBy)
         {
             if (startDate >= endDate)
@@ -159,10 +285,10 @@
             return
                 Db.Dictionary<DateTime, decimal>(
                     $@"
-                SELECT 
+                SELECT
                     CAST(MIN([Timestamp]) AS DATE)
                     , SUM([Total])
-                FROM 
+                FROM
                     [Sale]
                 WHERE
                     [Timestamp] BETWEEN @startDate AND @endDate

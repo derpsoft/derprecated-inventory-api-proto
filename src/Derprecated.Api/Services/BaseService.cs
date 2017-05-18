@@ -7,9 +7,8 @@
 
     public abstract class BaseService : Service
     {
-        private UserSession userSession;
         public ApplicationConfiguration Configuration { get; set; }
-        internal UserSession CurrentSession => userSession ?? (userSession = SessionAs<UserSession>());
+        internal IAuthSession CurrentSession => GetSession();
         public IUserAuthRepository UserAuthRepository { get; set; }
     }
 }

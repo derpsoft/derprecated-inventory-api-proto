@@ -203,7 +203,7 @@
                 throw new ArgumentOutOfRangeException(nameof(startDate),
                     $"{nameof(startDate)} should come before {nameof(endDate)}");
 
-            return Db.Scalar<decimal>($@"
+            return Db.Scalar<int>($@"
                 SELECT
                     SUM([Price])
                 FROM

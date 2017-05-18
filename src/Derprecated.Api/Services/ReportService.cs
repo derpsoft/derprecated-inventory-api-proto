@@ -79,5 +79,25 @@
 
             return result;
         }
+
+        public object Any(ShippedByUser request)
+        {
+            var result = new Dto<int>();
+            var handler = new ReportHandler(Db, CurrentSession);
+
+            result.Result = handler.GetShippedInventoryByUser(CurrentSession.UserAuthId, request.StartDate, request.EndDate);
+
+            return result;
+        }
+
+        public object Any(ReceivedByUser request)
+        {
+            var result = new Dto<int>();
+            var handler = new ReportHandler(Db, CurrentSession);
+
+            result.Result = handler.GetReceivedInventoryByUser(CurrentSession.UserAuthId, request.StartDate, request.EndDate);
+
+            return result;
+        }
     }
 }

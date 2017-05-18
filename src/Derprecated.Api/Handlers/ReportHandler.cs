@@ -203,7 +203,23 @@
                 throw new ArgumentOutOfRangeException(nameof(startDate),
                     $"{nameof(startDate)} should come before {nameof(endDate)}");
 
-            return 0;
+            return Db.Scalar<decimal>($@"
+                SELECT
+                    SUM([Price])
+                FROM
+                    [Order]
+                WHERE
+                    BillByUserAuthId = @userId
+                    AND [Status] = @status
+                    AND [BillDate] BETWEEN @startDate AND @endDate
+                ;",
+                    new
+                    {
+                        userId,
+                        startDate,
+                        endDate,
+                        status = OrderStatus.Pending,
+                    });
         }
 
         public int GetShippedInventoryByUser(string userId, DateTime startDate, DateTime endDate)

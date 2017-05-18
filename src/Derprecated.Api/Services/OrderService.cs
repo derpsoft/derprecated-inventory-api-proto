@@ -15,6 +15,7 @@ namespace Derprecated.Api.Services
     public static class OrderServices
     {
         private static ILog Log = LogManager.GetLogger(typeof(OrderServices));
+        private const decimal TAX_RATE =  0.09250m;
 
         public class OrderCrudService : CrudService<Order, Models.Dto.Order>
         {
@@ -50,7 +51,7 @@ namespace Derprecated.Api.Services
                 var order = Handler.Get(request.Id);
 
                 if(null != order && order.Status.EqualsIgnoreCase(OrderStatus.AwaitingPayment)){
-                  var priceInCents = (int)order.Price * 100;
+                  var priceInCents = (int)Math.Round(order.Price * 100, 2, MidpointRounding.AwayFromZero);
                   var prefixedOrderNumber = $"{Config.App.OrderPrefix}-{order.OrderNumber}";
                   var description = $"Custom order {prefixedOrderNumber}";
                   var stripeCharge = StripeHandler.CaptureChargeWithToken(priceInCents, prefixedOrderNumber, request.Token, description);
@@ -85,10 +86,11 @@ namespace Derprecated.Api.Services
             {
                 var resp = new Dto<Models.Dto.Order>();
                 var order = request.FromDto();
+                var subtotal = order.Offers.Sum(x => x.Price * x.Quantity);
 
                 order.BillByUserAuthId = CurrentSession.UserAuthId.ToString();
                 order.OrderNumber = Order.GetNewOrderNumber();
-                order.Price = order.Offers.Sum(x => x.Price);
+                order.Price = Math.Round(subtotal + (subtotal * TAX_RATE), 2, MidpointRounding.AwayFromZero);
                 order.Status = OrderStatus.AwaitingPayment;
                 order.PriceCurrency = Currency.USD;
 

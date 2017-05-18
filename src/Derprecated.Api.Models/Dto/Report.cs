@@ -67,4 +67,30 @@
         public DateTime EndDate { get; set; } =
             new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1).AddTicks(-1);
     }
+
+    [Route("/api/v1/reports/scalar/shippedByUser", "GET")]
+    [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
+    [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanReadReports)]
+    public sealed class ShippedByUser : IReturn<Dto<int>>
+    {
+        public DateTime StartDate { get; set; } =
+            new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
+        public DateTime EndDate { get; set; } =
+            new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1).AddTicks(-1);
+    }
+
+    [Route("/api/v1/reports/scalar/receivedByUser", "GET")]
+    [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
+    [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanReadReports)]
+    public sealed class ReceivedByUser : IReturn<Dto<int>>
+    {
+        public DateTime StartDate { get; set; } =
+            new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
+        public DateTime EndDate { get; set; } =
+            new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1).AddTicks(-1);
+    }
 }

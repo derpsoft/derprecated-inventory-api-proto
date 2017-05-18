@@ -206,6 +206,56 @@
             return 0;
         }
 
+        public int GetShippedInventoryByUser(string userId, DateTime startDate, DateTime endDate)
+        {
+            if (startDate >= endDate)
+                throw new ArgumentOutOfRangeException(nameof(startDate),
+                    $"{nameof(startDate)} should come before {nameof(endDate)}");
+
+            return Db.Scalar<int>($@"
+                SELECT
+                    SUM([Quantity])
+                FROM
+                    [InventoryTransaction]
+                WHERE
+                    UserAuthId = @userId
+                    AND [CreateDate] BETWEEN @startDate AND @endDate
+                    AND [TransactionType] = @transactionType
+                ;",
+                    new
+                    {
+                        userId,
+                        startDate,
+                        endDate,
+                        transactiontype = InventoryTransactionTypes.Out,
+                    });
+        }
+
+        public int GetReceivedInventoryByUser(string userId, DateTime startDate, DateTime endDate)
+        {
+            if (startDate >= endDate)
+                throw new ArgumentOutOfRangeException(nameof(startDate),
+                    $"{nameof(startDate)} should come before {nameof(endDate)}");
+
+            return Db.Scalar<int>($@"
+                SELECT
+                    CAST(SUM([Quantity]) AS INTEGER)
+                FROM
+                    [InventoryTransaction]
+                WHERE
+                    UserAuthId = @userId
+                    AND [CreateDate] BETWEEN @startDate AND @endDate
+                    AND [TransactionType] = @transactionType
+                ;",
+                    new
+                    {
+                        userId,
+                        startDate,
+                        endDate,
+                        transactiontype = InventoryTransactionTypes.In,
+                    });
+        }
+
         public Dictionary<DateTime, decimal> GetSalesByTotal(DateTime startDate, DateTime endDate, string groupBy)
         {
             if (startDate >= endDate)

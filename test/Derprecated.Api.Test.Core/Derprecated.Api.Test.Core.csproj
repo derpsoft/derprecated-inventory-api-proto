@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <VersionPrefix>1.1.0</VersionPrefix>
+    <TargetFramework>netcoreapp1.0</TargetFramework>
+    <AssemblyName>Derprecated.Api.Test.Core</AssemblyName>
+    <PackageId>Derprecated.Api.Test.Core</PackageId>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <RuntimeIdentifiers>win7-x64</RuntimeIdentifiers>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+    <RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>
+    <PackageTargetFallback>$(PackageTargetFallback);netcoreapp1.0;portable-net45+win8</PackageTargetFallback>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
+    <PackageReference Include="NUnit" Version="3.5.*" />
+    <PackageReference Include="dotnet-test-nunit" Version="3.4.0-beta-*" />
+    <PackageReference Include="Derprecated.Api" Version="1.0.0-*" />
+    <PackageReference Include="ServiceStack.OrmLite.Sqlite.Core" Version="1.0.*" />
+    <PackageReference Include="ServiceStack.Common.Core" Version="1.0.*" />
+    <PackageReference Include="Derprecated.Api.Models" Version="1.0.0-*" />
+  </ItemGroup>
+
+</Project>

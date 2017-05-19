@@ -17,8 +17,8 @@
 
   <ItemGroup>
     <PackageReference Include="CoreCompat.System.Drawing" Version="1.0.0-*" />
-    <PackageReference Include="MailKit" Version="1.10.*" />
-    <PackageReference Include="MimeKit" Version="1.10.*" />
+    <PackageReference Include="MailKit" Version="1.16.1" />
+    <PackageReference Include="MimeKit" Version="1.16.1" />
     <PackageReference Include="ServiceStack.Client.Core" Version="1.0.41" />
     <PackageReference Include="ServiceStack.Common.Core" Version="1.0.41" />
     <PackageReference Include="ServiceStack.Core" Version="1.0.41" />

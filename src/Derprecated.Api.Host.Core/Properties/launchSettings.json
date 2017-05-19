@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://*:3413/",
+      "applicationUrl": "http://localhost:3413/",
       "sslPort": 44341
     }
   },
@@ -16,11 +16,10 @@
     },
     "Derprecated.Api.Host.Core": {
       "commandName": "Project",
-      "launchBrowser": false,
       "launchUrl": "http://localhost:5000",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_URLS": "http://*:5000"
+        "ASPNETCORE_URLS": "http://*:5000",
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
   }

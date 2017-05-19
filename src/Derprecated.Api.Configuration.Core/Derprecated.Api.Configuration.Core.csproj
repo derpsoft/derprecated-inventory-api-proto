@@ -19,8 +19,8 @@
   <ItemGroup>
     <PackageReference Include="ServiceStack.Redis.Core" Version="1.0.41" />
     <PackageReference Include="System.Linq" Version="4.3.*" />
-    <PackageReference Include="MimeKit" Version="1.10.*" />
-    <PackageReference Include="MailKit" Version="1.10.*" />
+    <PackageReference Include="MimeKit" Version="1.16.1" />
+    <PackageReference Include="MailKit" Version="1.16.1" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.1" />
     <PackageReference Include="ServiceStack.Api.Swagger.Core" Version="1.0.41" />
     <PackageReference Include="System.Security.Cryptography.Csp" Version="4.3.0" />

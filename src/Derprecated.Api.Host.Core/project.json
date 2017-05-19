@@ -19,7 +19,7 @@
       "type": "platform"
     },
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.*",
-    "ServiceStack.Text.Core": "1.0.37",
+    "ServiceStack.Text.Core": "1.0.37"
   },
   "tools": {
     "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.0.0-preview2-final",

@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.0</TargetFramework>
+    <AssemblyName>Derprecated.Api</AssemblyName>
+    <PackageId>Derprecated.Api</PackageId>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50;portable-net451+win8</PackageTargetFallback>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Derprecated.Api.Models\Derprecated.Api.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CoreCompat.System.Drawing" Version="1.0.0-*" />
+    <PackageReference Include="MailKit" Version="1.10.*" />
+    <PackageReference Include="MimeKit" Version="1.10.*" />
+    <PackageReference Include="ServiceStack.Client.Core" Version="1.0.41" />
+    <PackageReference Include="ServiceStack.Common.Core" Version="1.0.41" />
+    <PackageReference Include="ServiceStack.Core" Version="1.0.41" />
+    <PackageReference Include="ServiceStack.Interfaces.Core" Version="1.0.41" />
+    <PackageReference Include="ServiceStack.OrmLite.Core" Version="1.0.41" />
+    <PackageReference Include="ServiceStack.Text.Core" Version="1.0.41" />
+    <PackageReference Include="ServiceStack.Stripe.Core" Version="1.0.41" />
+    <PackageReference Include="System.Linq" Version="4.3.*" />
+    <PackageReference Include="System.Linq.Parallel" Version="4.3.0" />
+    <PackageReference Include="WindowsAzure.Storage" Version="8.1.1" />
+    <PackageReference Include="Auth0" Version="3.6.*" />
+  </ItemGroup>
+
+</Project>

@@ -142,15 +142,6 @@
             // Schema init
             using (var ctx = container.Resolve<IDbConnectionFactory>().Open())
             {
-#if DEBUG
-                ctx.DropTable<Address>();
-                ctx.DropTable<Offer>();
-                ctx.DropTable<Order>();
-                ctx.DropTable<Merchant>();
-                ctx.DropTable<Customer>();
-                ctx.DropTable<InventoryTransaction>();
-#endif
-
                 ctx.CreateTableIfNotExists<ApiKey>();
                 ctx.CreateTableIfNotExists<Category>();
                 ctx.CreateTableIfNotExists<Product>();

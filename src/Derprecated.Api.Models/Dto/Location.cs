@@ -7,6 +7,7 @@
     [Route("/api/v1/locations", "POST")]
     [Route("/api/v1/locations/{Id}", "PUT, PATCH, GET, DELETE")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageLocations,
         Permissions.CanReadLocations)]
     [RequiresAnyPermission(ApplyTo.Post | ApplyTo.Patch | ApplyTo.Put, Permissions.CanDoEverything,
@@ -28,6 +29,7 @@
 
     [Route("/api/v1/locations", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageLocations, Permissions.CanReadLocations)]
     public class Locations : IReturn<Dto<List<Location>>>
     {
@@ -37,6 +39,7 @@
 
     [Route("/api/v1/locations/count", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageLocations, Permissions.CanReadLocations)]
     public sealed class LocationCount : IReturn<Dto<long>>
     {
@@ -44,6 +47,7 @@
 
     [Route("/api/v1/locations", "GET, SEARCH")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageLocations, Permissions.CanReadLocations)]
     public sealed class LocationSearch : QueryDb<Models.Location, Location>
     {
@@ -60,6 +64,7 @@
 
     [Route("/api/v1/locations/typeahead", "SEARCH")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageLocations, Permissions.CanReadLocations)]
     public sealed class LocationTypeahead : IReturn<Dto<List<Location>>>
     {

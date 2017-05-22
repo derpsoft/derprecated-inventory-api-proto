@@ -101,7 +101,8 @@
             if (!includeDeleted)
                 query = query.And(x => !x.IsDeleted);
 
-            return Db.Select(query.SelectDistinct());
+            return Db.Select(query.OrderByDescending(x => x.CreateDate)
+                                  .SelectDistinct());
         }
     }
 }

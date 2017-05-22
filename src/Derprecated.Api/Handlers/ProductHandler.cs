@@ -9,12 +9,11 @@
     using ServiceStack;
     using ServiceStack.OrmLite;
 
-    public class ProductHandler
+    public class ProductHandler : IHandler<Product>
     {
-        public ProductHandler(IDbConnection db, UserSession user)
+        public ProductHandler(IDbConnection db)
         {
             Db = db;
-            User = user;
         }
 
         private IDbConnection Db { get; }
@@ -34,6 +33,24 @@
                      .First();
         }
 
+        public void SetShopifyId(int productId, long shopifyId)
+        {
+            var q = Db.From<Product>();
+
+            Db.UpdateOnly(new Product {ShopifyId = shopifyId},
+                q.Update(x => x.ShopifyId).Where(x => x.Id == productId));
+        }
+
+        public Product Restore(int id)
+        {
+            var existing = Get(id);
+            if (default(Product) == existing)
+                throw new ArgumentException("unable to locate product with id");
+            if (existing.IsDeleted)
+                throw new Exception("that product was already deleted");
+            return Db.SoftDelete(existing);
+        }
+
         public Product Get(int id, bool includeDeleted = false)
         {
             id.ThrowIfLessThan(1);
@@ -46,12 +63,6 @@
 
             return Db.LoadSelect(query)
                      .First();
-        }
-
-        public ProductImage GetProductImage(int id)
-        {
-            id.ThrowIfLessThan(1);
-            return Db.SingleById<ProductImage>(id);
         }
 
         /// <summary>
@@ -78,7 +89,17 @@
             return Db.LoadSelect(query);
         }
 
-        public Product Save(Product product)
+        public List<Product> Typeahead(string q, bool includeDeleted = false)
+        {
+            return Db.LoadSelect(
+                Db.From<Product>()
+                  .Where(x => x.Title.Contains(q))
+                  .Or(x => x.Sku.Contains(q.ToUpper()))
+                  .SelectDistinct()
+            );
+        }
+
+        public Product Save(Product product, bool includeReferences = false)
         {
             product.ThrowIfNull(nameof(product));
 
@@ -93,9 +114,15 @@
 
                 product = existing.PopulateFromPropertiesWithAttribute(product, typeof(WhitelistAttribute));
             }
-            Db.Save(product);
+            Db.Save(product, includeReferences);
 
             return product;
+        }
+
+        public List<Product> SaveMany(List<Product> products)
+        {
+            Db.InsertAll(products);
+            return products;
         }
 
         public long Count(bool includeDeleted = false)
@@ -106,25 +133,7 @@
             return Db.Count<Product>(x => !x.IsDeleted);
         }
 
-        public void SetShopifyId(int productId, long shopifyId)
-        {
-            var q = Db.From<Product>();
-
-            Db.UpdateOnly(new Product {ShopifyId = shopifyId},
-                q.Update(x => x.ShopifyId).Where(x => x.Id == productId));
-        }
-
         public Product Delete(int id)
-        {
-            var existing = Get(id);
-            if (default(Product) == existing)
-                throw new ArgumentException("unable to locate product with id");
-            if (existing.IsDeleted)
-                throw new Exception("that product was already deleted");
-            return Db.SoftDelete(existing);
-        }
-
-        public Product Restore(int id)
         {
             var existing = Get(id);
             if (default(Product) == existing)

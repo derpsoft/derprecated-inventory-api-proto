@@ -2,8 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Net;
+    using System.Net.Http;
     using System.Reflection;
+    using System.Security.Cryptography;
     using Funq;
     using Handlers;
     using MailKit.Net.Smtp;
@@ -16,15 +19,39 @@
     using ServiceStack.Caching;
     using ServiceStack.Configuration;
     using ServiceStack.Data;
+    using ServiceStack.Logging;
     using ServiceStack.OrmLite;
     using ServiceStack.Text;
     using ServiceStack.Validation;
+    using ServiceStack.Stripe;
+    using Auth0.AuthenticationApi;
+    using Auth0.ManagementApi;
 
     public class Application : AppHostBase
     {
         public Application(string applicationName, Assembly assembly)
             : base("Derprecated::Api::{0}".Fmt(applicationName), assembly)
         {
+        }
+
+        private JsonWebKey JwkFromUri(Uri source)
+        {
+            using (var client = new HttpClient())
+            {
+                var raw = client.GetStringAsync(source);
+                raw.Wait();
+                var jwks = raw.Result.FromJson<JsonWebKeySet>();
+                return jwks.Keys.First();
+            }
+        }
+
+        private RSAParameters? RsaPubkeyFromJwk(JsonWebKey jwk)
+        {
+            return new RSAParameters
+            {
+                Modulus = jwk.N.FromBase64UrlSafe(),
+                Exponent = jwk.E.FromBase64UrlSafe()
+            };
         }
 
         public override void Configure(Container container)
@@ -38,6 +65,8 @@
             JsConfig.ExcludeTypeInfo = true;
             JsConfig<UserSession>.IncludeTypeInfo = true;
             JsConfig.DateHandler = DateHandler.ISO8601;
+
+            LogManager.LogFactory = new ConsoleLogFactory(debugEnabled:true);
 
             var baseSettings = new AppSettings();
             container.Register(baseSettings);
@@ -111,9 +140,6 @@
             };
 
             // Schema init
-            var userRepo = (OrmLiteAuthRepository) container.Resolve<IUserAuthRepository>();
-            userRepo.InitSchema();
-
             using (var ctx = container.Resolve<IDbConnectionFactory>().Open())
             {
                 ctx.CreateTableIfNotExists<ApiKey>();
@@ -129,20 +155,13 @@
                 ctx.CreateTableIfNotExists<Sale>();
                 ctx.CreateTableIfNotExists<Warehouse>();
                 ctx.CreateTableIfNotExists<Location>();
+                ctx.CreateTableIfNotExists<Image>();
+                ctx.CreateTableIfNotExists<Customer>();
+                ctx.CreateTableIfNotExists<Merchant>();
+                ctx.CreateTableIfNotExists<Order>();
+                ctx.CreateTableIfNotExists<Offer>();
+                ctx.CreateTableIfNotExists<Address>();
             }
-#if DEBUG
-            var testUser = new UserAuth
-            {
-                Email = "james@derprecated.com"
-            };
-            var existing = userRepo.GetUserAuthByUserName(testUser.Email);
-            if (null == existing)
-            {
-                var newUser = userRepo.CreateUserAuth(testUser, "12345");
-                userRepo.AssignRoles(newUser, new List<string> {Roles.Admin},
-                    new List<string> {Permissions.CanDoEverything});
-            }
-#endif
 
             // Mail
             container.Register(c =>
@@ -164,7 +183,7 @@
             Plugins.Add(new CorsFeature(
                 allowCredentials: true,
                 allowedMethods: "OPTIONS, GET, PUT, POST, PATCH, DELETE, SEARCH",
-                allowedHeaders: "Content-Type, X-Requested-With, Cache-Control",
+                allowedHeaders: "Content-Type, X-Requested-With, Cache-Control, Authorization",
                 allowOriginWhitelist:
                 new List<string>
                 {
@@ -179,34 +198,98 @@
                     "https://inventory-web-pro.herokuapp.com"
                 },
                 maxAge: 3600));
-            Plugins.Add(new RegistrationFeature());
+
+            var jwk = JwkFromUri(new Uri(configuration.Auth0.Jwks));
+            var rsaPubkey = RsaPubkeyFromJwk(jwk);
+            var managementUri = new Uri($"https://{configuration.Auth0.Domain}/");
+            var tokenAuth = new JwtAuthProviderReader
+            {
+                RequireHashAlgorithm = true,
+                HashAlgorithm = "RS256",
+                PublicKey = rsaPubkey,
+                Audience = configuration.Auth0.Audience,
+                Issuer = configuration.Auth0.Issuer,
+                PopulateSessionFilter = (session, json, request) =>
+                {
+                    /* JSON object looks like:
+                      {
+                        "app_metadata": {
+                          "authorization": {
+                            "roles": ["Admin", "User", "Delegated Admin - Administrator", "Delegated Admin - User"],
+                            "permissions": ["everything", "login", "manageCategories", "dispatchInventory"]
+                          }
+                        },
+                        "iss": "https://derprecated.auth0.com/",
+                        "sub": "google-oauth2|108854378958464530522",
+                        "aud": "HgdpKajxywOUlc52Uv6rASdiABMsnYd4",
+                        "exp": 1489635158,
+                        "iat": 1489599158
+                      }
+
+                      session props already set:
+                      session.UserAuthId = json.sub.split('|',2)[1]
+                    */
+
+                    var authorization = json.Object("app_metadata")
+                      .Object("authorization");
+                    session.Permissions = authorization
+                      .GetArray<string>("permissions")
+                      .ToList();
+                    session.Roles = authorization
+                      .GetArray<string>("roles")
+                      .ToList();
+                },
+#if DEBUG
+                RequireSecureConnection = false
+#endif
+            };
             Plugins.Add(new AuthFeature(
-                () => new UserSession(),
+                () => new AuthUserSession(),
                 new IAuthProvider[]
                 {
-                    new CredentialsAuthProvider()
+                    tokenAuth
                 },
                 "/login")
             {
-                IncludeAssignRoleServices = true,
+                IncludeAssignRoleServices = false,
                 ValidateUniqueEmails = true
             });
             Plugins.Add(new ValidationFeature());
             Plugins.Add(new AutoQueryFeature {MaxLimit = 100});
             Plugins.Add(new SwaggerFeature());
 
+            // Restrictions
+            typeof(AssignRoles).AddAttributes(new RestrictAttribute { VisibleLocalhostOnly = true });
+            typeof(UnAssignRoles).AddAttributes(new RestrictAttribute { VisibleLocalhostOnly = true });
+
             // Handlers
-            container.RegisterAutoWired<ImageHandler>();
+            container.RegisterAs<ImageHandler, IHandler<Image>>()
+                     .ReusedWithin(ReuseScope.Request);
+            container.RegisterAs<ProductImageHandler, IHandler<ProductImage>>()
+                     .ReusedWithin(ReuseScope.Request);
             container.RegisterAs<LocationHandler, IHandler<Location>>()
-                .ReusedWithin(ReuseScope.Request);
-            container.RegisterAs<CategoryHandler,IHandler<Category>>()
-                .ReusedWithin(ReuseScope.Request);
+                     .ReusedWithin(ReuseScope.Request);
+            container.RegisterAs<CategoryHandler, IHandler<Category>>()
+                     .ReusedWithin(ReuseScope.Request);
             container.RegisterAs<VendorHandler, IHandler<Vendor>>()
-                .ReusedWithin(ReuseScope.Request);
+                     .ReusedWithin(ReuseScope.Request);
             container.RegisterAs<WarehouseHandler, IHandler<Warehouse>>()
-                .ReusedWithin(ReuseScope.Request);
+                     .ReusedWithin(ReuseScope.Request);
+            container.RegisterAs<ProductHandler, IHandler<Product>>()
+                     .ReusedWithin(ReuseScope.Request);
+            container.RegisterAutoWired<UserHandler>()
+                     .ReusedWithin(ReuseScope.Request);
+            container.RegisterAutoWired<Auth0Handler>();
+            container.RegisterAs<AddressHandler, IHandler<Address>>()
+                     .ReusedWithin(ReuseScope.Request);
+            container.RegisterAs<OrderHandler, IHandler<Order>>()
+                     .ReusedWithin(ReuseScope.Request);
+            container.Register(new StripeHandler(configuration.Stripe.SecretKey));
+            container.RegisterAutoWired<InventoryHandler>()
+                     .ReusedWithin(ReuseScope.Request);
 
             // Misc
+            container.Register(new AuthenticationApiClient(new Uri($"https://{configuration.Auth0.Domain}/")));
             container.Register(new ShopifyServiceClient($"https://{configuration.Shopify.Domain}")
             {
                 UserName = configuration.Shopify.ApiKey,

@@ -7,6 +7,7 @@
     [Route("/api/v1/images", "POST")]
     [Route("/api/v1/images/{Id}", "GET, PUT, PATCH, DELETE")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything,
          Permissions.CanManageImages,
          Permissions.CanReadImages)]
@@ -19,12 +20,16 @@
     public class Image : IReturn<Dto<Image>>, IPrimaryKeyable
     {
         public int Id { get; set; }
+        public List<int> ProductIds { get; set; }
+        public List<Product> Products { get; set; }
         public ulong RowVersion { get; set; }
         public string Url { get; set; }
+        public bool IncludeDeleted { get; set; } = false;
     }
 
     [Route("/api/v1/images/count", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageImages,
          Permissions.CanReadImages)]
     public sealed class ImageCount : IReturn<Dto<long>>
@@ -34,6 +39,7 @@
 
     [Route("/api/v1/images", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageImages,
          Permissions.CanReadImages)]
     public sealed class Images : IReturn<Dto<List<Image>>>
@@ -43,9 +49,9 @@
         public int Take { get; set; } = 25;
     }
 
-
     [Route("/api/v1/images/typeahead", "GET, SEARCH")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageImages, Permissions.CanReadImages)]
     public sealed class ImageTypeahead : IReturn<Dto<List<Image>>>
     {
@@ -54,4 +60,5 @@
         [StringLength(20)]
         public string Query { get; set; }
     }
+
 }

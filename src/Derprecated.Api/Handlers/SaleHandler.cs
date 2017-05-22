@@ -5,18 +5,19 @@
     using System.Data;
     using Models;
     using ServiceStack;
+    using ServiceStack.Auth;
     using ServiceStack.OrmLite;
 
     public class SaleHandler
     {
-        public SaleHandler(IDbConnection db, UserSession user)
+        public SaleHandler(IDbConnection db, IAuthSession user)
         {
             Db = db;
             User = user;
         }
 
         private IDbConnection Db { get; }
-        private UserSession User { get; }
+        private IAuthSession User { get; }
 
         public Sale Create(Sale sale)
         {

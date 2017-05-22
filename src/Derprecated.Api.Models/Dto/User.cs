@@ -8,6 +8,7 @@
     [Route("/api/v1/users/{Id}", "GET, PUT, PATCH, DELETE")]
     [Route("/api/v1/users", "POST")]
     [Authenticate]
+    [RequiredPermission(Models.Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Models.Permissions.CanDoEverything, Models.Permissions.CanManageUsers,
          Models.Permissions.CanReadUsers)]
     [RequiresAnyPermission(ApplyTo.Put | ApplyTo.Patch, Models.Permissions.CanDoEverything,
@@ -19,23 +20,19 @@
     {
         public string Email { get; set; }
         public string FirstName { get; set; }
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string LastName { get; set; }
 
         public List<string> Permissions { get; set; }
         public string PhoneNumber { get; set; }
         public string UserName { get; set; }
 
-        public static User From(UserAuth source)
-        {
-            var result = new User().PopulateWith(source);
-
-            return result;
-        }
+        public bool IncludeDeleted { get; set; } = false;
     }
 
     [Route("/api/v1/users", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageUsers,
          Permissions.CanReadUsers)]
     public sealed class Users : IReturn<Dto<List<User>>>
@@ -46,6 +43,7 @@
 
     [Route("/api/v1/users/count", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageUsers, Permissions.CanReadUsers)]
     public sealed class UserCount : IReturn<Dto<long>>
     {
@@ -53,6 +51,7 @@
 
     [Route("/api/v1/users/typeahead", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageUsers, Permissions.CanReadUsers)]
     public sealed class UserTypeahead : IReturn<Dto<List<User>>>
     {
@@ -62,6 +61,7 @@
 
     [Route("/api/v1/users/search")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageUsers, Permissions.CanReadUsers)]
     public sealed class UserSearch : QueryDb<UserAuth, Dto<User>>
     {
@@ -70,6 +70,6 @@
         public string Email { get; set; }
 
         [QueryDbField(Term = QueryTerm.Or)]
-        public int Id { get; set; }
+        public string Id { get; set; }
     }
 }

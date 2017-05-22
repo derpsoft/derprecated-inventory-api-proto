@@ -10,7 +10,7 @@
     using ServiceStack.OrmLite;
 
     public abstract class CrudHandler<T> : IHandler<T>, IDisposable
-        where T : class, ISoftDeletable, IPrimaryKeyable
+        where T : class, ISoftDeletable, IPrimaryKeyable, IAuditable
     {
         protected CrudHandler(IDbConnectionFactory db)
         {
@@ -18,6 +18,29 @@
         }
 
         protected IDbConnection Db { get; }
+
+        public virtual SqlExpression<T> AddJoinTables(SqlExpression<T> source)
+        {
+            return source;
+        }
+
+        public virtual SqlExpression<T> QueryForGet(int id, bool includeDeleted = false)
+        {
+            id.ThrowIfLessThan(1);
+
+            var query = AddJoinTables(Db.From<T>())
+                .Where(x => x.Id == id);
+
+            if (!includeDeleted)
+                query = query.Where(x => !x.IsDeleted);
+
+            return query;
+        }
+
+        public void Dispose()
+        {
+            Db?.Dispose();
+        }
 
         public long Count(bool includeDeleted = false)
         {
@@ -32,19 +55,21 @@
             skip.ThrowIfLessThan(0);
             take.ThrowIfLessThan(1);
 
-            var query = Db.From<T>()
-                .Skip(skip)
-                .Take(take);
+            var query = AddJoinTables(Db.From<T>())
+                          .Skip(skip)
+                          .Take(take);
 
             if (!includeDeleted)
                 query = query.Where(x => !x.IsDeleted);
 
-            return Db.LoadSelect(query);
+            return Db.LoadSelect(query.OrderByDescending(x => x.ModifyDate));
         }
 
         public abstract List<T> Typeahead(string query, bool includeDeleted = false);
 
-        public virtual T Save(T record)
+        protected virtual void BeforeCreate(T record){}
+
+        public virtual T Save(T record, bool includeReferences = false)
         {
             record.ThrowIfNull();
 
@@ -56,15 +81,16 @@
 
                 record = existing.PopulateWith(record);
             }
-            Db.Save(record);
+            else
+            {
+                BeforeCreate(record);
+            }
+            Db.Save(record, includeReferences);
 
             return record;
         }
 
-        public void Dispose()
-        {
-            Db?.Dispose();
-        }
+        protected virtual void BeforeDelete(T record){}
 
         public virtual T Delete(int id)
         {
@@ -75,21 +101,15 @@
             if (existing.IsDeleted)
                 throw new Exception("that record was already deleted");
 
+            BeforeDelete(existing);
+
             return Db.SoftDelete(existing);
         }
 
         public virtual T Get(int id, bool includeDeleted = false)
         {
-            id.ThrowIfLessThan(1);
-
-            var query = Db.From<T>()
-                .Where(x => x.Id == id);
-
-            if (!includeDeleted)
-                query = query.Where(x => !x.IsDeleted);
-
-            return Db.LoadSelect(query)
-                .First();
+            return Db.LoadSelect(QueryForGet(id, includeDeleted))
+                     .Single();
         }
     }
 }

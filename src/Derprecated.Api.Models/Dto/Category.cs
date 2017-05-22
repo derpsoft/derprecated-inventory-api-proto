@@ -7,6 +7,7 @@
     [Route("/api/v1/categories", "POST")]
     [Route("/api/v1/categories/{Id}", "GET, PUT, PATCH, DELETE")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything,
          Permissions.CanManageCategories,
          Permissions.CanReadCategories)]
@@ -32,6 +33,7 @@
 
     [Route("/api/v1/categories/count", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageCategories,
          Permissions.CanReadCategories)]
     public sealed class CategoryCount : IReturn<Dto<long>>
@@ -41,6 +43,7 @@
 
     [Route("/api/v1/categories", "GET")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Get, Permissions.CanDoEverything, Permissions.CanManageCategories,
          Permissions.CanReadCategories)]
     public sealed class Categories : IReturn<Dto<List<Category>>>
@@ -52,6 +55,7 @@
 
     [Route("/api/v1/categories", "GET, SEARCH")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(ApplyTo.Search, Permissions.CanDoEverything, Permissions.CanManageCategories,
          Permissions.CanReadCategories)]
     public sealed class CategorySearch : QueryDb<Models.Category, Category>
@@ -66,6 +70,7 @@
 
     [Route("/api/v1/categories/typeahead", "GET, SEARCH")]
     [Authenticate]
+    [RequiredPermission(Permissions.CanLogin)]
     [RequiresAnyPermission(Permissions.CanDoEverything, Permissions.CanManageCategories, Permissions.CanReadCategories)]
     public sealed class CategoryTypeahead : IReturn<Dto<List<Category>>>
     {
